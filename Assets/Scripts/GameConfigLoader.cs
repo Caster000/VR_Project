@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameConfigLoader : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class GameConfigLoader : MonoBehaviour
         gameConfig = new GameConfig();
         gameConfig.Load();
         gameConfig.DebugLog();
+        SceneManager.LoadScene("GameScene");
     }
 
 }
