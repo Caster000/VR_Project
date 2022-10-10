@@ -1,0 +1,77 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GunBeahviour : MonoBehaviour
+{
+    
+    public float damage = 1f;
+
+    public float range = 50f;
+
+    public float fireRate = 1000000f;
+
+    public Camera gunCam;
+
+    public ParticleSystem muzzleFlash;
+
+    public AudioClip gunShot;
+
+    public GameObject bullet;
+
+    public GameObject bulletSpawn;
+
+    
+
+    private bool allowfire = true;
+    private float waitToFire = 1.5f;
+
+    public float bulletSpeed = 10f;
+
+    IEnumerator allowFireRoutine()
+    {
+         yield return new WaitForSeconds(waitToFire);
+        allowfire = true;
+
+
+    }
+ 
+    
+    void Start()
+    {
+        
+    }
+
+    
+    void Update()
+    {
+        if(Input.GetButtonDown("Fire1") && allowfire)
+        {
+     
+            Shoot();
+        }
+
+        
+    }
+
+    void Shoot()
+    {
+        allowfire = false;
+        muzzleFlash.Play();
+        AudioSource.PlayClipAtPoint(gunShot, transform.position);
+        var  tempBullet = Instantiate(bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
+        tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
+        RaycastHit hit;
+        if(Physics.Raycast(gunCam.transform.position, gunCam.transform.forward, out hit, range))
+        {
+            Debug.Log(hit.transform.name);
+
+         
+          
+
+        }
+        StartCoroutine(allowFireRoutine());
+
+
+    }
+}
