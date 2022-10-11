@@ -575,7 +575,7 @@ MonoBehaviour:
   limitFallVelocity: -15
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65
   groundMinDistance: 0.25
   groundMaxDistance: 0.5
   slopeLimit: 45

@@ -34,6 +34,9 @@ public class UserManager : MonoBehaviourPunCallbacks
             Instantiate(CameraPlayer);
             CameraPlayer.SetActive(photonView.IsMine);
         }
+
+        spawPoints = new List<Transform>();
+        spawPoints.Add(GameObject.Find("SpawnArea").transform);
     }
 
     // Update is called once per frame
