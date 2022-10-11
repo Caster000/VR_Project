@@ -1,12 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Invector.vCharacterController;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Random = UnityEngine.Random;
 
 
-public class UserManager : MonoBehaviourPunCallbacks
+public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static GameObject UserMeInstance;
 
@@ -18,7 +21,7 @@ public class UserManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject CameraPlayer;
     private int currentHealth;
     private float respawnTime;
-    private bool spwaned;
+    private bool spawned;
     
     private GameConfig gameConfig;
     
@@ -33,15 +36,26 @@ public class UserManager : MonoBehaviourPunCallbacks
             UserMeInstance = gameObject;
             Instantiate(CameraPlayer);
             CameraPlayer.SetActive(photonView.IsMine);
+            CameraPlayer.GetComponent<vThirdPersonCamera>().SetMainTarget(transform);
         }
+        GetComponent<vThirdPersonInput>().enabled = photonView.IsMine;
+        GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
+        CanvasPlayer.enabled = photonView.IsMine;
+        
+        //TODO Remove by loading list of spawn Points
+            spawPoints = new List<Transform>();
+            spawPoints.Add(GameObject.Find("SpawnArea").transform);
+            spawned = true;
+    }
 
-        spawPoints = new List<Transform>();
-        spawPoints.Add(GameObject.Find("SpawnArea").transform);
+    private void Start()
+    {
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!photonView.IsMine) return;
         //TODO to remove, Debug to test Health
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -55,17 +69,23 @@ public class UserManager : MonoBehaviourPunCallbacks
             TimerText.text = "Respawn in "+b.ToString ()+"s";
         }
 
-        if (respawnTime <= 0 && !spwaned)
+        if (respawnTime <= 0 && !spawned)
         {
-            //Reset player health, position and shield
+            //Reset Canvas
             TimerText.text = "";
             TimerText.enabled = false;
             Healthbar.gameObject.SetActive(true);
             CanvasPlayer.GetComponent<Image>().color = Color.clear;
             Healthbar.value = currentHealth = gameConfig.LifeNumber;
-            spwaned = true;
-            // transform.gameObject.GetComponent<Collider>().enabled = false;
-            BodyPlayer.SetActive(true);
+            spawned = true;
+            
+            //Reset player health, position and shield
+            GetComponent<Collider>().enabled = true;
+            GetComponent<Rigidbody>().useGravity = true;
+            GetComponent<Rigidbody>().isKinematic = false;
+            BodyPlayer.SetActive(true); // TODO Make with OnPhotonSerializeView
+            GetComponent<vThirdPersonInput>().enabled = true;
+            
             //TODO Rescale shield
         }
     }
@@ -75,13 +95,16 @@ public class UserManager : MonoBehaviourPunCallbacks
         Healthbar.value = --currentHealth;
         if (currentHealth <= 0)
         {
-            spwaned = false;
+            spawned = false;
             CanvasPlayer.GetComponent<Image>().color = Color.black;
             Healthbar.gameObject.SetActive(false);
             
-            // transform.gameObject.GetComponent<Collider>().enabled = false; //TODO remove collider ??
+            GetComponent<Collider>().enabled = false;
+            GetComponent<Rigidbody>().useGravity = false;
+            GetComponent<Rigidbody>().isKinematic = true;
             BodyPlayer.SetActive(false);
-            
+            GetComponent<vThirdPersonInput>().enabled = false;
+
             Transform transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
             transform.position = transform_spawn.position;
             TimerText.enabled = true;
@@ -90,4 +113,24 @@ public class UserManager : MonoBehaviourPunCallbacks
         }
 
     }
+
+    #region Photon
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if(stream.IsWriting)
+        {
+            stream.SendNext(currentHealth);
+            stream.SendNext(BodyPlayer.activeSelf);
+            stream.SendNext(GetComponent<Collider>().enabled);
+        }
+        else
+        {
+            currentHealth = (int)stream.ReceiveNext();
+            BodyPlayer.SetActive((bool)stream.ReceiveNext());
+            GetComponent<Collider>().enabled = (bool)stream.ReceiveNext();
+        }
+    }
+
+    #endregion
 }
