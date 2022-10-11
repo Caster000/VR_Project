@@ -4,7 +4,7 @@ using Photon.Realtime;
 using TMPro;
 using UnityEngine.UI;
 
-public class LobbyManager : MonoBehaviour
+public class LobbyManager : MonoBehaviourPunCallbacks
 {
      #region Private Serializable Fields
 
