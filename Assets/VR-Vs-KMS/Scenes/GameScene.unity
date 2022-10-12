@@ -1028,7 +1028,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1771731353998056768, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: cullRadius
-      value: 7.86
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_RootOrder
@@ -1312,10 +1312,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1250110004}
     m_Modifications:
-    - target: {fileID: 1771731353998056768, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
-      propertyPath: cullRadius
-      value: 7.86
-      objectReference: {fileID: 0}
     - target: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -1430,10 +1426,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1250110004}
     m_Modifications:
-    - target: {fileID: 1771731353998056768, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
-      propertyPath: cullRadius
-      value: 7.86
-      objectReference: {fileID: 0}
     - target: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1481,10 +1473,6 @@ PrefabInstance:
     - target: {fileID: 2112096271937188694, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_Name
       value: ContaminationArea
-      objectReference: {fileID: 0}
-    - target: {fileID: 2112096271937188694, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
@@ -1685,7 +1673,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1771731353998056768, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: cullRadius
-      value: 7.86
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_RootOrder
@@ -1886,7 +1874,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1771731353998056768, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: cullRadius
-      value: 7.86
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_RootOrder
