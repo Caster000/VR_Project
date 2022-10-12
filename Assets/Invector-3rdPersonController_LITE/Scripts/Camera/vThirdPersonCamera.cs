@@ -60,6 +60,7 @@ public class vThirdPersonCamera : MonoBehaviour
 
     void Start()
     {
+        Cursor.visible = false;
         Init();
     }
 
@@ -67,6 +68,8 @@ public class vThirdPersonCamera : MonoBehaviour
     {
         if (target == null)
             return;
+
+        
 
         _camera = GetComponent<Camera>();
         currentTarget = target;
@@ -86,6 +89,7 @@ public class vThirdPersonCamera : MonoBehaviour
 
     void FixedUpdate()
     {
+        Cursor.visible = false;
         if (target == null || targetLookAt == null) return;
 
         CameraMovement();
