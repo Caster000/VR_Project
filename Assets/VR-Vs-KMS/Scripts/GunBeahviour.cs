@@ -27,6 +27,8 @@ public class GunBeahviour : MonoBehaviour
     private float timetoFire = 0f;
     public bool isReloaded = true;
 
+    public Animator anim;
+
     
     float time = 0f;
 
@@ -51,7 +53,8 @@ public class GunBeahviour : MonoBehaviour
     
     void Update()
     {  
-        if(!allowfire)
+        
+        if (!allowfire)
         {
             timetoFire += Time.deltaTime;
             progressBar.fillAmount += 1.0f / waitToFire * Time.deltaTime;
@@ -87,6 +90,7 @@ public class GunBeahviour : MonoBehaviour
 
     void Shoot()
     {
+        
         allowfire = false;
         muzzleFlash.Play();
         AudioSource.PlayClipAtPoint(gunShot, transform.position);
