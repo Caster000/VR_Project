@@ -45,5 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefabPC: {fileID: 460924315711896060, guid: 7eba4737ba659ac4b82674366367f153, type: 3}
-  PalyerPCCamera: {fileID: 6444909020982337851, guid: c3f07221998f9ae409f367d2d196b1a8, type: 3}
-  playerPrefabVR: {fileID: 0}
+  playerPrefabVR: {fileID: 778991317317625219, guid: 64021bcd838b3a545b700b553c21fb09, type: 3}

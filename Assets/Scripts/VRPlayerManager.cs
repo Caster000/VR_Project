@@ -51,13 +51,13 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             stream.SendNext(currentHealth);
             // stream.SendNext(BodyPlayer.activeSelf);
-            stream.SendNext(GetComponent<Collider>().enabled);
+//            stream.SendNext(GetComponent<Collider>().enabled);
         }
         else
         {
             currentHealth = (int)stream.ReceiveNext();
             // BodyPlayer.SetActive((bool)stream.ReceiveNext());
-            GetComponent<Collider>().enabled = (bool)stream.ReceiveNext();
+           // GetComponent<Collider>().enabled = (bool)stream.ReceiveNext();
         }
     }
 

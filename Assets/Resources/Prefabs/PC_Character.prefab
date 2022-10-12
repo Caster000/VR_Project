@@ -645,13 +645,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f5c86e83070673438e3de03dd0ead61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Healthbar: {fileID: 792121970980233617}
   spawPoints:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  Healthbar: {fileID: 792121970980233617}
   CanvasPlayer: {fileID: 2127585655374153184}
   TimerText: {fileID: 3018056924339579420}
   BodyPlayer: {fileID: 460924315564547948}
