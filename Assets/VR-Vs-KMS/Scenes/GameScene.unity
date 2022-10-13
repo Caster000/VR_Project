@@ -1112,7 +1112,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1771731353998056768, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: cullRadius
-      value: 7.86
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_RootOrder
@@ -1396,10 +1396,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1250110004}
     m_Modifications:
-    - target: {fileID: 1771731353998056768, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
-      propertyPath: cullRadius
-      value: 7.86
-      objectReference: {fileID: 0}
     - target: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -1514,10 +1510,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1250110004}
     m_Modifications:
-    - target: {fileID: 1771731353998056768, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
-      propertyPath: cullRadius
-      value: 7.86
-      objectReference: {fileID: 0}
     - target: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1566,10 +1558,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ContaminationArea
       objectReference: {fileID: 0}
-    - target: {fileID: 2112096271937188694, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
 --- !u!4 &1648456429 stripped
@@ -1577,6 +1565,95 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
   m_PrefabInstance: {fileID: 1648456425}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1677944420 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4189118790085427539, guid: 6f39577aa7421254db17067b2156cefe, type: 3}
+  m_PrefabInstance: {fileID: 4189118789936339889}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1677944423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1677944420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 420a2ce162f9c3b478a6193b9a011fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractionManager: {fileID: 0}
+  m_Colliders: []
+  m_InteractionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 2
+  m_SelectMode: 1
+  m_CustomReticle: {fileID: 0}
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnFirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnLastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
+  m_TeleportationProvider: {fileID: 0}
+  m_MatchOrientation: 0
+  m_TeleportTrigger: 0
+  m_Teleporting:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1709700081
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,7 +1757,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1771731353998056768, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: cullRadius
-      value: 7.86
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_RootOrder
@@ -1914,7 +1991,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1771731353998056768, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: cullRadius
-      value: 7.86
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2112096271937188681, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
       propertyPath: m_RootOrder
