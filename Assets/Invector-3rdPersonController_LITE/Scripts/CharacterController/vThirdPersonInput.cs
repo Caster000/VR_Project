@@ -16,12 +16,14 @@ namespace Invector.vCharacterController
         [Header("Camera Input")]
         public string rotateCameraXInput = "Mouse X";
         public string rotateCameraYInput = "Mouse Y";
+        public Camera player;
 
         [HideInInspector] public vThirdPersonController cc;
         [HideInInspector] public vThirdPersonCamera tpCamera;
         [HideInInspector] public Camera cameraMain;
 
-        #endregion
+        #endregion 
+        
 
         protected virtual void Start()
         {
@@ -40,6 +42,7 @@ namespace Invector.vCharacterController
         {
             InputHandle();                  // update the input methods
             cc.UpdateAnimator();            // updates the Animator Parameters
+           
         }
 
         public virtual void OnAnimatorMove()
@@ -79,8 +82,10 @@ namespace Invector.vCharacterController
             SprintInput();
             StrafeInput();
             JumpInput();
+            
         }
 
+      
         public virtual void MoveInput()
         {
             cc.input.x = Input.GetAxis(horizontalInput);
@@ -145,6 +150,9 @@ namespace Invector.vCharacterController
                 cc.Jump();
         }
 
-        #endregion       
+        #endregion     
+        
+        
     }
+
 }
