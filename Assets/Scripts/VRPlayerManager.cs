@@ -45,6 +45,65 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
     void Update()
     {
         if (!photonView.IsMine) return;
+        
+        if(respawnTime>0)     
+        {         
+            respawnTime -= Time.deltaTime;   
+            double b = Mathf.RoundToInt(respawnTime); 
+            TimerText.text = "Respawn in "+b.ToString ()+"s";
+        }
+
+        if (respawnTime <= 0 && !spawned)
+        {
+            Respawn();
+        }
+    }
+
+    public void TakeDamage()
+    {
+        Healthbar.value = --currentHealth;
+        if (currentHealth <= 0)
+        {
+            PrepareRespwan();
+            return;
+        }
+    }
+
+    private void PrepareRespwan()
+    {
+        // Canvas update
+        spawned = false;
+        CanvasPlayer.GetComponent<Image>().color = Color.black;
+        Healthbar.gameObject.SetActive(false);
+        // Hide the body and colliders  
+        GetComponent<Collider>().enabled = false;
+        GetComponent<Rigidbody>().useGravity = false;
+        GetComponent<Rigidbody>().isKinematic = true;
+        GetComponent<vThirdPersonInput>().enabled = false;
+        // Teleport to spawnPoint
+        Transform transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
+        transform.position = transform_spawn.position;
+        TimerText.enabled = true;
+        respawnTime = gameConfig.RespawnTime;
+    }
+
+    private void Respawn()
+    {
+        //Reset Canvas
+        TimerText.text = "";
+        TimerText.enabled = false;
+        Healthbar.gameObject.SetActive(true);
+        CanvasPlayer.GetComponent<Image>().color = Color.clear;
+        Healthbar.value = currentHealth = gameConfig.LifeNumber;
+        spawned = true;
+            
+        //Reset player health, position and shield
+        GetComponent<Collider>().enabled = true;
+        GetComponent<Rigidbody>().useGravity = true;
+        GetComponent<Rigidbody>().isKinematic = false;
+        GetComponent<vThirdPersonInput>().enabled = true;
+            
+        //TODO Rescale shield
     }
     
     #region Photon

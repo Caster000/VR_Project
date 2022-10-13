@@ -56,11 +56,6 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
     void Update()
     {
         if (!photonView.IsMine) return;
-        //TODO to remove, Debug to test Health
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage();
-        }
 
         if(respawnTime>0)     
         {         
@@ -71,22 +66,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
 
         if (respawnTime <= 0 && !spawned)
         {
-            //Reset Canvas
-            TimerText.text = "";
-            TimerText.enabled = false;
-            Healthbar.gameObject.SetActive(true);
-            CanvasPlayer.GetComponent<Image>().color = Color.clear;
-            Healthbar.value = currentHealth = gameConfig.LifeNumber;
-            spawned = true;
-            
-            //Reset player health, position and shield
-            GetComponent<Collider>().enabled = true;
-            GetComponent<Rigidbody>().useGravity = true;
-            GetComponent<Rigidbody>().isKinematic = false;
-            BodyPlayer.SetActive(true); // TODO Make with OnPhotonSerializeView
-            GetComponent<vThirdPersonInput>().enabled = true;
-            
-            //TODO Rescale shield
+            Respawn();
         }
     }
 
@@ -95,23 +75,48 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
         Healthbar.value = --currentHealth;
         if (currentHealth <= 0)
         {
-            spawned = false;
-            CanvasPlayer.GetComponent<Image>().color = Color.black;
-            Healthbar.gameObject.SetActive(false);
-            
-            GetComponent<Collider>().enabled = false;
-            GetComponent<Rigidbody>().useGravity = false;
-            GetComponent<Rigidbody>().isKinematic = true;
-            BodyPlayer.SetActive(false);
-            GetComponent<vThirdPersonInput>().enabled = false;
-
-            Transform transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
-            transform.position = transform_spawn.position;
-            TimerText.enabled = true;
-            respawnTime = gameConfig.RespawnTime;
+            PrepareRespwan();
             return;
         }
+    }
 
+    private void PrepareRespwan()
+    {
+        // Canvas update
+        spawned = false;
+        CanvasPlayer.GetComponent<Image>().color = Color.black;
+        Healthbar.gameObject.SetActive(false);
+        // Hide the body and colliders  
+        GetComponent<Collider>().enabled = false;
+        GetComponent<Rigidbody>().useGravity = false;
+        GetComponent<Rigidbody>().isKinematic = true;
+        BodyPlayer.SetActive(false);
+        GetComponent<vThirdPersonInput>().enabled = false;
+        // Teleport to spawnPoint
+        Transform transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
+        transform.position = transform_spawn.position;
+        TimerText.enabled = true;
+        respawnTime = gameConfig.RespawnTime;
+    }
+
+    private void Respawn()
+    {
+        //Reset Canvas
+        TimerText.text = "";
+        TimerText.enabled = false;
+        Healthbar.gameObject.SetActive(true);
+        CanvasPlayer.GetComponent<Image>().color = Color.clear;
+        Healthbar.value = currentHealth = gameConfig.LifeNumber;
+        spawned = true;
+            
+        //Reset player health, position and shield
+        GetComponent<Collider>().enabled = true;
+        GetComponent<Rigidbody>().useGravity = true;
+        GetComponent<Rigidbody>().isKinematic = false;
+        BodyPlayer.SetActive(true);
+        GetComponent<vThirdPersonInput>().enabled = true;
+            
+        //TODO Rescale shield
     }
 
     #region Photon

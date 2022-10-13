@@ -68,10 +68,8 @@ public class GunBeahviour : MonoBehaviour
 
         if (timetoFire >= waitToFire)
         {
-            
             timetoFire = 0f;
             allowfire = true;
-
         }
         if(allowfire)
         {
@@ -81,7 +79,6 @@ public class GunBeahviour : MonoBehaviour
         
         if(Input.GetButtonDown("Fire1") && allowfire)
         {
-        
             Shoot();
         }
 
@@ -90,23 +87,20 @@ public class GunBeahviour : MonoBehaviour
 
     void Shoot()
     {
-        
         allowfire = false;
         muzzleFlash.Play();
         AudioSource.PlayClipAtPoint(gunShot, transform.position);
-        var  tempBullet = Instantiate(bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
+        
+        // TODO photon RPC
+        GameObject  tempBullet = Instantiate(bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
         tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
+        tempBullet.layer = gameObject.layer;
         RaycastHit hit;
         if(Physics.Raycast(gunCam.transform.position, gunCam.transform.forward, out hit, range))
         {
             Debug.Log(hit.transform.name);
-
         }
         isReloaded = false;
-
-
-
-
     }
 
 

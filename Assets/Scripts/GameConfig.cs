@@ -31,6 +31,8 @@ public class GameConfig
     public float RespawnTime;
     // Disables debug logging
     public bool NoDebug;
+    // Enable friendlyFire
+    public bool friendlyFire;
     
     /// <summary>
     /// Loads the configuration.
