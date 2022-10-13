@@ -24,14 +24,14 @@ namespace vr_vs_kms
         public bool isAlone = false;
         public int firstPlayerEnteredLayer;
         public float timer;
-        public int layerCapture;
+        public int layerCapture = 0;
         public BelongToProperties nobody;
         public BelongToProperties virus;
         public BelongToProperties scientist;
         public List<int> layers = new List<int>();
         private float faerieSpeed;
         public float cullRadius = 5f;
-
+        public AudioSource audioSource;
         private float radius = 1f;
         private ParticleSystem pSystem;
         ParticleSystem.ColorOverLifetimeModule colorModule; 
@@ -46,6 +46,7 @@ namespace vr_vs_kms
             setupCullingGroup();
 
             BelongsToNobody();
+            audioSource = GetComponent<AudioSource>();
         }
 
         private void populateParticleSystemCache()
@@ -89,6 +90,7 @@ namespace vr_vs_kms
                 isSomeoneAlreadyIn = true;
                 playerNumber++;
                 isAlone = true;
+                checkLayerCapture(other.gameObject.layer);
             }
             else
             {
@@ -102,6 +104,8 @@ namespace vr_vs_kms
                     else
                     {
                         isSameTeam = true;
+                        checkLayerCapture(other.gameObject.layer);
+
                     }
                 }
                 layers.Add(other.gameObject.layer);
@@ -117,7 +121,13 @@ namespace vr_vs_kms
             }
             if(isAlone)
             {
+
                 contaminationProcess(other.gameObject.layer);
+            }
+            if (!isSameTeam && !isAlone)
+            {
+                audioSource.Stop();
+
             }
         }
         private void OnTriggerExit(Collider other)
@@ -137,13 +147,24 @@ namespace vr_vs_kms
                 isAlone = true;
 
             }
-           
+            timer = 0;
+            audioSource.Stop();
+
+
         }
         void Update()
         {
 
         }
 
+        private void checkLayerCapture(int playerLayer)
+        {
+            if (layerCapture != playerLayer)
+            {
+                audioSource.Play();
+
+            }
+        }
         private void ColorParticle(ParticleSystem pSys, Color mainColor, Color accentColor)
         {
             colorModule.color = new ParticleSystem.MinMaxGradient(mainColor, accentColor);
@@ -171,15 +192,21 @@ namespace vr_vs_kms
         }
         public void contaminationProcess(int layer)
         {
+
             if (timer >= timeToAreaContamination)
             {
+
                 if (layer == 7)
                 {
                     BelongsToScientists();
+                    audioSource.Stop();
+
                 }
                 else if (layer == 8)
                 {
                     BelongsToVirus();
+                    audioSource.Stop();
+
                 }
 
                 timer = 0;
