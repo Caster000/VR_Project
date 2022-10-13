@@ -12,8 +12,11 @@ namespace VR_Vs_KMS.Scripts
     /// <seealso cref="TeleportationAnchor"/>
     [AddComponentMenu("XR/Teleportation Area", 11)]
     
+    
+    
     public class DelayedTeleportation : BaseTeleportationInteractable
     {
+        
         
         private float timer;
         float t = 0f;
@@ -22,7 +25,7 @@ namespace VR_Vs_KMS.Scripts
         // public GameObject LeftHandController;
         // public GameObject RightHandController;
 
-        private XRInteractorLineVisual _xrInteractorLineVisualRight, _xrInteractorLineVisualLeft;
+        private XRInteractorLineVisual _xrInteractorLineVisual;
 
         private void Start()
         {
@@ -36,12 +39,15 @@ namespace VR_Vs_KMS.Scripts
         protected override bool GenerateTeleportRequest(IXRInteractor interactor, RaycastHit raycastHit, ref TeleportRequest teleportRequest)
         {
             
-            Debug.Log(interactor.transform.gameObject.name); 
+            Debug.Log("can tp : "+canTp);
+            _xrInteractorLineVisual = interactor.transform.gameObject.GetComponent<XRInteractorLineVisual>();
             if (!canTp) return false;
 
             //timer = teleportRequest.requestTime;
+            Debug.Log(raycastHit.collider);
             if (raycastHit.collider == null)
                 return false;
+            Debug.Log("I TP");
             teleportRequest.destinationPosition = raycastHit.point;
             teleportRequest.destinationRotation = transform.rotation;
             canTp = false;
@@ -54,7 +60,7 @@ namespace VR_Vs_KMS.Scripts
              if (timer > 0 && !canTp)
              {
                  
-                 Debug.Log("_xrInteractorLineVisualLeft");
+                 //Debug.Log("_xrInteractorLineVisualLeft");
                  // _xrInteractorLineVisualRight.validColorGradient.colorKeys[0].color =
                  //    _xrInteractorLineVisualLeft.validColorGradient.colorKeys[0].color = Color.magenta;
                  ChangeColorRaycast(Color.yellow);
@@ -72,8 +78,7 @@ namespace VR_Vs_KMS.Scripts
 
          private void ChangeColorRaycast(Color color)
          {
-             _xrInteractorLineVisualRight.validColorGradient =
-                 _xrInteractorLineVisualLeft.validColorGradient = 
+             _xrInteractorLineVisual.validColorGradient = 
                      new Gradient
                      {
                          colorKeys = new[] { new GradientColorKey(color, 0f), new GradientColorKey(color, 1f) },

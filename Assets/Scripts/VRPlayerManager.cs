@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using UnityEngine.XR.Interaction.Toolkit;
+using VR_Vs_KMS.Scripts;
 using Random = UnityEngine.Random;
 
 public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
@@ -33,6 +35,8 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
             UserMeInstance = gameObject;
+            FindObjectOfType<DelayedTeleportation>().teleportationProvider =
+                GetComponent<TeleportationProvider>();
         }
         CameraPlayer.SetActive(photonView.IsMine);
     }
