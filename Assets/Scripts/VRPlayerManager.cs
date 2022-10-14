@@ -74,13 +74,13 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     {
         // Canvas update
         spawned = false;
-        CanvasPlayer.GetComponent<Image>().color = Color.black;
+       // CanvasPlayer.GetComponent<Image>().color = Color.black;
         Healthbar.gameObject.SetActive(false);
         // Hide the body and colliders  
-        GetComponent<Collider>().enabled = false;
-        GetComponent<Rigidbody>().useGravity = false;
-        GetComponent<Rigidbody>().isKinematic = true;
-        GetComponent<vThirdPersonInput>().enabled = false;
+       // GetComponent<Collider>().enabled = false;
+        // GetComponent<Rigidbody>().useGravity = false;
+        // GetComponent<Rigidbody>().isKinematic = true;
+        // GetComponent<vThirdPersonInput>().enabled = false;
         // Teleport to spawnPoint
         Transform transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
         transform.position = transform_spawn.position;
@@ -94,20 +94,32 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         TimerText.text = "";
         TimerText.enabled = false;
         Healthbar.gameObject.SetActive(true);
-        CanvasPlayer.GetComponent<Image>().color = Color.clear;
+//        CanvasPlayer.GetComponent<Image>().color = Color.clear;
         Healthbar.value = currentHealth = gameConfig.LifeNumber;
         spawned = true;
             
         //Reset player health, position and shield
-        GetComponent<Collider>().enabled = true;
-        GetComponent<Rigidbody>().useGravity = true;
-        GetComponent<Rigidbody>().isKinematic = false;
-        GetComponent<vThirdPersonInput>().enabled = true;
+        
+        // todo public values
+//        GetComponent<Collider>().enabled = true;
+       // GetComponent<Rigidbody>().useGravity = true;
+       // GetComponent<Rigidbody>().isKinematic = false;
+       // GetComponent<vThirdPersonInput>().enabled = true;
             
         //TODO Rescale shield
     }
     
     #region Photon
+
+    // void ShootVr()
+    // {
+    //     photonView.RPC("PlayerShoot",RpcTarget.AllViaServer);
+    // }
+    // [PunRPC]
+    // void PlayerShoot()
+    // {
+    //     gunBeahviour.Shoot();
+    // }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

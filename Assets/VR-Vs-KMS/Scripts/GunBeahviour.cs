@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DentedPixel;
+using Photon.Pun;
 
 public class GunBeahviour : MonoBehaviour
 {
@@ -27,10 +28,7 @@ public class GunBeahviour : MonoBehaviour
     private float timetoFire = 0f;
     public bool isReloaded = true;
 
-    public Animator anim;
-
-    
-    float time = 0f;
+    public bool isVR;
 
     
     public Image progressBar;
@@ -46,19 +44,23 @@ public class GunBeahviour : MonoBehaviour
     
     void Start()
     {
-     
+        
 
     }
 
     
     void Update()
-    {  
-        
+    {
         if (!allowfire)
         {
             timetoFire += Time.deltaTime;
-            progressBar.fillAmount += 1.0f / waitToFire * Time.deltaTime;
+            if (!isVR)
+            {
+                progressBar.fillAmount += 1.0f / waitToFire * Time.deltaTime;
+            }
         }
+        // if (isVR)return;
+
 
         if (timetoFire >= waitToFire - 0.6f && !isReloaded)
         {
@@ -71,7 +73,7 @@ public class GunBeahviour : MonoBehaviour
             timetoFire = 0f;
             allowfire = true;
         }
-        if(allowfire)
+        if(allowfire && !isVR)
         {
             progressBar.fillAmount = 0f;
         }
@@ -84,19 +86,22 @@ public class GunBeahviour : MonoBehaviour
 
     public void Shoot()
     {
-        allowfire = false;
-        muzzleFlash.Play();
-        AudioSource.PlayClipAtPoint(gunShot, transform.position);
-
-        GameObject  tempBullet = Instantiate(bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
-        tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
-        tempBullet.layer = gameObject.layer;
-        RaycastHit hit;
-        if(Physics.Raycast(transform.position, transform.forward, out hit, range))
+        if (allowfire)
         {
-            Debug.Log(hit.transform.name);
+            allowfire = false;
+            muzzleFlash.Play();
+            AudioSource.PlayClipAtPoint(gunShot, transform.position);
+
+            GameObject tempBullet = PhotonNetwork.Instantiate("Prefabs/"+bullet.name, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
+            tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
+            tempBullet.layer = gameObject.layer;
+            RaycastHit hit;
+            if(Physics.Raycast(transform.position, transform.forward, out hit, range))
+            {
+                Debug.Log(hit.transform.name);
+            }
+            isReloaded = false;
         }
-        isReloaded = false;
     }
 
     public void ToggleCanvasGun(bool toggle)

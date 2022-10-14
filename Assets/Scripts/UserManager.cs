@@ -81,14 +81,8 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
             && gunBeahviour.getAllowFire() 
             && photonView.IsMine)
         {
-            photonView.RPC("PlayerShoot",RpcTarget.AllViaServer);
+            gunBeahviour.Shoot();
         }
-    }
-
-    [PunRPC]
-    void PlayerShoot()
-    {
-        gunBeahviour.Shoot();
     }
 
     public void TakeDamage()
