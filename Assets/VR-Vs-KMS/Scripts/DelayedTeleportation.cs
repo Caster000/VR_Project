@@ -26,6 +26,8 @@ namespace VR_Vs_KMS.Scripts
         // public GameObject RightHandController;
 
         private XRInteractorLineVisual _xrInteractorLineVisual;
+        private ManageParticle manageParticle;
+        private Vector3 direction;
 
         private void Start()
         {
@@ -41,6 +43,8 @@ namespace VR_Vs_KMS.Scripts
             
             Debug.Log("can tp : "+canTp);
             _xrInteractorLineVisual = interactor.transform.gameObject.GetComponent<XRInteractorLineVisual>();
+            manageParticle = interactor.transform.gameObject.GetComponent<ManageParticle>();
+
             if (!canTp) return false;
 
             //timer = teleportRequest.requestTime;
@@ -52,6 +56,12 @@ namespace VR_Vs_KMS.Scripts
             teleportRequest.destinationRotation = transform.rotation;
             canTp = false;
             timer = 5f;
+
+            
+            
+            ParticleStart(manageParticle);
+            ParticleFollow(interactor.transform.position, teleportRequest.destinationPosition);
+
             return true;
         }
 
@@ -66,9 +76,11 @@ namespace VR_Vs_KMS.Scripts
                  ChangeColorRaycast(Color.yellow);
                  
                  timer -= Time.deltaTime;
-             }
+                manageParticle.gameObject.transform.position *= Time.deltaTime;
+            }
              if (timer <= 0 && !canTp)
              {
+                manageParticle.particleSystem.gameObject.SetActive(false);
                  canTp = true;
                  ChangeColorRaycast(Color.white);
 
@@ -86,6 +98,19 @@ namespace VR_Vs_KMS.Scripts
                      };
 
          }
+
+        private void ParticleFollow(Vector3 startPosition, Vector3 endPosition)
+        {
+            direction = endPosition - startPosition;
+            
+           
+
+        }
+
+        private void ParticleStart(ManageParticle manageParticle)
+        {
+            manageParticle.particleSystem.gameObject.SetActive(true);
+        }
     }
    
 
