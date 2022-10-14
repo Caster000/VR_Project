@@ -90,8 +90,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
                 Vector3 initialPos = UserDeviceManager.GetDeviceUsed() == UserDeviceType.HTC
                     ? new Vector3(0f, 0.5f, 0f)
-                    : new Vector3(0f, 3f, 0f);
-                PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, initialPos, Quaternion.identity, 0);
+                    : new Vector3(0f, 1f, 0f);
+                PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, initialPos, Quaternion.Euler(0, 180, 0), 0);
             }
             else
             {
