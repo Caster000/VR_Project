@@ -27,13 +27,13 @@ public class GunBeahviour : MonoBehaviour
     private float timetoFire = 0f;
     public bool isReloaded = true;
 
-    public Animator anim;
+   
 
     
-    float time = 0f;
+    
 
     
-    public Image progressBar;
+    //public Image progressBar;
 
 
     private bool allowfire = true;
@@ -54,11 +54,11 @@ public class GunBeahviour : MonoBehaviour
     void Update()
     {  
         
-        if (!allowfire)
+       /* if (!allowfire)
         {
             timetoFire += Time.deltaTime;
             progressBar.fillAmount += 1.0f / waitToFire * Time.deltaTime;
-        }
+        }*/
 
         if (timetoFire >= waitToFire - 0.6f && !isReloaded)
         {
@@ -73,10 +73,10 @@ public class GunBeahviour : MonoBehaviour
             allowfire = true;
 
         }
-        if(allowfire)
+       /* if(allowfire)
         {
             progressBar.fillAmount = 0f;
-        }
+        }*/
         
         
         if(Input.GetButtonDown("Fire1") && allowfire)
