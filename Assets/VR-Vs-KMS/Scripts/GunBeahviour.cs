@@ -13,7 +13,7 @@ public class GunBeahviour : MonoBehaviour
 
     public float fireRate = 1000000f;
 
-    public Camera gunCam;
+    public Canvas crosshair;
 
     public ParticleSystem muzzleFlash;
 
@@ -75,32 +75,33 @@ public class GunBeahviour : MonoBehaviour
         {
             progressBar.fillAmount = 0f;
         }
-        
-        
-        if(Input.GetButtonDown("Fire1") && allowfire)
-        {
-            Shoot();
-        }
-
-        
     }
 
-    void Shoot()
+    public bool getAllowFire()
+    {
+        return allowfire;
+    }
+
+    public void Shoot()
     {
         allowfire = false;
         muzzleFlash.Play();
         AudioSource.PlayClipAtPoint(gunShot, transform.position);
-        
-        // TODO photon RPC
+
         GameObject  tempBullet = Instantiate(bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
         tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
         tempBullet.layer = gameObject.layer;
         RaycastHit hit;
-        if(Physics.Raycast(gunCam.transform.position, gunCam.transform.forward, out hit, range))
+        if(Physics.Raycast(transform.position, transform.forward, out hit, range))
         {
             Debug.Log(hit.transform.name);
         }
         isReloaded = false;
+    }
+
+    public void ToggleCanvasGun(bool toggle)
+    {
+        crosshair.gameObject.SetActive(toggle);
     }
 
 

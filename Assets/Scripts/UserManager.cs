@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using Invector.vCharacterController;
 using TMPro;
 using UnityEngine;
@@ -9,7 +10,7 @@ using Photon.Pun;
 using Random = UnityEngine.Random;
 
 
-public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
+public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
 {
     public static GameObject UserMeInstance;
 
@@ -19,9 +20,11 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private TMP_Text TimerText;
     [SerializeField] private GameObject BodyPlayer;
     [SerializeField] private GameObject CameraPlayer;
+    [SerializeField] private GameObject GunObject;
     private int currentHealth;
     private float respawnTime;
     private bool spawned;
+    private GunBeahviour gunBeahviour;
     
     private GameConfig gameConfig;
     
@@ -40,8 +43,13 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
         }
         GetComponent<vThirdPersonInput>().enabled = photonView.IsMine;
         GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
-        CanvasPlayer.enabled = photonView.IsMine;
-        
+        CanvasPlayer.gameObject.SetActive(photonView.IsMine);
+        if (GunObject.GetComponent<GunBeahviour>())
+        {
+            gunBeahviour = GunObject.GetComponent<GunBeahviour>();
+            gunBeahviour.ToggleCanvasGun(photonView.IsMine);
+        }
+
         //TODO Remove by loading list of spawn Points
             spawPoints = new List<Transform>();
             spawPoints.Add(GameObject.Find("SpawnArea").transform);
@@ -68,10 +76,24 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             Respawn();
         }
+
+        if (Input.GetButtonDown("Fire1") 
+            && gunBeahviour.getAllowFire() 
+            && photonView.IsMine)
+        {
+            photonView.RPC("PlayerShoot",RpcTarget.AllViaServer);
+        }
+    }
+
+    [PunRPC]
+    void PlayerShoot()
+    {
+        gunBeahviour.Shoot();
     }
 
     public void TakeDamage()
     {
+        Debug.Log("Damage receive :"+photonView.InstantiationId);
         Healthbar.value = --currentHealth;
         if (currentHealth <= 0)
         {
@@ -91,6 +113,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
         GetComponent<Rigidbody>().useGravity = false;
         GetComponent<Rigidbody>().isKinematic = true;
         BodyPlayer.SetActive(false);
+        GunObject.SetActive(false);
         GetComponent<vThirdPersonInput>().enabled = false;
         // Teleport to spawnPoint
         Transform transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
@@ -114,6 +137,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
         GetComponent<Rigidbody>().useGravity = true;
         GetComponent<Rigidbody>().isKinematic = false;
         BodyPlayer.SetActive(true);
+        GunObject.SetActive(true);
         GetComponent<vThirdPersonInput>().enabled = true;
             
         //TODO Rescale shield
@@ -127,12 +151,14 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             stream.SendNext(currentHealth);
             stream.SendNext(BodyPlayer.activeSelf);
+            stream.SendNext(GunObject.activeSelf);
             stream.SendNext(GetComponent<Collider>().enabled);
         }
         else
         {
             currentHealth = (int)stream.ReceiveNext();
             BodyPlayer.SetActive((bool)stream.ReceiveNext());
+            GunObject.SetActive((bool)stream.ReceiveNext());
             GetComponent<Collider>().enabled = (bool)stream.ReceiveNext();
         }
     }

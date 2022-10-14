@@ -17,12 +17,12 @@ public class BulletBehaviour : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         GameObject hit = collision.gameObject;
-
         IPlayer player = hit.GetComponent<IPlayer>();
         if(player != null)
         {
-            if (hit.layer == gameObject.layer && !gameConfig.friendlyFire)
-                return;
+            //TODO uncomment
+            // if (hit.layer == gameObject.layer && !gameConfig.friendlyFire)
+            //     return;
             player.TakeDamage();
             Destroy(gameObject);
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using Invector.vCharacterController;
 using TMPro;
 using UnityEngine;
@@ -10,7 +11,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 using VR_Vs_KMS.Scripts;
 using Random = UnityEngine.Random;
 
-public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable
+public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
 {
     public static GameObject UserMeInstance;
     
