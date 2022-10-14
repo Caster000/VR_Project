@@ -7,10 +7,11 @@ public class ResizeShield : MonoBehaviour
 {
     private void OnCollisionEnter(Collision collision)
     {
-//TODO Put bullet Layer
-        if (collision.gameObject.layer == 6)
+        //TODO Put bullet Layer
+        if (collision.gameObject.layer == 8)
         {
-            gameObject.transform.localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+        Debug.Log("Collision");
+        gameObject.transform.localScale -= new Vector3(0.1f, 0.1f, 0.1f);
             
         }
 
