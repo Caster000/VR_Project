@@ -14,6 +14,7 @@ public class GunBeahviour : MonoBehaviour
     public float fireRate = 1000000f;
 
     public Camera gunCam;
+    public Camera playerCam;
 
     public ParticleSystem muzzleFlash;
 
@@ -94,10 +95,10 @@ public class GunBeahviour : MonoBehaviour
         allowfire = false;
         muzzleFlash.Play();
         AudioSource.PlayClipAtPoint(gunShot, transform.position);
-        var  tempBullet = Instantiate(bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
-        tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
+        var  tempBullet = Instantiate(bullet, bulletSpawn.transform.position, playerCam.transform.rotation);
+        tempBullet.GetComponent<Rigidbody>().velocity = playerCam.transform.forward * bulletSpeed ;
         RaycastHit hit;
-        if(Physics.Raycast(gunCam.transform.position, gunCam.transform.forward, out hit, range))
+        if(Physics.Raycast(bulletSpawn.transform.position, bulletSpawn.transform.forward, out hit, range))
         {
             Debug.Log(hit.transform.name);
 
