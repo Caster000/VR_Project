@@ -59,7 +59,6 @@ public class GunBeahviour : MonoBehaviour
                 progressBar.fillAmount += 1.0f / waitToFire * Time.deltaTime;
             }
         }
-        // if (isVR)return;
 
 
         if (timetoFire >= waitToFire - 0.6f && !isReloaded)
