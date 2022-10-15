@@ -9,11 +9,17 @@ EditorBuildSettings:
     path: Assets/Scenes/Init.unity
     guid: 39023bdf021d6fa428e091867f8baffe
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 1ac244062676dd541bdd9f40833c3d21
+  - enabled: 1
     path: Assets/Scenes/LobbyScene.unity
     guid: d4334e05a1a43594c9302ccaf4a293ed
   - enabled: 1
-    path: Assets/VR-Vs-KMS/Scenes/GameScene.unity
+    path: Assets/VR-Vs-KMS/Scenes/TutoScene.unity
     guid: 80bcd862fc14a8149a44c2a61f9ee6b0
+  - enabled: 0
+    path: Assets/Scenes/TutoInit.unity
+    guid: ec95f7140a4329b4f96626e5bf156a6c
   - enabled: 0
     path: Assets/Scenes/GameScene_v1_multi.unity
     guid: 30347d40228ce1a4888f1f7c7e1cd1f6

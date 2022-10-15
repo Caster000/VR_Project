@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    public static bool isMulti;
     public static NetworkManager Instance;
 
     [Tooltip("The prefab to use for representing the user on a PC. Must be in Resources folder")]
@@ -55,7 +56,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     /// </summary>
     public void LeaveRoom()
     {
-        PhotonNetwork.LeaveRoom();
+        if (SceneManager.GetActiveScene().name == "TutoSceneSolo")
+        {
+            SceneManager.LoadScene("Menue");
+        }
+        else
+        {
+            PhotonNetwork.LeaveRoom();
+        }
     }
 
     private void updatePlayerNumberUI()
@@ -91,7 +99,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 Vector3 initialPos = UserDeviceManager.GetDeviceUsed() == UserDeviceType.HTC
                     ? new Vector3(0f, 0.5f, 0f)
                     : new Vector3(0f, 1f, 0f);
-                PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, initialPos, Quaternion.Euler(0, 180, 0), 0);
+                if (SceneManager.GetActiveScene().name == "TutoSceneSolo")
+                {
+                    Instantiate(playerPrefab, initialPos, Quaternion.Euler(0, 180, 0));
+                    
+                }
+                else
+                {
+                    PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, initialPos, Quaternion.Euler(0, 180, 0), 0);
+                }
             }
             else
             {

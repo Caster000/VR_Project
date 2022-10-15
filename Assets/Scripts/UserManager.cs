@@ -30,22 +30,30 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         gameConfig = GameConfigLoader.Instance.gameConfig;
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
-        if (photonView.IsMine)
+
+        if (NetworkManager.isMulti)
         {
-            Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
-            UserMeInstance = gameObject;
-            Instantiate(CameraPlayer);
-            CameraPlayer.SetActive(photonView.IsMine);
-            CameraPlayer.GetComponent<vThirdPersonCamera>().SetMainTarget(transform);
+            if (photonView.IsMine)
+            {
+                Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
+                UserMeInstance = gameObject;
+                Instantiate(CameraPlayer);
+                CameraPlayer.SetActive(photonView.IsMine);
+                CameraPlayer.GetComponent<vThirdPersonCamera>().SetMainTarget(transform);
+            }
+            GetComponent<vThirdPersonInput>().enabled = photonView.IsMine;
+            GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
+            CanvasPlayer.enabled = photonView.IsMine;
         }
-        GetComponent<vThirdPersonInput>().enabled = photonView.IsMine;
-        GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
-        CanvasPlayer.enabled = photonView.IsMine;
-        
+        else
+        {
+            Instantiate(CameraPlayer);
+        }
+                
         //TODO Remove by loading list of spawn Points
-            spawPoints = new List<Transform>();
-            spawPoints.Add(GameObject.Find("SpawnArea").transform);
-            spawned = true;
+        spawPoints = new List<Transform>();
+        spawPoints.Add(GameObject.Find("SpawnArea").transform);
+        spawned = true;
     }
 
     private void Start()
@@ -55,7 +63,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine && NetworkManager.isMulti) return;
         //TODO to remove, Debug to test Health
         if (Input.GetKeyDown(KeyCode.Space))
         {
