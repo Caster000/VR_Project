@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private string Id;
-    private string coucou;
     //global information
     public int playerNumber;
     public bool isWin;
