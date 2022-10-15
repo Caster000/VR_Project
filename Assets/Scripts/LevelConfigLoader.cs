@@ -1,26 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class LevelConfigLoader : MonoBehaviour
 {
-    #region "PublicAttributes"
     public static LevelConfigLoader Instance { get; private set; }
 
-    [SerializeField] public LevelConfig levelConfig { get; private set;  }
-    #endregion
+    [SerializeField] public LevelConfig levelConfig { get; private set; }
 
-    #region "PrivateAttributes"
     private LevelConfigLoader() { }
     // Start is called before the first frame update
-    void Start()
+
+    //    public string SceneToLoad = "LobbyScene";
+    public string SceneToLoad = "GameScene";
+
+    void Awake()
     {
-        
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("More than one gameconfig instance exists. Put exactly one in the world.");
+            Destroy(Instance);
+        }
+        else
+        {
+            Instance = this;
+
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        
+        levelConfig = new LevelConfig();
+        levelConfig.Load();
+        levelConfig.DebugLog();
+        SceneManager.LoadScene(SceneToLoad);
     }
 }

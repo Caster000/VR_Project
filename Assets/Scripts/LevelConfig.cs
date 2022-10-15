@@ -8,13 +8,13 @@ using System;
 public class LevelConfig
 {
 
-    private static readonly string PATH = "./ConfigFiles/LevelConfig.json";
-    #region fetched variable
-    public LevelConfig contaminationArea = new LevelConfig();
-    public LevelConfig throwableObject = new LevelConfig();
+    private static readonly string PATH = "./LevelConfig.json";
+    public int nbContaminatedPlayerToVictory;
+    public int nbContaminationArea;
+    /*public LevelConfig ContaminationArea = new LevelConfig();
+    public LevelConfig ThrowableObject = new LevelConfig();
     public LevelConfig SpawnArea = new LevelConfig();
-
-    // Disables debug logging
+    // Disables debug logging */
 
     public bool NoDebug;
     /// <summary>
@@ -23,10 +23,11 @@ public class LevelConfig
     public void Load()
     {
         string jsonRepresentation = TextReader.LoadResourceTextfileFromStreamingAsset(PATH);
-        if(jsonRepresentation != null)
+        if (jsonRepresentation != null)
         {
             JsonUtility.FromJsonOverwrite(jsonRepresentation, this);
             Debug.unityLogger.logEnabled = !NoDebug;
+            Debug.Log("json" + jsonRepresentation);
         }
         else
         {

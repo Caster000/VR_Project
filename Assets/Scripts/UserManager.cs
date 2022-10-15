@@ -22,9 +22,9 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
     private int currentHealth;
     private float respawnTime;
     private bool spawned;
-    
+
     private GameConfig gameConfig;
-    
+    public GameManager gameManager;
     // Start is called before the first frame update
     void Awake()
     {
@@ -41,11 +41,11 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
         GetComponent<vThirdPersonInput>().enabled = photonView.IsMine;
         GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
         CanvasPlayer.enabled = photonView.IsMine;
-        
+
         //TODO Remove by loading list of spawn Points
-            spawPoints = new List<Transform>();
-            spawPoints.Add(GameObject.Find("SpawnArea").transform);
-            spawned = true;
+        spawPoints = new List<Transform>();
+        spawPoints.Add(GameObject.Find("SpawnArea").transform);
+        spawned = true;
     }
 
     private void Start()
@@ -55,18 +55,21 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
     // Update is called once per frame
     void Update()
     {
+
+
         if (!photonView.IsMine) return;
         //TODO to remove, Debug to test Health
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            //gameManager.ScientistScore++;
             TakeDamage();
         }
 
-        if(respawnTime>0)     
-        {         
-            respawnTime -= Time.deltaTime;   
-            double b = Mathf.RoundToInt(respawnTime); 
-            TimerText.text = "Respawn in "+b.ToString ()+"s";
+        if (respawnTime > 0)
+        {
+            respawnTime -= Time.deltaTime;
+            double b = Mathf.RoundToInt(respawnTime);
+            TimerText.text = "Respawn in " + b.ToString() + "s";
         }
 
         if (respawnTime <= 0 && !spawned)
@@ -78,14 +81,14 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
             CanvasPlayer.GetComponent<Image>().color = Color.clear;
             Healthbar.value = currentHealth = gameConfig.LifeNumber;
             spawned = true;
-            
+
             //Reset player health, position and shield
             GetComponent<Collider>().enabled = true;
             GetComponent<Rigidbody>().useGravity = true;
             GetComponent<Rigidbody>().isKinematic = false;
             BodyPlayer.SetActive(true); // TODO Make with OnPhotonSerializeView
             GetComponent<vThirdPersonInput>().enabled = true;
-            
+
             //TODO Rescale shield
         }
     }
@@ -98,7 +101,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
             spawned = false;
             CanvasPlayer.GetComponent<Image>().color = Color.black;
             Healthbar.gameObject.SetActive(false);
-            
+
             GetComponent<Collider>().enabled = false;
             GetComponent<Rigidbody>().useGravity = false;
             GetComponent<Rigidbody>().isKinematic = true;
@@ -118,7 +121,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if(stream.IsWriting)
+        if (stream.IsWriting)
         {
             stream.SendNext(currentHealth);
             stream.SendNext(BodyPlayer.activeSelf);
