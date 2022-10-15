@@ -20032,6 +20032,7 @@ MonoBehaviour:
   bulletSpawn: {fileID: 3763847506102889000}
   isReloaded: 1
   anim: {fileID: 6436178135610868994}
+  PlayerCam: {fileID: 6444909022239269045}
   progressBar: {fileID: 5748376096638034094}
   waitToFire: 1.5
   bulletSpeed: 10
@@ -34342,3 +34343,4 @@ MonoBehaviour:
   TimerText: {fileID: 8563074728230328037}
   BodyPlayer: {fileID: 6436178135539032981}
   CameraPlayer: {fileID: 6444909020982337854, guid: c3f07221998f9ae409f367d2d196b1a8, type: 3}
+  GunObject: {fileID: 0}

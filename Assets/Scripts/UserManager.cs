@@ -19,11 +19,13 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private TMP_Text TimerText;
     [SerializeField] private GameObject BodyPlayer;
     [SerializeField] private GameObject CameraPlayer;
+    [SerializeField] private GameObject GunObject;
     private int currentHealth;
     private float respawnTime;
     private bool spawned;
     
     private GameConfig gameConfig;
+    private GunBeahviour gunBeahviour;
     
     // Start is called before the first frame update
     void Awake()

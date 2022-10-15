@@ -28,22 +28,26 @@ public class GunBeahviour : MonoBehaviour
     public bool isReloaded = true;
 
     public Animator anim;
-
+    public GameObject PlayerCam;
     
     float time = 0f;
 
     
     public Image progressBar;
 
+    public vThirdPersonCamera camScript;
 
     private bool allowfire = true;
     public float waitToFire = 1.5f;
 
     public float bulletSpeed = 10f;
 
-   
- 
-    
+
+    private void Awake()
+    {
+       camScript = PlayerCam.GetComponent<vThirdPersonCamera>();
+    }
+
     void Start()
     {
      
@@ -87,14 +91,12 @@ public class GunBeahviour : MonoBehaviour
 
         if(Input.GetButtonDown("Fire2"))
         {
-            Debug.Log("Aim pressed");
-            anim.SetBool("isAiming", true);
+            Aim();
 
         }
         if (Input.GetButtonUp("Fire2"))
         {
-            Debug.Log("Aim released");
-            anim.SetBool("isAiming", false);
+            ResetCam(); 
         }
 
 
@@ -121,5 +123,25 @@ public class GunBeahviour : MonoBehaviour
 
     }
 
+    public void Aim()
+    {
+        Debug.Log("Aim pressed");
+        anim.SetBool("isAiming", true);
+        camScript.rightOffset = 0.3f;
+        camScript.defaultDistance = 0.5f;
+        camScript.height = 1.6f;
+        
+    }
+
+    public void ResetCam()
+    {
+        Debug.Log("Aim released");
+        anim.SetBool("isAiming", false);
+        camScript.rightOffset = 0f;
+        camScript.defaultDistance = 2.5f;
+        camScript.height = 1.4f;
+
+    }
+   
 
 }
