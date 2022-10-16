@@ -11,11 +11,20 @@ public class LevelConfig
     private static readonly string PATH = "./LevelConfig.json";
     public int nbContaminatedPlayerToVictory;
     public int nbContaminationArea;
-    /*public LevelConfig ContaminationArea = new LevelConfig();
-    public LevelConfig ThrowableObject = new LevelConfig();
-    public LevelConfig SpawnArea = new LevelConfig();
-    // Disables debug logging */
+    //Contamination area
 
+    public List<Vector3> contaminationAreaPositions = new List<Vector3>();
+    public List<Vector3> contaminationAreaRotations = new List<Vector3>();
+    // Throwable object
+    public List<Vector3> throwableObjectPositions = new List<Vector3>();
+    public List<Vector3> throwableObjectRotations = new List<Vector3>();
+
+    //spawner
+    public List<Vector3> spawnAreaPositions = new List<Vector3>();
+    public List<Vector3> spawnAreaRotations = new List<Vector3>();
+
+
+    // Disables debug logging
     public bool NoDebug;
     /// <summary>
     /// Loads the configuration.
