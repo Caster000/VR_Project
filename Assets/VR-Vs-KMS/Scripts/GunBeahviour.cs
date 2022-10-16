@@ -14,8 +14,6 @@ public class GunBeahviour : MonoBehaviour
 
     public float fireRate = 1000000f;
 
-    public Canvas crosshair;
-
     public ParticleSystem muzzleFlash;
 
     public AudioClip gunShot;
@@ -30,25 +28,12 @@ public class GunBeahviour : MonoBehaviour
 
     public bool isVR;
 
-    
     public Image progressBar;
-
 
     private bool allowfire = true;
     public float waitToFire = 1.5f;
 
     public float bulletSpeed = 10f;
-
-   
- 
-    
-    void Start()
-    {
-        
-
-    }
-
-    
     void Update()
     {
         if (!allowfire)
@@ -77,13 +62,12 @@ public class GunBeahviour : MonoBehaviour
             progressBar.fillAmount = 0f;
         }
     }
-
     public bool getAllowFire()
     {
         return allowfire;
     }
 
-    public void Shoot()
+    public void Shoot(GameObject cameraPlayer)
     {
         if (allowfire)
         {
@@ -91,8 +75,8 @@ public class GunBeahviour : MonoBehaviour
             muzzleFlash.Play();
             AudioSource.PlayClipAtPoint(gunShot, transform.position);
 
-            GameObject tempBullet = PhotonNetwork.Instantiate("Prefabs/"+bullet.name, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
-            tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
+            GameObject tempBullet = PhotonNetwork.Instantiate("Prefabs/"+bullet.name, bulletSpawn.transform.position, cameraPlayer.transform.rotation);
+            tempBullet.GetComponent<Rigidbody>().velocity = cameraPlayer.transform.forward * bulletSpeed ;
             tempBullet.layer = gameObject.layer;
             RaycastHit hit;
             if(Physics.Raycast(transform.position, transform.forward, out hit, range))
@@ -102,11 +86,5 @@ public class GunBeahviour : MonoBehaviour
             isReloaded = false;
         }
     }
-
-    public void ToggleCanvasGun(bool toggle)
-    {
-        crosshair.gameObject.SetActive(toggle);
-    }
-
 
 }

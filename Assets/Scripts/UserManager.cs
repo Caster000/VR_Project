@@ -19,14 +19,27 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     [SerializeField] private Canvas CanvasPlayer;
     [SerializeField] private TMP_Text TimerText;
     [SerializeField] private GameObject BodyPlayer;
-    [SerializeField] private GameObject CameraPlayer;
+    [SerializeField] private GameObject CameraPlayerPrefab;
+    
+    
+    [Header("Gun objects")]
     [SerializeField] private GameObject GunObject;
+    [SerializeField] private Animator GunAnim;
+    private GunBeahviour gunBeahviour;
+    private vThirdPersonCamera _vThirdPersonCamera;
+
     private int currentHealth;
     private float respawnTime;
     private bool spawned;
-    private GunBeahviour gunBeahviour;
-    
+
     private GameConfig gameConfig;
+    private GameObject cameraPlayer;
+    private Image canvasImage;
+    
+    [Header("My Components")]
+    private Rigidbody _rigidbody;
+    private Collider _collider;
+    private vThirdPersonInput _thirdPersonInput;
     
     // Start is called before the first frame update
     void Awake()
@@ -37,17 +50,21 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         {
             Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
             UserMeInstance = gameObject;
-            Instantiate(CameraPlayer);
-            CameraPlayer.SetActive(photonView.IsMine);
-            CameraPlayer.GetComponent<vThirdPersonCamera>().SetMainTarget(transform);
+            cameraPlayer = Instantiate(CameraPlayerPrefab);
+            cameraPlayer.SetActive(photonView.IsMine);
+            _vThirdPersonCamera = cameraPlayer.GetComponent<vThirdPersonCamera>();
+            _vThirdPersonCamera.SetMainTarget(transform);
         }
-        GetComponent<vThirdPersonInput>().enabled = photonView.IsMine;
-        GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
+        _thirdPersonInput = GetComponent<vThirdPersonInput>();
+        _thirdPersonInput.enabled = photonView.IsMine;
+        _rigidbody = GetComponent<Rigidbody>();
+        _rigidbody.isKinematic = !photonView.IsMine;
+        _collider = GetComponent<Collider>();
         CanvasPlayer.gameObject.SetActive(photonView.IsMine);
+        canvasImage = CanvasPlayer.GetComponent<Image>();
         if (GunObject.GetComponent<GunBeahviour>())
         {
             gunBeahviour = GunObject.GetComponent<GunBeahviour>();
-            gunBeahviour.ToggleCanvasGun(photonView.IsMine);
         }
 
         //TODO Remove by loading list of spawn Points
@@ -77,12 +94,24 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
             Respawn();
         }
 
+        // Gun inputs
         if (Input.GetButtonDown("Fire1") 
             && gunBeahviour.getAllowFire() 
             && photonView.IsMine)
         {
-            gunBeahviour.Shoot();
+            gunBeahviour.Shoot(cameraPlayer);
         }
+        
+        if(Input.GetButtonDown("Fire2"))
+        {
+            Aim();
+
+        }
+        if (Input.GetButtonUp("Fire2"))
+        {
+            ResetCam(); 
+        }
+
     }
 
     public void TakeDamage()
@@ -95,20 +124,40 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
             return;
         }
     }
+    
+    public void Aim()
+    {
+        Debug.Log("Aim pressed");
+        GunAnim.SetBool("isAiming", true);
+        _vThirdPersonCamera.rightOffset = 0.3f;
+        _vThirdPersonCamera.defaultDistance = 0.5f;
+        _vThirdPersonCamera.height = 1.6f;
+        
+    }
+
+    public void ResetCam()
+    {
+        Debug.Log("Aim released");
+        GunAnim.SetBool("isAiming", false);
+        _vThirdPersonCamera.rightOffset = 0f;
+        _vThirdPersonCamera.defaultDistance = 2.5f;
+        _vThirdPersonCamera.height = 1.4f;
+
+    }
 
     private void PrepareRespwan()
     {
         // Canvas update
         spawned = false;
-        CanvasPlayer.GetComponent<Image>().color = Color.black;
+        canvasImage.color = Color.black;
         Healthbar.gameObject.SetActive(false);
         // Hide the body and colliders  
-        GetComponent<Collider>().enabled = false;
-        GetComponent<Rigidbody>().useGravity = false;
-        GetComponent<Rigidbody>().isKinematic = true;
+        _collider.enabled = false;
+        _rigidbody.useGravity = false;
+        _rigidbody.isKinematic = true;
         BodyPlayer.SetActive(false);
         GunObject.SetActive(false);
-        GetComponent<vThirdPersonInput>().enabled = false;
+       _thirdPersonInput.enabled = false;
         // Teleport to spawnPoint
         Transform transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
         transform.position = transform_spawn.position;
@@ -122,19 +171,17 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         TimerText.text = "";
         TimerText.enabled = false;
         Healthbar.gameObject.SetActive(true);
-        CanvasPlayer.GetComponent<Image>().color = Color.clear;
+        canvasImage.color = Color.clear;
         Healthbar.value = currentHealth = gameConfig.LifeNumber;
         spawned = true;
             
         //Reset player health, position and shield
-        GetComponent<Collider>().enabled = true;
-        GetComponent<Rigidbody>().useGravity = true;
-        GetComponent<Rigidbody>().isKinematic = false;
+        _collider.enabled = true;
+        _rigidbody.useGravity = true;
+        _rigidbody.isKinematic = false;
         BodyPlayer.SetActive(true);
         GunObject.SetActive(true);
-        GetComponent<vThirdPersonInput>().enabled = true;
-            
-        //TODO Rescale shield
+        _thirdPersonInput.enabled = true;
     }
 
     #region Photon
