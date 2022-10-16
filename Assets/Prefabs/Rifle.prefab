@@ -731,13 +731,14 @@ MonoBehaviour:
   damage: 1
   range: 50
   fireRate: 10
-  gunCam: {fileID: 2037475095716596281}
+  crosshair: {fileID: 2037475094227787004}
   muzzleFlash: {fileID: 2199680606712697282}
   gunShot: {fileID: 8300000, guid: be0c166dec85dc94ba85ba92f5ef2968, type: 3}
   gunReload: {fileID: 8300000, guid: 9eb7910e8f3c5e8428f58cf1f3ca1152, type: 3}
   bullet: {fileID: 3741455278575672788, guid: d72e75ae8a31bc24a8246e7a143f3d08, type: 3}
   bulletSpawn: {fileID: 2037475095694904739}
   isReloaded: 1
+  anim: {fileID: 0}
   progressBar: {fileID: 0}
   waitToFire: 1.5
   bulletSpeed: 10
