@@ -74,8 +74,16 @@ public class GunBeahviour : MonoBehaviour
             allowfire = false;
             muzzleFlash.Play();
             AudioSource.PlayClipAtPoint(gunShot, transform.position);
+            GameObject tempBullet = null;
+            if (NetworkManager.isMulti)
+            {
+                tempBullet = PhotonNetwork.Instantiate("Prefabs/"+bullet.name, bulletSpawn.transform.position, cameraPlayer.transform.rotation);
 
-            GameObject tempBullet = PhotonNetwork.Instantiate("Prefabs/"+bullet.name, bulletSpawn.transform.position, cameraPlayer.transform.rotation);
+            }
+            else
+            {
+                tempBullet = Instantiate(bullet, bulletSpawn.transform.position, cameraPlayer.transform.rotation);
+            }
             tempBullet.GetComponent<Rigidbody>().velocity = cameraPlayer.transform.forward * bulletSpeed ;
             tempBullet.layer = gameObject.layer;
             RaycastHit hit;

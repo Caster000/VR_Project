@@ -31,21 +31,24 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     {
         gameConfig = GameConfigLoader.Instance.gameConfig;
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
-        
-        if (photonView.IsMine)
+
+        if (NetworkManager.isMulti)
         {
-            Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
-            UserMeInstance = gameObject;
-            FindObjectOfType<DelayedTeleportation>().teleportationProvider =
-                GetComponent<TeleportationProvider>();
+            if (photonView.IsMine)
+            {
+                Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
+                UserMeInstance = gameObject;
+                FindObjectOfType<DelayedTeleportation>().teleportationProvider =
+                    GetComponent<TeleportationProvider>();
+            }
+            CameraPlayer.SetActive(photonView.IsMine);
         }
-        CameraPlayer.SetActive(photonView.IsMine);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine && NetworkManager.isMulti) return;
         
         if(respawnTime>0)     
         {         

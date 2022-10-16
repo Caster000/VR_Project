@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 
@@ -46,31 +47,36 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     {
         gameConfig = GameConfigLoader.Instance.gameConfig;
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
-        if (photonView.IsMine)
+        _thirdPersonInput = GetComponent<vThirdPersonInput>();
+        _rigidbody = GetComponent<Rigidbody>();
+        _collider = GetComponent<Collider>();
+        canvasImage = CanvasPlayer.GetComponent<Image>();
+
+        if (NetworkManager.isMulti)
         {
+            if (photonView.IsMine)
+            {
             Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
             UserMeInstance = gameObject;
-            cameraPlayer = Instantiate(CameraPlayerPrefab);
-            cameraPlayer.SetActive(photonView.IsMine);
-            _vThirdPersonCamera = cameraPlayer.GetComponent<vThirdPersonCamera>();
-            _vThirdPersonCamera.SetMainTarget(transform);
+            CameraPlayerInstanciate();
+            _thirdPersonInput.enabled = photonView.IsMine;
+            _rigidbody.isKinematic = !photonView.IsMine;
+            CanvasPlayer.gameObject.SetActive(photonView.IsMine);
+            }
         }
-        _thirdPersonInput = GetComponent<vThirdPersonInput>();
-        _thirdPersonInput.enabled = photonView.IsMine;
-        _rigidbody = GetComponent<Rigidbody>();
-        _rigidbody.isKinematic = !photonView.IsMine;
-        _collider = GetComponent<Collider>();
-        CanvasPlayer.gameObject.SetActive(photonView.IsMine);
-        canvasImage = CanvasPlayer.GetComponent<Image>();
+        else
+        {
+            CameraPlayerInstanciate();
+        }
         if (GunObject.GetComponent<GunBeahviour>())
         {
             gunBeahviour = GunObject.GetComponent<GunBeahviour>();
         }
 
         //TODO Remove by loading list of spawn Points
-            spawPoints = new List<Transform>();
-            spawPoints.Add(GameObject.Find("SpawnArea").transform);
-            spawned = true;
+        spawPoints = new List<Transform>();
+        spawPoints.Add(GameObject.Find("SpawnArea").transform);
+        spawned = true;
     }
 
     private void Start()
@@ -80,7 +86,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine && NetworkManager.isMulti) return;
 
         if(respawnTime>0)     
         {         
@@ -95,23 +101,45 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         }
 
         // Gun inputs
-        if (Input.GetButtonDown("Fire1") 
+        if ((Input.GetButtonDown("Fire1") 
             && gunBeahviour.getAllowFire() 
             && photonView.IsMine)
+            ||
+            (Input.GetButtonDown("Fire1") 
+             && gunBeahviour.getAllowFire() 
+             && !NetworkManager.isMulti)
+            )
         {
             gunBeahviour.Shoot(cameraPlayer);
         }
         
-        if(Input.GetButtonDown("Fire2"))
+        if((Input.GetButtonDown("Fire2") && photonView.IsMine)
+           ||
+           (Input.GetButtonDown("Fire2") && !NetworkManager.isMulti))
         {
             Aim();
 
         }
-        if (Input.GetButtonUp("Fire2"))
+        if((Input.GetButtonUp("Fire2") && photonView.IsMine)
+           ||
+           (Input.GetButtonUp("Fire2") && !NetworkManager.isMulti))
         {
             ResetCam(); 
         }
 
+        if (Input.GetButton("Leave")&& !NetworkManager.isMulti)
+        {
+            SceneManager.LoadScene("Menu");
+        }
+
+    }
+
+    private void CameraPlayerInstanciate()
+    {
+        cameraPlayer = Instantiate(CameraPlayerPrefab);
+        cameraPlayer.SetActive(true);
+        _vThirdPersonCamera = cameraPlayer.GetComponent<vThirdPersonCamera>();
+        _vThirdPersonCamera.SetMainTarget(transform);
     }
 
     public void TakeDamage()
