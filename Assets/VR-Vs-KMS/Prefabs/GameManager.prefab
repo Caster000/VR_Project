@@ -44,24 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c0335aa5277d374da6111049dea2e88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNumber: 0
-  isWin: 0
-  winner: 
-  nbContaminationArea: 0
-  contaminationAreaPositions: []
-  contaminationAreaRotations: []
   contaminationAreaPrefab: {fileID: 2112096271937188694, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
   contaminationAreaParent: {fileID: 0}
-  nbContaminatedPlayerToVictory: 0
-  throwableObjectPositions: []
-  throwableObjectRotations: []
   throwableObjectPrefab: {fileID: 5837272303240001897, guid: 893d7d88144380a4b9a00aded7c33f0d, type: 3}
   throwableObjectParent: {fileID: 0}
-  spawnAreaPositions: []
-  spawnAreaRotations: []
   spawnAreaPrefab: {fileID: 4772955901445691050, guid: a8ee511281b67a1448c9fb76e29d1577, type: 3}
   spawnAreaParent: {fileID: 0}
   VictorySound: {fileID: 0}
   DefeatSound: {fileID: 0}
-  VictoryText: {fileID: 0}
-  DefeatText: {fileID: 0}
+  canvasEndText: {fileID: 0}
+  endText: {fileID: 0}
