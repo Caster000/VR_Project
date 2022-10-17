@@ -14,7 +14,7 @@ public class LevelConfigLoader : MonoBehaviour
     // Start is called before the first frame update
 
     //    public string SceneToLoad = "LobbyScene";
-    public string SceneToLoad = "GameScene";
+    //public string SceneToLoad = "GameScene";
 
     void Awake()
     {
@@ -35,6 +35,6 @@ public class LevelConfigLoader : MonoBehaviour
         levelConfig = new LevelConfig();
         levelConfig.Load();
         levelConfig.DebugLog();
-        SceneManager.LoadScene(SceneToLoad);
+        //SceneManager.LoadScene(SceneToLoad);
     }
 }
