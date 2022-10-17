@@ -48,14 +48,10 @@ MonoBehaviour:
   isWin: 0
   winner: 
   nbContaminationArea: 0
-  nbContaminatedAreaByScientist: 0
-  nbContaminatedAreaByVirus: 0
   contaminationAreaPositions: []
   contaminationAreaRotations: []
   contaminationAreaPrefab: {fileID: 2112096271937188694, guid: 2ec6fba1a40102843b98f3569a9d95fa, type: 3}
   contaminationAreaParent: {fileID: 0}
-  ScientistScore: 0
-  VirusScore: 0
   nbContaminatedPlayerToVictory: 0
   throwableObjectPositions: []
   throwableObjectRotations: []

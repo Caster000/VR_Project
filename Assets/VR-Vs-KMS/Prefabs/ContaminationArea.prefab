@@ -4907,6 +4907,7 @@ MonoBehaviour:
   cullRadius: 4
   layerCapture: 0
   layers: 
+  gameManager: {fileID: 3173589504671523344, guid: 1cfa9100c1c9e7e41a6e30f82242ca9e, type: 3}
 --- !u!82 &1678797290
 AudioSource:
   m_ObjectHideFlags: 0

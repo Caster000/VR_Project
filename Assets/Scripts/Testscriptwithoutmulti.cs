@@ -20,11 +20,11 @@ public class Testscriptwithoutmulti : MonoBehaviour
             Debug.Log("x");
             if (player.gameObject.layer == 7)
             {
-                gameManager.ScientistScore++;
+                GameManager.ScientistScore++;
             }
             else if (player.gameObject.layer == 8)
             {
-                gameManager.VirusScore++;
+                GameManager.VirusScore++;
             }
         }
         if (Input.GetKeyUp("w"))
@@ -33,11 +33,11 @@ public class Testscriptwithoutmulti : MonoBehaviour
 
             if (player.gameObject.layer == 7)
             {
-                gameManager.nbContaminatedAreaByScientist++;
+                GameManager.nbContaminatedAreaByScientist++;
             }
             else if (player.gameObject.layer == 8)
             {
-                gameManager.nbContaminatedAreaByVirus++;
+                GameManager.nbContaminatedAreaByVirus++;
             }
         }
     }

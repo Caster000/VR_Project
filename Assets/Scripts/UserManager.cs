@@ -34,7 +34,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     private bool spawned;
 
     private GameConfig gameConfig;
-    public GameManager gameManager;
+    private GameManager gameManager;
     private GameObject cameraPlayer;
     private Image canvasImage;
     
@@ -75,9 +75,9 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         }
 
         //TODO Remove by loading list of spawn Points
-        spawPoints = new List<Transform>();
-        spawPoints.Add(GameObject.Find("SpawnArea").transform);
-        spawned = true;
+        //spawPoints = new List<Transform>();
+        //spawPoints.Add(GameObject.Find("SpawnArea").transform);
+        //spawned = true;
     }
 
     private void Start()
@@ -132,7 +132,17 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         {
             SceneManager.LoadScene("Menu");
         }
-
+        if (Input.GetKeyDown("space"))
+        {
+            if(gameObject.layer == 7)
+            {
+                GameManager.ScientistScore++;
+            }else if (gameObject.layer == 8)
+            {
+                GameManager.VirusScore++;
+            }
+          
+        }
     }
 
     private void CameraPlayerInstanciate()
@@ -192,6 +202,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         transform.position = transform_spawn.position;
         TimerText.enabled = true;
         respawnTime = gameConfig.RespawnTime;
+        Debug.Log("prepareRespawn" + gameObject.layer);
     }
 
     private void Respawn()

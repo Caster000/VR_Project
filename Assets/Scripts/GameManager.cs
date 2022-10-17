@@ -1,3 +1,4 @@
+using Photon.Pun.Demo.PunBasics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,8 +14,8 @@ public class GameManager : MonoBehaviour
 
     // variables related to contamination area
     public int nbContaminationArea;
-    public int nbContaminatedAreaByScientist;
-    public int nbContaminatedAreaByVirus;
+    static public int nbContaminatedAreaByScientist;
+    static public int nbContaminatedAreaByVirus;
 
     //ContaminationArea
     public List<Vector3> contaminationAreaPositions = new List<Vector3>();
@@ -23,8 +24,8 @@ public class GameManager : MonoBehaviour
     public Transform contaminationAreaParent;
 
     //variables related to player contamination (kill)
-    public int ScientistScore;
-    public int VirusScore;
+    static public int ScientistScore;
+    static public int VirusScore;
     public int nbContaminatedPlayerToVictory;
 
 
@@ -65,6 +66,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (ScientistScore == nbContaminatedPlayerToVictory || VirusScore == nbContaminatedPlayerToVictory)
         {
             isWin = true;
