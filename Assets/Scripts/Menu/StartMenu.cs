@@ -83,7 +83,7 @@ public class StartMenu : MonoBehaviourPunCallbacks
         // try connecting to the PUN server
         // progressLabel.SetActive(false);
         // controlPanel.SetActive(true);
-        
+        Cursor.visible = true;
         isConnecting = false;
         ipInputField.text = "10.169.128.201";
         portInputField.text = "5055";
@@ -292,7 +292,7 @@ public class StartMenu : MonoBehaviourPunCallbacks
                 IsVisible = true
                 , IsOpen = true
                 , MaxPlayers =  maxPlayersPerRoom
-                , PlayerTtl = 60000
+                , PlayerTtl = 0
                 , EmptyRoomTtl = 60000
             };
             roomOptions.CustomRoomProperties = new Hashtable();

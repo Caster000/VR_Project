@@ -77,7 +77,7 @@ public class RoomList : MonoBehaviourPunCallbacks
         EmptyList();
         try
         {
-            CheckCreateInputFields();
+            CheckServerInputFields();
             MessageToUser.text = "List loading...";
             MessageToUserContainer.SetActive(true);
             
@@ -86,6 +86,7 @@ public class RoomList : MonoBehaviourPunCallbacks
         {
             MessageToUser.text = e.Message;
             MessageToUserContainer.SetActive(true);
+            return;
         }
         PhotonNetwork.NickName = nickNameJoinInputField.text;
         if (PhotonNetwork.IsConnected)
@@ -139,18 +140,19 @@ public class RoomList : MonoBehaviourPunCallbacks
             MessageToUserContainer.SetActive(true);
         }
     }
-    public void CheckCreateInputFields()
+    public void CheckServerInputFields()
     {
         if (
-            ipJoinInputField.text=="" ||
-            portJoinField.text=="" ||
-            nickNameJoinInputField.text==""
-        ) throw new Exception("Server Settings Fields can't be empty") ;
+            string.IsNullOrEmpty(ipJoinInputField.text) ||
+            string.IsNullOrEmpty(portJoinField.text) ||
+            string.IsNullOrEmpty(nickNameJoinInputField.text)
+        ) throw new Exception("Server Settings Fields can't be empty");
     }
     
     public void LoadListRoom()
     {
         Debug.Log("cachedRoomList :"+cachedRoomList.Count);
+        EmptyList();
         foreach (KeyValuePair<string,RoomInfo> roomInfo in cachedRoomList )
         {
             GameObject roomItem =  Instantiate(RoomItemPrefab,transform);
@@ -185,7 +187,7 @@ public class RoomList : MonoBehaviourPunCallbacks
         {
             Debug.Log("Connected to server RoomList");
             JoinLobby();
-            Load();
+            // Load();
         }
     }
     
@@ -196,7 +198,7 @@ public class RoomList : MonoBehaviourPunCallbacks
         if (roomList.Count>0)
         {
             UpdateCachedRoomList(roomList);
-            // LoadListRoom();
+            LoadListRoom();
         }
     }
 

@@ -24,7 +24,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnLeftRoom()
     {
-        // TODO: load the Lobby Scene
+        Debug.Log("OnLeftRoom");
+        PhotonNetwork.Disconnect();
         SceneManager.LoadScene("Menu");
     }
 
@@ -66,8 +67,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         else
         {
             PhotonNetwork.LeaveRoom();
-            PhotonNetwork.Disconnect();
-            Cursor.visible = true;
         }
     }
 
