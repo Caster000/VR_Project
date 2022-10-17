@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.IO;
 
 [System.Serializable]
 public class GameConfig
@@ -37,16 +38,37 @@ public class GameConfig
     /// <summary>
     /// Loads the configuration.
     /// </summary>
-    public void Load()
+    public bool Load()
     {
-        string jsonRepresentation = TextReader.LoadResourceTextfileFromStreamingAsset(PATH);
-        if(jsonRepresentation != null)
+        try
         {
+            string jsonRepresentation = TextReader.LoadResourceTextfileFromStreamingAsset(PATH);
+            if (string.IsNullOrEmpty(jsonRepresentation)) throw new LoadingException("GameConfig.json content is not valid.");
+
             JsonUtility.FromJsonOverwrite(jsonRepresentation, this);
             Debug.unityLogger.logEnabled = !NoDebug;
-        } else
+            return true;
+        } catch(Exception e)
         {
-            Debug.LogWarning("GameConfig.json content is null");
+            if(e is LoadingException || e is IOException)
+            {
+                Debug.LogError(e.Message);
+                return false;
+            }
+            throw e;
+        }
+    }
+
+    public bool Write()
+    {
+        try
+        {
+            File.WriteAllText(PATH, JsonUtility.ToJson(this));
+            return true;
+        } catch(IOException ioe)
+        {
+            Debug.LogError(ioe.Message);
+            return false;
         }
     }
 
