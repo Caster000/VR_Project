@@ -163,7 +163,7 @@ namespace Invector.vCharacterController
                 moveSpeed = Mathf.Lerp(moveSpeed, isSprinting ? speed.sprintSpeed : speed.runningSpeed, speed.movementSmooth * Time.deltaTime);
         }
 
-        public virtual void MoveCharacter(Vector3 _direction)
+        public virtual void MoveCharacter(Vector3 _direction, AudioClip footstep)
         {
             // calculate input smooth
             inputSmooth = Vector3.Lerp(inputSmooth, input, (isStrafing ? strafeSpeed.movementSmooth : freeSpeed.movementSmooth) * Time.deltaTime);

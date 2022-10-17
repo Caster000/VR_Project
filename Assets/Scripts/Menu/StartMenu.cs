@@ -52,6 +52,8 @@ public class StartMenu : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Dropdown mapDropdown;
     [SerializeField] private TMP_Dropdown mapConfigDropdown;
 
+   
+
     private GameConfig gameConfig;
     /// <summary>
     /// Keep track of the current process. Since connection is asynchronous and is based on several callbacks from Photon,
@@ -70,6 +72,7 @@ public class StartMenu : MonoBehaviourPunCallbacks
         gameConfig = GameConfigLoader.Instance.gameConfig;
         PhotonNetwork.AutomaticallySyncScene = true;
         LoadMapDropdown();
+        
 
     }
     

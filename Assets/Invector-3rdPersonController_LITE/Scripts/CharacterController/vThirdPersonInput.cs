@@ -18,6 +18,9 @@ namespace Invector.vCharacterController
         public string rotateCameraYInput = "Mouse Y";
         public Camera player;
 
+        [Header("Sound")]
+        public AudioClip footStep;
+
         [HideInInspector] public vThirdPersonController cc;
         [HideInInspector] public vThirdPersonCamera tpCamera;
         [HideInInspector] public Camera cameraMain;
@@ -90,6 +93,8 @@ namespace Invector.vCharacterController
         {
             cc.input.x = Input.GetAxis(horizontalInput);
             cc.input.z = Input.GetAxis(verticallInput);
+            
+            
         }
 
         protected virtual void CameraInput()
@@ -121,7 +126,11 @@ namespace Invector.vCharacterController
         protected virtual void StrafeInput()
         {
             if (Input.GetKeyDown(strafeInput))
+            {
                 cc.Strafe();
+                
+            }
+                
         }
 
         protected virtual void SprintInput()

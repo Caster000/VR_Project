@@ -3584,6 +3584,8 @@ MonoBehaviour:
   groundMinDistance: 0.25
   groundMaxDistance: 0.5
   slopeLimit: 45
+  jump: {fileID: 0}
+  footStep: {fileID: 0}
 --- !u!114 &4132836085787713338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3604,6 +3606,7 @@ MonoBehaviour:
   rotateCameraXInput: Mouse X
   rotateCameraYInput: Mouse Y
   player: {fileID: 0}
+  footStep: {fileID: 0}
   cc: {fileID: 0}
   tpCamera: {fileID: 0}
   cameraMain: {fileID: 0}
@@ -3662,6 +3665,8 @@ MonoBehaviour:
   CameraPlayerPrefab: {fileID: 6444909020982337854, guid: c3f07221998f9ae409f367d2d196b1a8, type: 3}
   GunObject: {fileID: 6066614991434056586}
   GunAnim: {fileID: 4132836085787713336}
+  damage: {fileID: 0}
+  death: {fileID: 0}
 --- !u!114 &6722393187097791668
 MonoBehaviour:
   m_ObjectHideFlags: 0
