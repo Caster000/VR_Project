@@ -33,6 +33,10 @@ public class GameConfig
     public bool NoDebug;
     // Enable friendlyFire
     public bool friendlyFire;
+    // Victory by kill
+    public bool killToVictory;
+    // Victory by contamination
+    public bool contaminationVictory;
     
     /// <summary>
     /// Loads the configuration.
@@ -60,5 +64,4 @@ public class GameConfig
                 Debug.Log(String.Format("{0}={1}", prop.Name, prop.GetValue(this)));
             }
         }
-
 }

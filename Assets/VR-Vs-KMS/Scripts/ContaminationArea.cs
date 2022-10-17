@@ -48,6 +48,7 @@ namespace vr_vs_kms
         void Start()
         {
             gameConfig = GameConfigLoader.Instance.gameConfig;
+            TimeToAreaContamination = gameConfig.TimeToAreaContamination;
             populateParticleSystemCache();
             setupCullingGroup();    
             TimeToAreaContamination = gameConfig.TimeToAreaContamination;

@@ -2,6 +2,7 @@ using Photon.Pun.Demo.PunBasics;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
     //variables related to player contamination (kill)
     static public int ScientistScore;
     static public int VirusScore;
-    private int nbContaminatedPlayerToVictory;
+    public int nbContaminatedPlayerToVictory; //Todo get from gameconfig
 
     //ThrowableObject
     private List<Vector3> throwableObjectPositions = new List<Vector3>();
@@ -57,11 +58,14 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI endText;
 
     private LevelConfig levelConfig;
+    private GameConfig gameConfig;
 
     void Awake()
     {
-        ReadConfigFile();
-
+        levelConfig = LevelConfigLoader.Instance.levelConfig;
+        gameConfig = GameConfigLoader.Instance.gameConfig;
+        Debug.Log(NetworkManager.isMulti);
+        ReadServerConfig();
     }
     // Start is called before the first frame update
     void Start()
@@ -108,8 +112,8 @@ public class GameManager : MonoBehaviour
     public void ReadConfigFile()
     {
         levelConfig = LevelConfigLoader.Instance.levelConfig;
-        nbContaminatedPlayerToVictory = 2;//levelConfig.nbContaminatedPlayerToVictory;
-        nbContaminationArea = 2;//levelConfig.nbContaminationArea;
+        nbContaminatedPlayerToVictory = gameConfig.NbContaminatedPlayerToVictory;
+        nbContaminationArea = levelConfig.contaminationAreaPositions.Count;
         contaminationAreaPositions = levelConfig.contaminationAreaPositions;
         contaminationAreaRotations = levelConfig.contaminationAreaRotations;
         throwableObjectPositions = levelConfig.throwableObjectPositions;
@@ -123,6 +127,15 @@ public class GameManager : MonoBehaviour
             temp.y += (float)0.01;
             spawnAreaPositions[i] = temp;
         }
+    }
+
+    public void ReadServerConfig()
+    {
+        ExitGames.Client.Photon.Hashtable serverConfig = PhotonNetwork.CurrentRoom.CustomProperties;
+        LevelConfigLoader.Instance.levelConfig = JsonUtility.FromJson<LevelConfig>((string)serverConfig["LevelConfig"]);
+        GameConfigLoader.Instance.gameConfig = JsonUtility.FromJson<GameConfig>((string)serverConfig["GameConfig"]);
+        Debug.Log("ReadServerConfig");
+        ReadConfigFile();
     }
     public void GeneratingObject()
     {

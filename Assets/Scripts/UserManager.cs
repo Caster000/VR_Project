@@ -15,7 +15,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
 {
     public static GameObject UserMeInstance;
 
-    [SerializeField] private List<Transform> spawPoints;
+    private List<Vector3> spawPoints;
     [SerializeField] private Slider Healthbar;
     [SerializeField] private Canvas CanvasPlayer;
     [SerializeField] private TMP_Text TimerText;
@@ -46,6 +46,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     [Header("Sound")]
     public AudioClip damage;
     public AudioClip death;
+    private AudioSource _audioSource;
     
     // Start is called before the first frame update
     void Awake()
@@ -56,7 +57,8 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         _rigidbody = GetComponent<Rigidbody>();
         _collider = GetComponent<Collider>();
         canvasImage = CanvasPlayer.GetComponent<Image>();
-
+        _audioSource = GetComponent<AudioSource>();
+        spawPoints = LevelConfigLoader.Instance.levelConfig.spawnAreaPositions;
         if (NetworkManager.isMulti)
         {
             if (photonView.IsMine)
@@ -77,11 +79,6 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         {
             gunBeahviour = GunObject.GetComponent<GunBeahviour>();
         }
-
-        //TODO Remove by loading list of spawn Points
-        //spawPoints = new List<Transform>();
-        //spawPoints.Add(GameObject.Find("SpawnArea").transform);
-        //spawned = true;
     }
 
     private void Start()
@@ -193,6 +190,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     private void PrepareRespwan()
     {
         AudioSource.PlayClipAtPoint(death, transform.position);
+        _audioSource.mute = true;
         // Canvas update
         spawned = false;
         canvasImage.color = Color.black;
@@ -205,8 +203,8 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         GunObject.SetActive(false);
        _thirdPersonInput.enabled = false;
         // Teleport to spawnPoint
-        Transform transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
-        transform.position = transform_spawn.position;
+        Vector3 transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
+        transform.position = transform_spawn;
         TimerText.enabled = true;
         respawnTime = gameConfig.RespawnTime;
         Debug.Log("prepareRespawn" + gameObject.layer);
@@ -214,6 +212,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
 
     private void Respawn()
     {
+        _audioSource.mute = false;
         //Reset Canvas
         TimerText.text = "";
         TimerText.enabled = false;
