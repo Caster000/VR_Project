@@ -1,4 +1,5 @@
 using System;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using Random = System.Random;
@@ -22,12 +23,14 @@ namespace VR_Vs_KMS.Scripts
         float t = 0f;
         private bool canTp = true;
 
-        // public GameObject LeftHandController;
-        // public GameObject RightHandController;
+        public GameObject ParticlePrefab;
 
         private XRInteractorLineVisual _xrInteractorLineVisual;
-        private ManageParticle manageParticle;
+        private GameObject manageParticle;
+        private Vector3 startPosition;
+        private Vector3 endPosition;
         private Vector3 direction;
+        private bool inTravel;
 
         private void Start()
         {
@@ -43,7 +46,7 @@ namespace VR_Vs_KMS.Scripts
             
             Debug.Log("can tp : "+canTp);
             _xrInteractorLineVisual = interactor.transform.gameObject.GetComponent<XRInteractorLineVisual>();
-            manageParticle = interactor.transform.gameObject.GetComponent<ManageParticle>();
+            manageParticle = interactor.transform.gameObject.GetComponent<ManageParticle>().particleObjecT;
 
             if (!canTp) return false;
 
@@ -56,12 +59,10 @@ namespace VR_Vs_KMS.Scripts
             teleportRequest.destinationRotation = transform.rotation;
             canTp = false;
             timer = 5f;
-
+            endPosition = 
+            startPosition = teleportRequest.destinationPosition;
             
             
-            ParticleStart(manageParticle);
-            ParticleFollow(interactor.transform.position, teleportRequest.destinationPosition);
-
             return true;
         }
 
@@ -70,17 +71,16 @@ namespace VR_Vs_KMS.Scripts
              if (timer > 0 && !canTp)
              {
                  
-                 //Debug.Log("_xrInteractorLineVisualLeft");
-                 // _xrInteractorLineVisualRight.validColorGradient.colorKeys[0].color =
-                 //    _xrInteractorLineVisualLeft.validColorGradient.colorKeys[0].color = Color.magenta;
-                 ChangeColorRaycast(Color.yellow);
+                  ChangeColorRaycast(Color.yellow);
                  
                  timer -= Time.deltaTime;
-                manageParticle.gameObject.transform.position *= Time.deltaTime;
-            }
+                 
+                
+                 
+             }
              if (timer <= 0 && !canTp)
              {
-                manageParticle.particleSystem.gameObject.SetActive(false);
+               
                  canTp = true;
                  ChangeColorRaycast(Color.white);
 
@@ -98,19 +98,11 @@ namespace VR_Vs_KMS.Scripts
                      };
 
          }
+       
 
-        private void ParticleFollow(Vector3 startPosition, Vector3 endPosition)
-        {
-            direction = endPosition - startPosition;
-            
-           
+       
 
-        }
-
-        private void ParticleStart(ManageParticle manageParticle)
-        {
-            manageParticle.particleSystem.gameObject.SetActive(true);
-        }
+        
     }
    
 
