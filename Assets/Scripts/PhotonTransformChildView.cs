@@ -20,7 +20,10 @@ public class PhotonTransformChildView : MonoBehaviourPunCallbacks, IPunObservabl
         //         SynchronizedChildTransform[i].gameObject.SetActive(false);
         //     }
         // }
-        cameraPlayer.enabled = photonView.IsMine;
+        if (NetworkManager.isMulti)
+        {
+            cameraPlayer.enabled = photonView.IsMine;
+        }
     }
 
     // Update is called once per frame

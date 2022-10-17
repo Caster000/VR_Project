@@ -35,7 +35,7 @@ namespace vr_vs_kms
         private float timer;
         public int layerCapture = 0;
         public List<int> layers = new List<int>();
-        private AudioSource audioSource;
+        public AudioSource audioSource;
         private ParticleSystem pSystem;
         ParticleSystem.ColorOverLifetimeModule colorModule; 
         private WindZone windZone;
@@ -52,7 +52,7 @@ namespace vr_vs_kms
             setupCullingGroup();    
             TimeToAreaContamination = gameConfig.TimeToAreaContamination;
             BelongsToNobody();
-            audioSource = GetComponent<AudioSource>();
+            // audioSource = GetComponent<AudioSource>();
         }
 
         private void populateParticleSystemCache()
@@ -69,7 +69,7 @@ namespace vr_vs_kms
         {
             // Debug.Log($"setupCullingGroup {Camera.main}");
             cullGroup = new CullingGroup();
-            cullGroup.targetCamera = Camera.main;
+            // cullGroup.targetCamera = Camera.main;
             cullGroup.SetBoundingSpheres(new BoundingSphere[] { new BoundingSphere(transform.position, cullRadius) });
             cullGroup.SetBoundingSphereCount(1);
             cullGroup.onStateChanged += OnStateChanged;
@@ -200,7 +200,7 @@ namespace vr_vs_kms
         public void contaminationProcess(int layer)
         {
 
-            if (timer >= gameConfig.TimeToAreaContamination)
+            if (timer >= TimeToAreaContamination)
             {
                 
                 if ((layer == 7 && isNeutral) || (layer==7 && isTakenByVirus))

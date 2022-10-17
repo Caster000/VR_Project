@@ -3,19 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public class teleportgun : MonoBehaviour
+public class TeleportGun : MonoBehaviour
 {
    public GameObject gunspawnPoint;
    private int collisionlayer;
    private Rigidbody gunRigid;
+   private XRSocketInteractor _xrSocketInteractor;
    
-
 
    private void Start()
    {
-      gunspawnPoint = Camera.main.transform.GetChild(0).gameObject;
       gunRigid = GetComponent<Rigidbody>();
+      _xrSocketInteractor = gunspawnPoint.GetComponent<XRSocketInteractor>();
    }
 
    private void OnCollisionEnter(Collision collision)

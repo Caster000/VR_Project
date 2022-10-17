@@ -1090,7 +1090,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 4294967294
+    m_Bits: 4294967290
   m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 0
   m_StartingSelectedInteractable: {fileID: 0}
@@ -1518,6 +1518,8 @@ MonoBehaviour:
   CanvasPlayer: {fileID: 2383985112174683230}
   TimerText: {fileID: 4772622205840683355}
   CameraPlayer: {fileID: 778991317974210865}
+  gunVr: {fileID: 0}
+  socket: {fileID: 0}
 --- !u!114 &2849998066518792508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2415,7 +2417,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_InteractionLayers:
-    m_Bits: 4294967294
+    m_Bits: 4294967290
   m_AttachTransform: {fileID: 0}
   m_KeepSelectedTargetValid: 0
   m_StartingSelectedInteractable: {fileID: 0}

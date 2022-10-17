@@ -20,18 +20,23 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     [SerializeField] private Canvas CanvasPlayer;
     [SerializeField] private TMP_Text TimerText;
     [SerializeField] private GameObject CameraPlayer;
-    
+    [SerializeField] private GameObject gunVr;
+    [SerializeField] private GameObject ShieldPrefab;
+    [SerializeField] private GameObject socket;
+
     private int currentHealth;
     private float respawnTime;
     private bool spawned;
     private GameConfig gameConfig;
+    private GameObject gunVrInstance;
+    private GameObject shieldInstance;
     
     // Start is called before the first frame update
     void Awake()
     {
         gameConfig = GameConfigLoader.Instance.gameConfig;
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
-
+        Debug.Log(NetworkManager.isMulti);
         if (NetworkManager.isMulti)
         {
             if (photonView.IsMine)
@@ -40,9 +45,21 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
                 UserMeInstance = gameObject;
                 FindObjectOfType<DelayedTeleportation>().teleportationProvider =
                     GetComponent<TeleportationProvider>();
+                gunVrInstance = PhotonNetwork.Instantiate("Prefabs/"+gunVr.name, transform.position,Quaternion.identity);
+                shieldInstance = PhotonNetwork.Instantiate("Prefabs/"+shieldInstance.name, transform.position,Quaternion.identity);
             }
             CameraPlayer.SetActive(photonView.IsMine);
         }
+        else
+        {
+            Debug.Log("instantiate Solo");
+            CameraPlayer.SetActive(true);
+            gunVrInstance = Instantiate(gunVr, transform.position,Quaternion.identity);
+            shieldInstance = Instantiate(ShieldPrefab, transform.position,Quaternion.identity);
+            FindObjectOfType<DelayedTeleportation>().teleportationProvider =
+                GetComponent<TeleportationProvider>();
+        }
+        gunVrInstance.GetComponent<TeleportGun>().gunspawnPoint = socket;
     }
 
     // Update is called once per frame

@@ -95,4 +95,32 @@ public class GunBeahviour : MonoBehaviour
         }
     }
 
+    public void ShootVr()
+    {
+        if (allowfire)
+        {
+            allowfire = false;
+            muzzleFlash.Play();
+            AudioSource.PlayClipAtPoint(gunShot, transform.position);
+            GameObject tempBullet = null;
+            if (NetworkManager.isMulti)
+            {
+                tempBullet = PhotonNetwork.Instantiate("Prefabs/"+bullet.name, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
+
+            }
+            else
+            {
+                tempBullet = Instantiate(bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
+            }
+            tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
+            tempBullet.layer = gameObject.layer;
+            RaycastHit hit;
+            if(Physics.Raycast(transform.position, transform.forward, out hit, range))
+            {
+                Debug.Log(hit.transform.name);
+            }
+            isReloaded = false;
+        }
+    }
+
 }

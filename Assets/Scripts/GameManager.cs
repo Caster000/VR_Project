@@ -108,8 +108,8 @@ public class GameManager : MonoBehaviour
     public void ReadConfigFile()
     {
         levelConfig = LevelConfigLoader.Instance.levelConfig;
-        nbContaminatedPlayerToVictory = levelConfig.nbContaminatedPlayerToVictory;
-        nbContaminationArea = levelConfig.nbContaminationArea;
+        nbContaminatedPlayerToVictory = 2;//levelConfig.nbContaminatedPlayerToVictory;
+        nbContaminationArea = 2;//levelConfig.nbContaminationArea;
         contaminationAreaPositions = levelConfig.contaminationAreaPositions;
         contaminationAreaRotations = levelConfig.contaminationAreaRotations;
         throwableObjectPositions = levelConfig.throwableObjectPositions;
