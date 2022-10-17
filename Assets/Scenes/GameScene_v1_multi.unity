@@ -19573,6 +19573,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -198713118853459679, guid: 09cdcc7fd0567e74d9b547f2d10fe91d, type: 3}
+      propertyPath: clips.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -198713118853459679, guid: 09cdcc7fd0567e74d9b547f2d10fe91d, type: 3}
+      propertyPath: clips.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
+    - target: {fileID: -198713118853459679, guid: 09cdcc7fd0567e74d9b547f2d10fe91d, type: 3}
+      propertyPath: clips.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
     - target: {fileID: 120481787381757331, guid: 09cdcc7fd0567e74d9b547f2d10fe91d, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -19620,6 +19632,14 @@ PrefabInstance:
     - target: {fileID: 120481787381757333, guid: 09cdcc7fd0567e74d9b547f2d10fe91d, type: 3}
       propertyPath: m_Name
       value: PC_Character_shooter
+      objectReference: {fileID: 0}
+    - target: {fileID: 2213103837639534803, guid: 09cdcc7fd0567e74d9b547f2d10fe91d, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2213103837639534803, guid: 09cdcc7fd0567e74d9b547f2d10fe91d, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7118855107079832437, guid: 09cdcc7fd0567e74d9b547f2d10fe91d, type: 3}
       propertyPath: m_AnchorMax.y

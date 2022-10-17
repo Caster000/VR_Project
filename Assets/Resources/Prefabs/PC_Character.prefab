@@ -581,6 +581,8 @@ MonoBehaviour:
   groundMinDistance: 0.25
   groundMaxDistance: 0.5
   slopeLimit: 45
+  jump: {fileID: 0}
+  footStep: {fileID: 0}
 --- !u!114 &460924315711896057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -601,6 +603,7 @@ MonoBehaviour:
   rotateCameraXInput: Mouse X
   rotateCameraYInput: Mouse Y
   player: {fileID: 0}
+  footStep: {fileID: 0}
   cc: {fileID: 0}
   tpCamera: {fileID: 0}
   cameraMain: {fileID: 0}
@@ -656,7 +659,11 @@ MonoBehaviour:
   CanvasPlayer: {fileID: 2127585655374153184}
   TimerText: {fileID: 3018056924339579420}
   BodyPlayer: {fileID: 460924315564547948}
-  CameraPlayer: {fileID: 6444909020982337854, guid: c3f07221998f9ae409f367d2d196b1a8, type: 3}
+  CameraPlayerPrefab: {fileID: 0}
+  GunObject: {fileID: 0}
+  GunAnim: {fileID: 0}
+  damage: {fileID: 0}
+  death: {fileID: 0}
 --- !u!114 &7094854140998347383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -734,9 +741,14 @@ MonoBehaviour:
   - Type: 1
     SynchronizeType: 1
     Name: GroundDistance
+  - Type: 4
+    SynchronizeType: 0
+    Name: isAiming
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+  - SynchronizeType: 0
+    LayerIndex: 1
 --- !u!1 &460924315722410077
 GameObject:
   m_ObjectHideFlags: 0
