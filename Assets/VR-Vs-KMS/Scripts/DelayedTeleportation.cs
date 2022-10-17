@@ -1,4 +1,5 @@
 using System;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using Random = System.Random;
@@ -22,6 +23,11 @@ namespace VR_Vs_KMS.Scripts
         private bool canTp = true;
         
         private XRInteractorLineVisual _xrInteractorLineVisual;
+        private GameObject manageParticle;
+        private Vector3 startPosition;
+        private Vector3 endPosition;
+        private Vector3 direction;
+        private bool inTravel;
 
         /// <inheritdoc />
         /// 
@@ -29,6 +35,8 @@ namespace VR_Vs_KMS.Scripts
         {
             
             _xrInteractorLineVisual = interactor.transform.gameObject.GetComponent<XRInteractorLineVisual>();
+            manageParticle = interactor.transform.gameObject.GetComponent<ManageParticle>().particleObjecT;
+
             if (!canTp) return false;
 
             if (raycastHit.collider == null)
@@ -37,6 +45,10 @@ namespace VR_Vs_KMS.Scripts
             teleportRequest.destinationRotation = transform.rotation;
             canTp = false;
             timer = 5f;
+            endPosition = 
+            startPosition = teleportRequest.destinationPosition;
+            
+            
             return true;
         }
 
@@ -47,9 +59,13 @@ namespace VR_Vs_KMS.Scripts
                  ChangeColorRaycast(Color.yellow);
                  
                  timer -= Time.deltaTime;
+                 
+                
+                 
              }
              if (timer <= 0 && !canTp)
              {
+               
                  canTp = true;
                  ChangeColorRaycast(Color.white);
              }
@@ -64,6 +80,11 @@ namespace VR_Vs_KMS.Scripts
                          alphaKeys = new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) },
                      };
          }
+       
+
+       
+
+        
     }
    
 

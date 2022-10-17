@@ -944,7 +944,20 @@ MonoBehaviour:
   m_TeleportTrigger: 0
   m_Teleporting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  ParticlePrefab: {fileID: 4994301928756122096, guid: aa232a6104bd8f14bafbcc12357d70fd, type: 3}
 --- !u!1 &1134728478 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4189118790050822415, guid: 6f39577aa7421254db17067b2156cefe, type: 3}
