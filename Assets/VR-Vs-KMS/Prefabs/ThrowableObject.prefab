@@ -205,6 +205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee71792c2bd7aab40a6058afef506106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minimumThrownVelocity: 0.5
+  explosionPrefab: {fileID: 100010, guid: 031d08f52af1daa4f929b85221519426, type: 3}
 --- !u!1001 &7114079900207891316
 PrefabInstance:
   m_ObjectHideFlags: 0

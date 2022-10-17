@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ThrownExplosion : MonoBehaviour
+public class ThrowableBehaviour : MonoBehaviour
 {
 
     private bool isThrown;
@@ -14,6 +12,7 @@ public class ThrownExplosion : MonoBehaviour
     private float upforce = 1.0f;
 
     [SerializeField] private float minimumThrownVelocity = 0.5f; //0.5 is chosen because it is considered sufficient to determine if a throwable has been thrown
+    [SerializeField] GameObject explosionPrefab;
 
     private void Awake()
     {
@@ -38,7 +37,13 @@ public class ThrownExplosion : MonoBehaviour
 
     private void Explode()
     {
-        Vector3 position = gameObject.transform.position;
+        Transform objectTransform = gameObject.transform;
+        Vector3 position = objectTransform.position;
+
+        // Add particles
+        Instantiate(explosionPrefab, position, objectTransform.rotation);
+
+        // Push everything around & damage players
         Collider[] hitColliders = Physics.OverlapSphere(position, radius);
         GameObject currentTreatedObject;
         Rigidbody currentRigidbody;
