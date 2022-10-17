@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 2208902228599392638, guid: 958bb1e1312b75d499d2cb40f2332885, type: 3}
       propertyPath: death
       value: 
-      objectReference: {fileID: 8300000, guid: 940f66f99327e264bba3c2a849418f5f, type: 3}
+      objectReference: {fileID: 8300000, guid: 37eb2da61a6a35641ad5152071160c1a, type: 3}
     - target: {fileID: 2208902228599392638, guid: 958bb1e1312b75d499d2cb40f2332885, type: 3}
       propertyPath: damage
       value: 
@@ -73,7 +73,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
     - target: {fileID: 4132836085787713343, guid: 958bb1e1312b75d499d2cb40f2332885, type: 3}
       propertyPath: m_Name
-      value: PC_Character_shooter Variant
+      value: sound
       objectReference: {fileID: 0}
     - target: {fileID: 6066614991434089785, guid: 958bb1e1312b75d499d2cb40f2332885, type: 3}
       propertyPath: PlayerCam
