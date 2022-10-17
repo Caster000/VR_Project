@@ -4,6 +4,10 @@ namespace Invector.vCharacterController
 {
     public class vThirdPersonController : vThirdPersonAnimator
     {
+
+        [Header("Sound")]
+        public AudioClip jump;
+        public AudioClip footStep;
         public virtual void ControlAnimatorRootMotion()
         {
             if (!this.enabled) return;
@@ -15,7 +19,8 @@ namespace Invector.vCharacterController
             }
 
             if (useRootMotion)
-                MoveCharacter(moveDirection);
+                MoveCharacter(moveDirection, footStep);
+                
         }
 
         public virtual void ControlLocomotionType()
@@ -35,7 +40,8 @@ namespace Invector.vCharacterController
             }
 
             if (!useRootMotion)
-                MoveCharacter(moveDirection);
+                MoveCharacter(moveDirection, footStep);
+                
         }
 
         public virtual void ControlRotationType()
@@ -114,9 +120,11 @@ namespace Invector.vCharacterController
 
         public virtual void Jump()
         {
+            AudioSource.PlayClipAtPoint(jump, transform.position);
             // trigger jump behaviour
             jumpCounter = jumpTimer;
             isJumping = true;
+            
 
             // trigger jump animations
             if (input.sqrMagnitude < 0.1f)

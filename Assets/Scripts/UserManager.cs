@@ -41,6 +41,10 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     private Rigidbody _rigidbody;
     private Collider _collider;
     private vThirdPersonInput _thirdPersonInput;
+
+    [Header("Sound")]
+    public AudioClip damage;
+    public AudioClip death;
     
     // Start is called before the first frame update
     void Awake()
@@ -146,11 +150,13 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     {
         Debug.Log("Damage receive :"+photonView.InstantiationId);
         Healthbar.value = --currentHealth;
+        AudioSource.PlayClipAtPoint(damage, transform.position);
         if (currentHealth <= 0)
         {
             PrepareRespwan();
             return;
         }
+
     }
     
     public void Aim()
@@ -175,6 +181,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
 
     private void PrepareRespwan()
     {
+        AudioSource.PlayClipAtPoint(death, transform.position);
         // Canvas update
         spawned = false;
         canvasImage.color = Color.black;
