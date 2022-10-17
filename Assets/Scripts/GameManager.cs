@@ -1,53 +1,60 @@
+using Photon.Pun.Demo.PunBasics;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     //global information
-    public int playerNumber;
-    public bool isWin;
-    public string winner;
+    //private int playerNumber;
+    private bool isWin;
+    private string winner;
 
 
     // variables related to contamination area
-    public int nbContaminationArea;
-    public int nbContaminatedAreaByScientist;
-    public int nbContaminatedAreaByVirus;
+    private int nbContaminationArea;
+    static public int nbContaminatedAreaByScientist;
+    static public int nbContaminatedAreaByVirus;
 
     //ContaminationArea
-    public List<Vector3> contaminationAreaPositions = new List<Vector3>();
-    public List<Vector3> contaminationAreaRotations = new List<Vector3>();
+    private List<Vector3> contaminationAreaPositions = new List<Vector3>();
+    private List<Vector3> contaminationAreaRotations = new List<Vector3>();
+    [Header("Contamination Area")]
     public GameObject contaminationAreaPrefab;
     public Transform contaminationAreaParent;
 
     //variables related to player contamination (kill)
-    public int ScientistScore;
-    public int VirusScore;
-    public int nbContaminatedPlayerToVictory;
+    static public int ScientistScore;
+    static public int VirusScore;
+    private int nbContaminatedPlayerToVictory;
 
-
-    //other gameObject
     //ThrowableObject
-    public List<Vector3> throwableObjectPositions = new List<Vector3>();
-    public List<Vector3> throwableObjectRotations = new List<Vector3>();
+    private List<Vector3> throwableObjectPositions = new List<Vector3>();
+    private List<Vector3> throwableObjectRotations = new List<Vector3>();
+    [Header("Throwable Object")]
     public GameObject throwableObjectPrefab;
     public Transform throwableObjectParent;
 
     //Spawner
-    public List<Vector3> spawnAreaPositions = new List<Vector3>();
-    public List<Vector3> spawnAreaRotations = new List<Vector3>();
+    private List<Vector3> spawnAreaPositions = new List<Vector3>();
+    private List<Vector3> spawnAreaRotations = new List<Vector3>();
+    [Header("Spawner")]
     public GameObject spawnAreaPrefab;
     public Transform spawnAreaParent;
 
     //Audio source
+    [Header("Audio source")]
+
     public AudioSource VictorySound;
     public AudioSource DefeatSound;
 
     //UI
-    public Text VictoryText;
-    public Text DefeatText;
+    [Header("User Interface")]
+
+    public Canvas canvasEndText;
+    public TextMeshProUGUI endText;
 
     private LevelConfig levelConfig;
 
@@ -65,33 +72,33 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ScientistScore == nbContaminatedPlayerToVictory || VirusScore == nbContaminatedPlayerToVictory)
+        if (!isWin)
         {
-            isWin = true;
-            winner = ScientistScore > VirusScore ? "ScientistWin" : "VirusWin";
-            EndGame(winner);
+            if (ScientistScore == nbContaminatedPlayerToVictory || VirusScore == nbContaminatedPlayerToVictory)
+            {
+                isWin = true;
+                winner = ScientistScore > VirusScore ? "Scientist" : "Virus";
+                EndGame(winner);
 
+            }
+            if (nbContaminatedAreaByScientist == nbContaminationArea || nbContaminatedAreaByVirus == nbContaminationArea)
+            {
+                isWin = true;
+                winner = nbContaminatedAreaByScientist > nbContaminatedAreaByVirus ? "Scientist" : "Virus";
+                EndGame(winner);
+            }
         }
-        if (nbContaminatedAreaByScientist == nbContaminationArea || nbContaminatedAreaByVirus == nbContaminationArea)
-        {
-            isWin = true;
-            winner = nbContaminatedAreaByScientist > nbContaminatedAreaByVirus ? "ScientistWin" : "VirusWin";
-            EndGame(winner);
-
-
-        }
+       
     }
     //TODO Ecran de victoire / ecran de défaite en focntion de l'équipe
     public void EndGame(string winner)
     {
         if (isWin)
         {
-            Debug.Log("Victory" + winner);
+            canvasEndText.gameObject.SetActive(true);
+            endText.text = winner + "\nwin";
+            endText.color = winner == "Scientist" ? new Color32(25, 207, 0, 237) : new Color32(255, 0, 0, 237);
         }
-
-
-
-
     }
 
     public void ReloadGame()

@@ -1,7 +1,9 @@
 ﻿using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -22,7 +24,10 @@ namespace vr_vs_kms
         private float faerieSpeed;
         private float radius = 1f;
         public float cullRadius = 5f;
-        
+        private bool isTakenByScientist;
+        private bool isTakenByVirus;
+        public bool isNeutral = true;
+        private float TimeToAreaContamination;
         private int playerNumber = 0;
         private bool isSomeoneAlreadyIn = false;
         private bool isSameTeam = false;
@@ -38,14 +43,14 @@ namespace vr_vs_kms
         private CullingGroup cullGroup;
         
         private GameConfig gameConfig;
-
+        private GameManager gameManager;
 
         void Start()
         {
             gameConfig = GameConfigLoader.Instance.gameConfig;
             populateParticleSystemCache();
-            setupCullingGroup();
-
+            setupCullingGroup();    
+            TimeToAreaContamination = gameConfig.TimeToAreaContamination;
             BelongsToNobody();
             audioSource = GetComponent<AudioSource>();
         }
@@ -116,6 +121,7 @@ namespace vr_vs_kms
         }
         private void OnTriggerStay(Collider other)
         {
+
             if (isSameTeam && !isAlone)
             {
                 contaminationProcess(other.gameObject.layer);
@@ -196,17 +202,24 @@ namespace vr_vs_kms
 
             if (timer >= gameConfig.TimeToAreaContamination)
             {
-
-                if (layer == 7)
+                
+                if ((layer == 7 && isNeutral) || (layer==7 && isTakenByVirus))
                 {
+                    GameManager.nbContaminatedAreaByScientist++;
                     BelongsToScientists();
                     audioSource.Stop();
+                    isTakenByScientist = true;
+                    isNeutral = false;
+
 
                 }
-                else if (layer == 8)
+                else if ((layer == 8 && isNeutral) || (layer==8 && isTakenByScientist))
                 {
+                    GameManager.nbContaminatedAreaByVirus++;
                     BelongsToVirus();
                     audioSource.Stop();
+                    isTakenByVirus = true;
+                    isNeutral = false;
 
                 }
 

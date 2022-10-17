@@ -1,6 +1,6 @@
 {
-  "nbContaminatedPlayerToVictory": 10,
-  "nbContaminationArea": 6,
+  "nbContaminatedPlayerToVictory": 2,
+  "nbContaminationArea": 2,
   "maxPlayerNumber": 4,
   "contaminationAreaPositions": [
     {
@@ -28,12 +28,12 @@
   ],
   "throwableObjectPositions": [
     {
-      "x": 0,
+      "x": 1,
       "y": 0,
-      "z": 0
+      "z": -7.11
     },
     {
-      "x": -2.85,
+      "x": 5,
       "y": 0.4,
       "z": -3.58
     }
