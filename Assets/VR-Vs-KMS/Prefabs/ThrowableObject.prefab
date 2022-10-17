@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5290371634470740057}
   - component: {fileID: 5290371634470740060}
   m_Layer: 0
-  m_Name: Thowable
+  m_Name: ThrowableObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

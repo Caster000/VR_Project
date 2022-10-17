@@ -34,6 +34,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     private bool spawned;
 
     private GameConfig gameConfig;
+    public GameManager gameManager;
     private GameObject cameraPlayer;
     private Image canvasImage;
     
@@ -88,11 +89,11 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     {
         if (!photonView.IsMine && NetworkManager.isMulti) return;
 
-        if(respawnTime>0)     
-        {         
-            respawnTime -= Time.deltaTime;   
-            double b = Mathf.RoundToInt(respawnTime); 
-            TimerText.text = "Respawn in "+b.ToString ()+"s";
+        if (respawnTime > 0)
+        {
+            respawnTime -= Time.deltaTime;
+            double b = Mathf.RoundToInt(respawnTime);
+            TimerText.text = "Respawn in " + b.ToString() + "s";
         }
 
         if (respawnTime <= 0 && !spawned)
@@ -216,7 +217,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if(stream.IsWriting)
+        if (stream.IsWriting)
         {
             stream.SendNext(currentHealth);
             stream.SendNext(BodyPlayer.activeSelf);

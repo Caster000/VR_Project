@@ -53,12 +53,12 @@ public class GameConfig
     /// <summary>
     /// Prints all the public variables and their content.
     /// </summary>
-    public void DebugLog()
-    {
-        foreach(var prop in GetType().GetFields())
+        public void DebugLog()
         {
-            Debug.Log(String.Format("{0}={1}", prop.Name, prop.GetValue(this)));
+            foreach(var prop in GetType().GetFields())
+            {
+                Debug.Log(String.Format("{0}={1}", prop.Name, prop.GetValue(this)));
+            }
         }
-    }
 
 }

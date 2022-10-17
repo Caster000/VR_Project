@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -124,16 +125,18 @@ public class StartMenu : MonoBehaviourPunCallbacks
 
     private void LoadMapConfig()
     {
-        // TODO get loader of MapConfig
+        DirectoryInfo d = new DirectoryInfo("Assets/StreamingAssets/"+LevelConfig.PATH);
+        Debug.Log(d);
+        FileInfo[] Files = d.GetFiles("*.json");
+        LoadMapConfigDropdown(Files);
     }
 
-    public void LoadMapConfigDropdown()
+    public void LoadMapConfigDropdown(FileInfo[] files)
     {
-        //TODO load mapconfig call in select of mapDropdown
-        // foreach (Scene map in mapScene)
-        // {
-        //     mapConfigDropdown.options.Add(new TMP_Dropdown.OptionData(map.name));
-        // }
+        foreach (FileInfo file in files)
+        {
+            mapConfigDropdown.options.Add(new TMP_Dropdown.OptionData(Path.GetFileNameWithoutExtension(file.Name)));
+        }
     }
     
     public void LoadTutorialScene()
@@ -168,7 +171,7 @@ public class StartMenu : MonoBehaviourPunCallbacks
         killToVictoryField.text = gameConfig.NbContaminatedPlayerToVictory.ToString();
         timeToAreaContaminationField.text = gameConfig.TimeToAreaContamination.ToString();
         timeToRespawnField.text = gameConfig.RespawnTime.ToString();
-        
+        LoadMapConfig();
         CreateRoomObject.SetActive(true);
         StartMenuPanel.SetActive(false);
         BackButtonCreateRoomObject.SetActive(true);
@@ -273,6 +276,7 @@ public class StartMenu : MonoBehaviourPunCallbacks
                 , EmptyRoomTtl = 60000
             };
             //todo pass config to photon
+            
             
             bool roomCreated = PhotonNetwork.CreateRoom(roomNameField.text, roomOptions, null);
             Debug.Log("roomCreated "+roomCreated);

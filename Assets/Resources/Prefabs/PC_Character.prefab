@@ -657,6 +657,7 @@ MonoBehaviour:
   TimerText: {fileID: 3018056924339579420}
   BodyPlayer: {fileID: 460924315564547948}
   CameraPlayer: {fileID: 6444909020982337854, guid: c3f07221998f9ae409f367d2d196b1a8, type: 3}
+  gameManager: {fileID: 0}
 --- !u!114 &7094854140998347383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -737,6 +738,20 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+  - SynchronizeType: 0
+    LayerIndex: 1
+--- !u!114 &2435988198641261887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 460924315711896060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb141f6e966d5d46ae100b8e965f421, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &460924315722410077
 GameObject:
   m_ObjectHideFlags: 0
