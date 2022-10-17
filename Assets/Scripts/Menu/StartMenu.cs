@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using ExitGames.Client.Photon;
+using Newtonsoft.Json;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -154,6 +156,7 @@ public class StartMenu : MonoBehaviourPunCallbacks
         StartMenuPanel.SetActive(true);
         CreateRoomObject.SetActive(false);
         BackButtonCreateRoomObject.SetActive(false);
+        isCreating = false;
     }
     
     public void BackButtonJoinRoom()
@@ -161,6 +164,10 @@ public class StartMenu : MonoBehaviourPunCallbacks
         StartMenuPanel.SetActive(true);
         JoinRoomObject.SetActive(false);
         BackButtonJoinRoomObject.SetActive(false);
+        //rest room list
+        PhotonNetwork.Disconnect();
+        RoomList.EmptyList();
+        RoomList.listing = false;
     }
 
     public void DisplayCreatePanel()
@@ -217,7 +224,6 @@ public class StartMenu : MonoBehaviourPunCallbacks
         {
             CheckCreateInputFields();
             Debug.Log("Config good");
-            //todo export config
             MessageToUser.text = "Config loading...";
             MessageToUserContainer.SetActive(true);
             
@@ -255,6 +261,19 @@ public class StartMenu : MonoBehaviourPunCallbacks
             ) 
             throw new Exception("Room Settings Fields can't be empty") ;
     }
+
+    public string formatGameConfig()
+    {
+        gameConfig.LifeNumber = int.Parse(lifeNumberField.text);
+        gameConfig.DelayShoot = float.Parse(delayShootField.text);
+        gameConfig.DelayTeleport = float.Parse(delayTeleportField.text);
+        gameConfig.NbContaminatedPlayerToVictory = int.Parse(killToVictoryField.text);
+        gameConfig.TimeToAreaContamination = float.Parse(timeToAreaContaminationField.text);
+        gameConfig.killToVictory = killToVictory.isOn;
+        gameConfig.contaminationVictory = contaminationVictoryField.isOn;
+
+        return JsonUtility.ToJson(gameConfig);
+    }
     
     #endregion
     
@@ -262,10 +281,11 @@ public class StartMenu : MonoBehaviourPunCallbacks
     
     public override void OnConnectedToMaster()
     {
-        Debug.Log("Connected to server");
         // VHD attention, cet événement est appelé lorsque on quitte une room et que l'on revient sur le Lobby.
         if (isCreating)
         {
+            Debug.Log("Connected to server");
+
             // Create Room
             RoomOptions roomOptions = new RoomOptions()
             {
@@ -275,10 +295,18 @@ public class StartMenu : MonoBehaviourPunCallbacks
                 , PlayerTtl = 60000
                 , EmptyRoomTtl = 60000
             };
-            //todo pass config to photon
+            roomOptions.CustomRoomProperties = new Hashtable();
+
+            LevelConfigLoader.Instance.levelConfig.Load(mapConfigDropdown.options[mapConfigDropdown.value].text);
+            string levelConfig = JsonUtility.ToJson(LevelConfigLoader.Instance.levelConfig);
             
+            roomOptions.CustomRoomProperties.Add("LevelConfig",levelConfig);
+            string gameConfigCustom = formatGameConfig();
             
-            bool roomCreated = PhotonNetwork.CreateRoom(roomNameField.text, roomOptions, null);
+            roomOptions.CustomRoomProperties.Add("GameConfig",gameConfigCustom);
+            roomOptions.CustomRoomPropertiesForLobby = new string[1] { "GameConfig" };
+
+            bool roomCreated = PhotonNetwork.CreateRoom(roomNameField.text, roomOptions, TypedLobby.Default);
             Debug.Log("roomCreated "+roomCreated);
         }
     }
@@ -300,14 +328,14 @@ public class StartMenu : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("OnJoinedRoom()");
-
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+    
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && isCreating)
         {
             Debug.Log("We load the scene "+mapDropdown.options[mapDropdown.value].text);
             PhotonNetwork.LoadLevel(mapDropdown.options[mapDropdown.value].text);
         }
     }
-    
+
     #endregion
 
 }

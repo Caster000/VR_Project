@@ -38,11 +38,13 @@ namespace vr_vs_kms
         private CullingGroup cullGroup;
         
         private GameConfig gameConfig;
+        private float TimeToAreaContamination;
 
 
         void Start()
         {
             gameConfig = GameConfigLoader.Instance.gameConfig;
+            TimeToAreaContamination = gameConfig.TimeToAreaContamination;
             populateParticleSystemCache();
             setupCullingGroup();
 
@@ -194,7 +196,7 @@ namespace vr_vs_kms
         public void contaminationProcess(int layer)
         {
 
-            if (timer >= gameConfig.TimeToAreaContamination)
+            if (timer >= TimeToAreaContamination)
             {
 
                 if (layer == 7)

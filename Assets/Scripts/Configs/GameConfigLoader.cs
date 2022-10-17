@@ -9,7 +9,7 @@ public class GameConfigLoader : MonoBehaviour
     // Single instance of the game config loader game object in the scene
     public static GameConfigLoader Instance { get; private set; }
     // Instance of the game config
-    [SerializeField] public GameConfig gameConfig { get; private set; }
+    [SerializeField] public GameConfig gameConfig { get; set; }
     public string SceneToLoad = "TutoScene";
     #endregion
 

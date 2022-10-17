@@ -1,7 +1,4 @@
 {
-  "nbContaminatedPlayerToVictory": 10,
-  "nbContaminationArea": 6,
-  "maxPlayerNumber": 4,
   "contaminationAreaPositions": [
     {
       "x": 0,

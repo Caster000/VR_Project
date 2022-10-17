@@ -130,10 +130,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4227252034425440290, guid: aa1eff52e8bc76b4ba56132dd8e91928, type: 3}
-      propertyPath: SceneToLoad
-      value: GameScene
-      objectReference: {fileID: 0}
     - target: {fileID: 4227252034425440291, guid: aa1eff52e8bc76b4ba56132dd8e91928, type: 3}
       propertyPath: m_Name
       value: LevelConfigLoader

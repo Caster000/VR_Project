@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -5,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
+    private float timeoutRoom = 10;
+    private float timeoutRoomTemp;
     public static bool isMulti;
     public static NetworkManager Instance;
 
@@ -22,7 +25,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         // TODO: load the Lobby Scene
-        SceneManager.LoadScene("MainRoom");
+        SceneManager.LoadScene("Menu");
     }
 
     /// <summary>
@@ -58,11 +61,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (SceneManager.GetActiveScene().name == "TutoSceneSolo")
         {
-            SceneManager.LoadScene("Menue");
+            SceneManager.LoadScene("Menu");
         }
         else
         {
             PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+            Cursor.visible = true;
         }
     }
 
@@ -74,7 +79,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void Start()
     {
         Instance = this;
-
+        timeoutRoomTemp = timeoutRoom;
         #region TO debug
 
         Debug.Log("device:" + UserDeviceManager.GetDeviceUsed());
@@ -119,14 +124,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
-        {
+        // if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+        // {
             // Code to leave the room by pressing CTRL + the Leave button
             if (Input.GetButtonUp("Leave"))
             {
                 LeaveRoom();
             }
-        }
+
     }
     #endregion
 }

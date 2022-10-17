@@ -73,11 +73,6 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         {
             gunBeahviour = GunObject.GetComponent<GunBeahviour>();
         }
-
-        //TODO Remove by loading list of spawn Points
-        spawPoints = new List<Transform>();
-        spawPoints.Add(GameObject.Find("SpawnArea").transform);
-        spawned = true;
     }
 
     private void Start()
@@ -188,8 +183,8 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         GunObject.SetActive(false);
        _thirdPersonInput.enabled = false;
         // Teleport to spawnPoint
-        Transform transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
-        transform.position = transform_spawn.position;
+        Vector3 transform_spawn = LevelConfigLoader.Instance.levelConfig.spawnAreaPositions[Random.Range(0, spawPoints.Count)];
+        transform.position = transform_spawn;
         TimerText.enabled = true;
         respawnTime = gameConfig.RespawnTime;
     }

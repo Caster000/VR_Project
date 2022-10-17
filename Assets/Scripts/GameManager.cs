@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,7 +26,7 @@ public class GameManager : MonoBehaviour
     //variables related to player contamination (kill)
     public int ScientistScore;
     public int VirusScore;
-    public int nbContaminatedPlayerToVictory;
+    public int nbContaminatedPlayerToVictory; //Todo get from gameconfig
 
 
     //other gameObject
@@ -50,11 +51,14 @@ public class GameManager : MonoBehaviour
     public Text DefeatText;
 
     private LevelConfig levelConfig;
+    private GameConfig gameConfig;
 
     void Awake()
     {
-        ReadConfigFile();
-
+        levelConfig = LevelConfigLoader.Instance.levelConfig;
+        gameConfig = GameConfigLoader.Instance.gameConfig;
+        Debug.Log(NetworkManager.isMulti);
+        ReadServerConfig();
     }
     // Start is called before the first frame update
     void Start()
@@ -100,9 +104,8 @@ public class GameManager : MonoBehaviour
     }
     public void ReadConfigFile()
     {
-        levelConfig = LevelConfigLoader.Instance.levelConfig;
-        nbContaminatedPlayerToVictory = levelConfig.nbContaminatedPlayerToVictory;
-        nbContaminationArea = levelConfig.nbContaminationArea;
+        nbContaminatedPlayerToVictory = gameConfig.NbContaminatedPlayerToVictory;
+        nbContaminationArea = levelConfig.contaminationAreaPositions.Count;
         contaminationAreaPositions = levelConfig.contaminationAreaPositions;
         contaminationAreaRotations = levelConfig.contaminationAreaRotations;
         throwableObjectPositions = levelConfig.throwableObjectPositions;
@@ -116,6 +119,15 @@ public class GameManager : MonoBehaviour
             temp.y += (float)0.01;
             spawnAreaPositions[i] = temp;
         }
+    }
+
+    public void ReadServerConfig()
+    {
+        ExitGames.Client.Photon.Hashtable serverConfig = PhotonNetwork.CurrentRoom.CustomProperties;
+        LevelConfigLoader.Instance.levelConfig = JsonUtility.FromJson<LevelConfig>((string)serverConfig["LevelConfig"]);
+        GameConfigLoader.Instance.gameConfig = JsonUtility.FromJson<GameConfig>((string)serverConfig["GameConfig"]);
+        Debug.Log("ReadServerConfig");
+        ReadConfigFile();
     }
     public void GeneratingObject()
     {

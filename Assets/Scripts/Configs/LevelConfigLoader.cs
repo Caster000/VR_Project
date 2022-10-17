@@ -8,7 +8,7 @@ public class LevelConfigLoader : MonoBehaviour
 {
     public static LevelConfigLoader Instance { get; private set; }
 
-    [SerializeField] public LevelConfig levelConfig { get; private set; }
+    [SerializeField] public LevelConfig levelConfig { get; set; }
 
     private LevelConfigLoader() { }
     // Start is called before the first frame update
@@ -33,7 +33,7 @@ public class LevelConfigLoader : MonoBehaviour
     void Start()
     {
         levelConfig = new LevelConfig();
-        levelConfig.Load();
+        levelConfig.Load("LevelConfig");
         levelConfig.DebugLog();
         //SceneManager.LoadScene(SceneToLoad);
     }

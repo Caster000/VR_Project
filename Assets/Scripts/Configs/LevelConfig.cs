@@ -9,8 +9,6 @@ public class LevelConfig
 {
 
     public static readonly string PATH = "./LevelConfigs/";
-    public int nbContaminatedPlayerToVictory;
-    public int nbContaminationArea;
     //Contamination area
 
     public List<Vector3> contaminationAreaPositions = new List<Vector3>();
@@ -29,9 +27,9 @@ public class LevelConfig
     /// <summary>
     /// Loads the configuration.
     /// </summary>
-    public void Load()
+    public void Load(string filename)
     {
-        string jsonRepresentation = TextReader.LoadResourceTextfileFromStreamingAsset(PATH+"LevelConfig.json");
+        string jsonRepresentation = TextReader.LoadResourceTextfileFromStreamingAsset(PATH+filename+".json");
         if (jsonRepresentation != null)
         {
             JsonUtility.FromJsonOverwrite(jsonRepresentation, this);

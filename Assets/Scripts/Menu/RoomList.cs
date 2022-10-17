@@ -15,14 +15,7 @@ public class RoomList : MonoBehaviourPunCallbacks
     //
     [Header("Prefab RoomItemPrefab")] 
     public GameObject RoomItemPrefab;
-    // public TMP_Text PlayerNumber;
-    // public TMP_Text Config;
-    // public Button JoinBtn;
 
-    // [Header("Room Config")] 
-    // private Hashtable RoomOptions;
-    // public Room Room;
-    
     [Header("Join Room Inputs")] 
     [SerializeField] private TMP_InputField ipJoinInputField;
     [SerializeField] private TMP_InputField portJoinField;
@@ -32,7 +25,8 @@ public class RoomList : MonoBehaviourPunCallbacks
     private TypedLobby customLobby = new TypedLobby(null, LobbyType.Default);
 
     private Dictionary<string, RoomInfo> cachedRoomList = new Dictionary<string, RoomInfo>();
-
+    public static List<GameObject> cachedRoomListItem = new List<GameObject>();
+    public static bool listing;
     private void Awake()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
@@ -67,18 +61,26 @@ public class RoomList : MonoBehaviourPunCallbacks
         MessageToUserContainer.SetActive(true);
     }
 
-
+    public static void EmptyList()
+    {
+        foreach (GameObject item in cachedRoomListItem)
+        {
+            Destroy(item);
+        }
+        cachedRoomListItem = new List<GameObject>();
+    }
     public void LoadRooms()
     {
+        listing = true;
+        Debug.Log("LoadRooms");
+        //PhotonNetwork.Disconnect();
+        EmptyList();
         try
         {
-            if (CheckCreateInputFields())
-            {
-                Debug.Log("Config good");
-                //todo export config
-                MessageToUser.text = "Config loading...";
-                MessageToUserContainer.SetActive(true);
-            }
+            CheckCreateInputFields();
+            MessageToUser.text = "List loading...";
+            MessageToUserContainer.SetActive(true);
+            
         }
         catch (Exception e)
         {
@@ -86,8 +88,24 @@ public class RoomList : MonoBehaviourPunCallbacks
             MessageToUserContainer.SetActive(true);
         }
         PhotonNetwork.NickName = nickNameJoinInputField.text;
-        ConnectToServer();
-        // PhotonNetwork.JoinRoom(Room.Name);
+        if (PhotonNetwork.IsConnected)
+        {
+            Debug.Log("InLobby "+ PhotonNetwork.InLobby);
+            if (PhotonNetwork.InLobby)
+            {
+                JoinLobby();
+            }
+            Debug.Log("InRoom "+ PhotonNetwork.InRoom);
+            if (PhotonNetwork.InRoom)
+            {
+                PhotonNetwork.LeaveRoom();
+            }
+            Load();
+        }
+        else
+        {
+            ConnectToServer();
+        }
     }
 
 
@@ -106,17 +124,28 @@ public class RoomList : MonoBehaviourPunCallbacks
             }
         }
     }
-    
-    public bool CheckCreateInputFields()
+
+    public void Load()
+    {
+        int count = PhotonNetwork.NetworkingClient.RoomsCount;
+        Debug.Log("COunt"+count);
+        if (count>0)
+        {
+            LoadListRoom();
+        }
+        else
+        {
+            MessageToUser.text = "No room available";
+            MessageToUserContainer.SetActive(true);
+        }
+    }
+    public void CheckCreateInputFields()
     {
         if (
             ipJoinInputField.text=="" ||
             portJoinField.text=="" ||
             nickNameJoinInputField.text==""
-        ) 
-            throw new Exception("Room Settings Fields can't be empty") ;
-            
-        return true;
+        ) throw new Exception("Server Settings Fields can't be empty") ;
     }
     
     public void LoadListRoom()
@@ -126,10 +155,19 @@ public class RoomList : MonoBehaviourPunCallbacks
         {
             GameObject roomItem =  Instantiate(RoomItemPrefab,transform);
             RoomListItem script = roomItem.GetComponent<RoomListItem>();
-            Debug.Log(script);
+            cachedRoomListItem.Add(roomItem);
+            Hashtable serverConfig = roomInfo.Value.CustomProperties;
+            Debug.Log(roomInfo.Value);
+            GameConfig gameConfigRoom = JsonUtility.FromJson<GameConfig>((string)serverConfig["GameConfig"]);
+            Debug.Log(serverConfig["GameConfig"]);
             script.RoomName.text = roomInfo.Key;
             script.PlayerNumber.text = roomInfo.Value.PlayerCount+"/"+roomInfo.Value.MaxPlayers;
-            script.Config.text = roomInfo.Value.CustomProperties.ToString();
+            if (gameConfigRoom != null)
+            {
+                string config = gameConfigRoom.killToVictory ? "killToVictory" : "";
+                config += gameConfigRoom.contaminationVictory ? " contaminationVictory" : "";
+                script.Config.text = config;
+            }
         }
         MessageToUserContainer.SetActive(false);
 
@@ -143,19 +181,11 @@ public class RoomList : MonoBehaviourPunCallbacks
     
     public override void OnConnectedToMaster()
     {
-        Debug.Log("Connected to server");
-        JoinLobby();
-        int count = PhotonNetwork.NetworkingClient.RoomsCount;
-        Debug.Log(PhotonNetwork.CountOfRooms);
-        Debug.Log("COunt"+count);
-        if (count>0)
+        if (listing)
         {
-            LoadListRoom();
-        }
-        else
-        {
-            MessageToUser.text = "No room available";
-            MessageToUserContainer.SetActive(true);
+            Debug.Log("Connected to server RoomList");
+            JoinLobby();
+            Load();
         }
     }
     
@@ -166,38 +196,28 @@ public class RoomList : MonoBehaviourPunCallbacks
         if (roomList.Count>0)
         {
             UpdateCachedRoomList(roomList);
-            LoadListRoom();
+            // LoadListRoom();
         }
     }
 
-    public override void OnDisconnected(DisconnectCause cause)
-    {
-        // cachedRoomList.Clear();
-        Debug.LogWarningFormat("OnDisconnected() was called by PUN with reason {0}", cause);
-    }
+    // public override void OnDisconnected(DisconnectCause cause)
+    // {
+    //     cachedRoomList.Clear();
+    //     Debug.LogWarningFormat("OnDisconnected() was called by PUN with reason {0}", cause);
+    // }
 
-    public override void OnJoinRandomFailed(short returnCode, string message)
-    {
-        Debug.LogWarningFormat("OnJoinRandomFailed() was called by PUN. {0q}: {1}", returnCode, message);
-        MessageToUser.text = "Failed to join";
-        MessageToUserContainer.SetActive(true);
-    }
+    // public override void OnJoinRandomFailed(short returnCode, string message)
+    // {
+    //     Debug.LogWarningFormat("OnJoinRandomFailed() was called by PUN. {0q}: {1}", returnCode, message);
+    //     MessageToUser.text = "Failed to join";
+    //     MessageToUserContainer.SetActive(true);
+    // }
+    
 
-    public override void OnJoinedRoom()
-    {
-        // cachedRoomList.Clear();
-        Debug.Log("OnJoinedRoom()");
-
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-        {
-            PhotonNetwork.LoadLevel("TutoScene");
-        }
-    }
-
-    public override void OnLeftLobby()
-    {
-        // cachedRoomList.Clear();
-    }
+    // public override void OnLeftLobby()
+    // {
+    //     // cachedRoomList.Clear();
+    // }
 
     #endregion
 }
