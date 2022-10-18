@@ -43,6 +43,9 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     private Collider _collider;
     private vThirdPersonInput _thirdPersonInput;
 
+    [Header("Minimap")]
+    [SerializeField] private GameObject cameraMinimap;
+    
     [Header("Sound")]
     public AudioClip damage;
     public AudioClip death;
@@ -70,6 +73,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
             _thirdPersonInput.enabled = photonView.IsMine;
             _rigidbody.isKinematic = !photonView.IsMine;
             CanvasPlayer.gameObject.SetActive(photonView.IsMine);
+            cameraMinimap.GetComponent<Camera>().enabled = photonView.IsMine;
         }
         else
         {
