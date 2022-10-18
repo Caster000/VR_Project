@@ -112,9 +112,12 @@ MonoBehaviour:
       m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7054785777856220580}
-        m_TargetAssemblyTypeName: ThrownExplosion, Assembly-CSharp
+        m_TargetAssemblyTypeName: ThrowableBehaviour, Assembly-CSharp
         m_MethodName: Throw
         m_Mode: 1
         m_Arguments:
@@ -125,9 +128,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_Activated:
-    m_PersistentCalls:
-      m_Calls: []
   m_Deactivated:
     m_PersistentCalls:
       m_Calls: []
