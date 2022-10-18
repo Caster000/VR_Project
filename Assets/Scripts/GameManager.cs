@@ -1,6 +1,7 @@
 using Photon.Pun.Demo.PunBasics;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,13 +15,12 @@ public class GameManager : MonoBehaviour
 
 
     // variables related to contamination area
-    private int nbContaminationArea;
+    public int nbContaminationArea;
     static public int nbContaminatedAreaByScientist;
     static public int nbContaminatedAreaByVirus;
 
-    //ContaminationArea
-    private List<Vector3> contaminationAreaPositions = new List<Vector3>();
-    private List<Vector3> contaminationAreaRotations = new List<Vector3>();
+    
+    
     [Header("Contamination Area")]
     public GameObject contaminationAreaPrefab;
     public Transform contaminationAreaParent;
@@ -28,18 +28,13 @@ public class GameManager : MonoBehaviour
     //variables related to player contamination (kill)
     static public int ScientistScore;
     static public int VirusScore;
-    private int nbContaminatedPlayerToVictory;
 
-    //ThrowableObject
-    private List<Vector3> throwableObjectPositions = new List<Vector3>();
-    private List<Vector3> throwableObjectRotations = new List<Vector3>();
+  
     [Header("Throwable Object")]
     public GameObject throwableObjectPrefab;
     public Transform throwableObjectParent;
 
-    //Spawner
-    private List<Vector3> spawnAreaPositions = new List<Vector3>();
-    private List<Vector3> spawnAreaRotations = new List<Vector3>();
+    
     [Header("Spawner")]
     public GameObject spawnAreaPrefab;
     public Transform spawnAreaParent;
@@ -57,15 +52,21 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI endText;
 
     private LevelConfig levelConfig;
+    private GameConfig gameConfig;
+
+    static public string spawnArea = "SpawnArea";
+    static public string throwableObject = "ThrowableObject";
+    static public string contaminationArea = "ContaminationArea";
+
 
     void Awake()
     {
         ReadConfigFile();
-
     }
     // Start is called before the first frame update
     void Start()
     {
+        CountContaminationArea();
         GeneratingObject();
     }
 
@@ -74,7 +75,7 @@ public class GameManager : MonoBehaviour
     {
         if (!isWin)
         {
-            if (ScientistScore == nbContaminatedPlayerToVictory || VirusScore == nbContaminatedPlayerToVictory)
+            if (ScientistScore == gameConfig.NbContaminatedPlayerToVictory || VirusScore == gameConfig.NbContaminatedPlayerToVictory)
             {
                 isWin = true;
                 winner = ScientistScore > VirusScore ? "Scientist" : "Virus";
@@ -108,40 +109,39 @@ public class GameManager : MonoBehaviour
     public void ReadConfigFile()
     {
         levelConfig = LevelConfigLoader.Instance.levelConfig;
-        nbContaminatedPlayerToVictory = levelConfig.nbContaminatedPlayerToVictory;
-        nbContaminationArea = levelConfig.nbContaminationArea;
-        contaminationAreaPositions = levelConfig.contaminationAreaPositions;
-        contaminationAreaRotations = levelConfig.contaminationAreaRotations;
-        throwableObjectPositions = levelConfig.throwableObjectPositions;
-        throwableObjectRotations = levelConfig.throwableObjectRotations;
-        spawnAreaPositions = levelConfig.spawnAreaPositions;
-        spawnAreaRotations = levelConfig.spawnAreaRotations;
-        //adding 0.01 in Y to avoid glitched texture
-        for (int i = 0; i < spawnAreaPositions.Count; i++)
-        {
-            Vector3 temp = spawnAreaPositions[i];
-            temp.y += (float)0.01;
-            spawnAreaPositions[i] = temp;
-        }
+        gameConfig = GameConfigLoader.Instance.gameConfig;
     }
     public void GeneratingObject()
     {
-        for (int i = 0; i < contaminationAreaPositions.Count; i++)
+        for( int i = 0; i < levelConfig.Modifications.Count; i++)
         {
+            if(levelConfig.Modifications[i].modification == spawnArea)
+            {
+                GameObject spawnArea = Instantiate(spawnAreaPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
+                spawnArea.transform.SetParent(spawnAreaParent);
 
-            GameObject contaminationAreaPosition = Instantiate(contaminationAreaPrefab, contaminationAreaPositions[i], Quaternion.Euler(contaminationAreaRotations[i]));
-            contaminationAreaPosition.transform.SetParent(contaminationAreaParent);
-        }
-        for (int j = 0; j < throwableObjectPositions.Count; j++)
-        {
-            GameObject throwableObjectPosition = Instantiate(throwableObjectPrefab, throwableObjectPositions[j], Quaternion.Euler(throwableObjectRotations[j]));
-            throwableObjectPosition.transform.SetParent(throwableObjectParent);
-        }
-        for (int k = 0; k < spawnAreaPositions.Count; k++)
-        {
+            } if(levelConfig.Modifications[i].modification == throwableObject)
+            {
+                GameObject ThrowableObject = Instantiate(throwableObjectPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
+                ThrowableObject.transform.SetParent(throwableObjectParent);
 
-            GameObject spawnAreaPosition = Instantiate(spawnAreaPrefab, spawnAreaPositions[k], Quaternion.Euler(spawnAreaRotations[k]));
-            spawnAreaPosition.transform.SetParent(spawnAreaParent);
+            } if(levelConfig.Modifications[i].modification == contaminationArea)
+            {
+                GameObject ContaminationArea = Instantiate(contaminationAreaPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
+                ContaminationArea.transform.SetParent(contaminationAreaParent);
+
+            }
+        }
+       
+    }
+    public void CountContaminationArea()
+    {
+        for (int i = 0; i < levelConfig.Modifications.Count; i++)
+        {
+            if (levelConfig.Modifications[i].modification == contaminationArea)
+            {
+                nbContaminationArea++;
+            }
         }
     }
 

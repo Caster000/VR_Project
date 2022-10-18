@@ -22,7 +22,7 @@ public class LevelConfig
     //spawner
     public List<Vector3> spawnAreaPositions = new List<Vector3>();
     public List<Vector3> spawnAreaRotations = new List<Vector3>();
-
+    public List<UnitModification> Modifications = new List<UnitModification>();
 
     // Disables debug logging
     public bool NoDebug;
@@ -31,12 +31,13 @@ public class LevelConfig
     /// </summary>
     public void Load()
     {
-        string jsonRepresentation = TextReader.LoadResourceTextfileFromStreamingAsset(PATH+"LevelConfig.json");
+        string jsonRepresentation = TextReader.LoadResourceTextfileFromStreamingAsset(PATH+"DefaultLevelConfig.json");
         if (jsonRepresentation != null)
         {
             JsonUtility.FromJsonOverwrite(jsonRepresentation, this);
             Debug.unityLogger.logEnabled = !NoDebug;
             Debug.Log("json" + jsonRepresentation);
+            Debug.Log("listcount" + Modifications.Count);
         }
         else
         {
