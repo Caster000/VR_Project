@@ -46,11 +46,13 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     [Header("Sound")]
     public AudioClip damage;
     public AudioClip death;
-    
+
+    public GameObject scientistKills;
     // Start is called before the first frame update
     void Awake()
     {
         gameConfig = GameConfigLoader.Instance.gameConfig;
+        gameManager = GameManager.Instance;
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
         _thirdPersonInput = GetComponent<vThirdPersonInput>();
         _rigidbody = GetComponent<Rigidbody>();
@@ -140,12 +142,15 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         {
             if(gameObject.layer == 7)
             {
-                GameManager.ScientistScore++;
-            }else if (gameObject.layer == 8)
-            {
-                GameManager.VirusScore++;
+                gameManager.IncreaseScientificScore();
+                gameManager.IncreaseScientificSlider();
             }
-          
+            else if (gameObject.layer == 8)
+            {
+                gameManager.IncreaseVirusScore();
+                gameManager.IncreaseVirusSlider();
+            }
+
         }
     }
 

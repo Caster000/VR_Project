@@ -9,8 +9,7 @@ public class LevelConfig
 {
 
     public static readonly string PATH = "./LevelConfigs/";
-    public int nbContaminatedPlayerToVictory;
-    public int nbContaminationArea;
+  
     //Contamination area
 
     public List<Vector3> contaminationAreaPositions = new List<Vector3>();

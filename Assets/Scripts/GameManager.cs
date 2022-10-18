@@ -15,9 +15,9 @@ public class GameManager : MonoBehaviour
 
 
     // variables related to contamination area
-    public int nbContaminationArea;
-    static public int nbContaminatedAreaByScientist;
-    static public int nbContaminatedAreaByVirus;
+     public int nbContaminationArea;
+     public int nbContaminatedAreaByScientist;
+     public int nbContaminatedAreaByVirus;
 
     
     
@@ -26,8 +26,8 @@ public class GameManager : MonoBehaviour
     public Transform contaminationAreaParent;
 
     //variables related to player contamination (kill)
-    static public int ScientistScore;
-    static public int VirusScore;
+    public int scientistScore;
+    public int virusScore;
 
   
     [Header("Throwable Object")]
@@ -50,9 +50,17 @@ public class GameManager : MonoBehaviour
 
     public Canvas canvasEndText;
     public TextMeshProUGUI endText;
-
+    public TextMeshProUGUI virusScoreText;
+    public TextMeshProUGUI scientistScoreText;
+    public Slider scientistSlider;
+    public Slider virusSlider;
+    public TextMeshProUGUI contaminationAreaScientistText;
+    public TextMeshProUGUI contaminationAreaVirusText;
+    public TextMeshProUGUI contaminationAreaNeutralText;
     private LevelConfig levelConfig;
     private GameConfig gameConfig;
+
+    public static GameManager Instance { get; private set; }
 
     static public string spawnArea = "SpawnArea";
     static public string throwableObject = "ThrowableObject";
@@ -61,6 +69,15 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("More than one gameconfig instance exists. Put exactly one in the world.");
+            Destroy(Instance);
+        }
+        else
+        {
+            Instance = this;
+        }
         ReadConfigFile();
     }
     // Start is called before the first frame update
@@ -68,6 +85,11 @@ public class GameManager : MonoBehaviour
     {
         CountContaminationArea();
         GeneratingObject();
+        virusSlider.minValue = 0;
+        scientistSlider.minValue = 0;
+        virusSlider.maxValue = gameConfig.NbContaminatedPlayerToVictory;
+        scientistSlider.maxValue = gameConfig.NbContaminatedPlayerToVictory;
+        contaminationAreaNeutralText.text = nbContaminationArea.ToString();
     }
 
     // Update is called once per frame
@@ -75,10 +97,10 @@ public class GameManager : MonoBehaviour
     {
         if (!isWin)
         {
-            if (ScientistScore == gameConfig.NbContaminatedPlayerToVictory || VirusScore == gameConfig.NbContaminatedPlayerToVictory)
+            if (scientistScore == gameConfig.NbContaminatedPlayerToVictory || virusScore == gameConfig.NbContaminatedPlayerToVictory)
             {
                 isWin = true;
-                winner = ScientistScore > VirusScore ? "Scientist" : "Virus";
+                winner = scientistScore > virusScore ? "Scientist" : "Virus";
                 EndGame(winner);
 
             }
@@ -118,17 +140,17 @@ public class GameManager : MonoBehaviour
             if(levelConfig.Modifications[i].modification == spawnArea)
             {
                 GameObject spawnArea = Instantiate(spawnAreaPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
-                spawnArea.transform.SetParent(spawnAreaParent);
+                spawnArea.transform.SetParent(spawnAreaParent, false);
 
             } if(levelConfig.Modifications[i].modification == throwableObject)
             {
                 GameObject ThrowableObject = Instantiate(throwableObjectPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
-                ThrowableObject.transform.SetParent(throwableObjectParent);
+                ThrowableObject.transform.SetParent(throwableObjectParent, false);
 
             } if(levelConfig.Modifications[i].modification == contaminationArea)
             {
                 GameObject ContaminationArea = Instantiate(contaminationAreaPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
-                ContaminationArea.transform.SetParent(contaminationAreaParent);
+                ContaminationArea.transform.SetParent(contaminationAreaParent, false);
 
             }
         }
@@ -143,6 +165,46 @@ public class GameManager : MonoBehaviour
                 nbContaminationArea++;
             }
         }
+    }
+    public void IncreaseVirusScore()
+    {
+        virusScore++;
+        virusScoreText.text = virusScore.ToString();
+    }public void IncreaseScientificScore()
+    {
+        scientistScore++;
+        scientistScoreText.text = scientistScore.ToString();
+    }
+    public void IncreaseScientificSlider()
+    {
+        scientistSlider.value += scientistScore;
+    } public void IncreaseVirusSlider()
+    {
+        virusSlider.value += virusScore;
+    }
+    public void IncreaseContaminationAreaScientistScore()
+    {
+        nbContaminatedAreaByScientist++;
+        contaminationAreaScientistText.text = nbContaminatedAreaByScientist.ToString();
+
+    }
+    public void IncreaseContaminationAreaVirusScore()
+    {
+        nbContaminatedAreaByVirus++;
+        contaminationAreaVirusText.text = nbContaminatedAreaByVirus.ToString();
+    }
+    public void DecreaseContaminationAreaNeutralScore()
+    {
+        nbContaminationArea--;
+        contaminationAreaNeutralText.text = nbContaminationArea.ToString();
+    }public void DecreaseContaminationAreaScientistScore()
+    {
+        nbContaminatedAreaByScientist--;
+        contaminationAreaScientistText.text = nbContaminatedAreaByScientist.ToString();
+    }public void DecreaseContaminationAreaVirusScore()
+    {
+        nbContaminatedAreaByVirus--;
+        contaminationAreaVirusText.text = nbContaminatedAreaByVirus.ToString();
     }
 
 }
