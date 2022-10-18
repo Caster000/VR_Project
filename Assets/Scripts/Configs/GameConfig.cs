@@ -33,10 +33,16 @@ public class GameConfig
     public bool NoDebug;
     // Enable friendlyFire
     public bool friendlyFire;
+
     // Victory by kill
     public bool killToVictory;
     // Victory by contamination
     public bool contaminationVictory;
+
+    // Force applied when a throwable explodes
+    public float ExplosionPower;
+    // Force that lifts movable objects when explosion occurs
+    public float ExplosionUpforce;
     
     /// <summary>
     /// Loads the configuration.
