@@ -17,7 +17,7 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
 
     private List<Vector3> spawPoints;
     [SerializeField] private Slider Healthbar;
-    [SerializeField] private Canvas CanvasPlayer;
+    [SerializeField] private GameObject CanvasPlayer;
     [SerializeField] private TMP_Text TimerText;
     [SerializeField] private GameObject BodyPlayer;
     [SerializeField] private GameObject CameraPlayerPrefab;
@@ -50,18 +50,18 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
     public AudioClip damage;
     public AudioClip death;
     private AudioSource _audioSource;
-    
     // Start is called before the first frame update
     void Awake()
     {
         gameConfig = GameConfigLoader.Instance.gameConfig;
+        gameManager = GameManager.Instance;
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
         _thirdPersonInput = GetComponent<vThirdPersonInput>();
         _rigidbody = GetComponent<Rigidbody>();
         _collider = GetComponent<Collider>();
         canvasImage = CanvasPlayer.GetComponent<Image>();
         _audioSource = GetComponent<AudioSource>();
-        spawPoints = LevelConfigLoader.Instance.levelConfig.spawnAreaPositions;
+        spawPoints = GameManager.Instance.spawnAreaList;
         if (NetworkManager.isMulti)
         {
             if (photonView.IsMine)
@@ -72,12 +72,15 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
             }
             _thirdPersonInput.enabled = photonView.IsMine;
             _rigidbody.isKinematic = !photonView.IsMine;
-            CanvasPlayer.gameObject.SetActive(photonView.IsMine);
+            CanvasPlayer.SetActive(photonView.IsMine);
+            GameManager.Instance.isCanvasEnabled = photonView.IsMine;
             cameraMinimap.GetComponent<Camera>().enabled = photonView.IsMine;
         }
         else
         {
             CameraPlayerInstanciate();
+            GameManager.Instance.isCanvasEnabled = true;
+            cameraMinimap.GetComponent<Camera>().enabled = true;
         }
         if (GunObject.GetComponent<GunBeahviour>())
         {
@@ -137,17 +140,6 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         {
             SceneManager.LoadScene("Menu");
         }
-        if (Input.GetKeyDown("space"))
-        {
-            if(gameObject.layer == 7)
-            {
-                GameManager.ScientistScore++;
-            }else if (gameObject.layer == 8)
-            {
-                GameManager.VirusScore++;
-            }
-          
-        }
     }
 
     private void CameraPlayerInstanciate()
@@ -156,6 +148,8 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         cameraPlayer.SetActive(true);
         _vThirdPersonCamera = cameraPlayer.GetComponent<vThirdPersonCamera>();
         _vThirdPersonCamera.SetMainTarget(transform);
+        GameManager.Instance._CanvasUIScript = CanvasPlayer.GetComponent<CanvasUIScript>();
+
     }
 
     public void TakeDamage()

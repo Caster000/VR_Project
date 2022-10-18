@@ -47,6 +47,7 @@ namespace vr_vs_kms
 
         void Start()
         {
+            gameManager = GameManager.Instance;
             gameConfig = GameConfigLoader.Instance.gameConfig;
             TimeToAreaContamination = gameConfig.TimeToAreaContamination;
             populateParticleSystemCache();
@@ -122,20 +123,29 @@ namespace vr_vs_kms
         }
         private void OnTriggerStay(Collider other)
         {
-
+            Debug.Log(other.gameObject);
             if (isSameTeam && !isAlone)
             {
+                Debug.Log("isSameTeam && !isAlone");
                 contaminationProcess(other.gameObject.layer);
             }
             if(isAlone)
             {
+                Debug.Log("isAlone");
+                if (isNeutral || (other.gameObject.layer == 7 && isTakenByVirus)
+                              || 
+                              (other.gameObject.layer == 8 && isTakenByScientist))
+                {
+                    Debug.Log("Big condition");
 
-                contaminationProcess(other.gameObject.layer);
+                    contaminationProcess(other.gameObject.layer);
+                }
             }
             if (!isSameTeam && !isAlone)
             {
+                Debug.Log("!isSameTeam && !isAlone");
                 audioSource.Stop();
-
+                timer = 0;
             }
         }
         private void OnTriggerExit(Collider other)
@@ -189,7 +199,15 @@ namespace vr_vs_kms
         {
             ColorParticle(pSystem, virus.mainColor, virus.secondColor);
             layerCapture = 8;
-            
+            gameManager.IncreaseContaminationAreaVirusScore();
+            if (isNeutral)
+            {
+                gameManager.DecreaseContaminationAreaNeutralScore();
+            }
+            else if (isTakenByScientist)
+            {
+                gameManager.DecreaseContaminationAreaScientistScore();
+            }
         }
 
         public void BelongsToScientists()
@@ -197,6 +215,15 @@ namespace vr_vs_kms
 
             ColorParticle(pSystem, scientist.mainColor, scientist.secondColor);
             layerCapture = 7;
+            gameManager.IncreaseContaminationAreaScientistScore();
+            if (isNeutral)
+            {
+                gameManager.DecreaseContaminationAreaNeutralScore();
+            }
+            else if (isTakenByVirus)
+            {
+                gameManager.DecreaseContaminationAreaVirusScore();            }
+
         }
         public void contaminationProcess(int layer)
         {
@@ -206,24 +233,20 @@ namespace vr_vs_kms
                 
                 if ((layer == 7 && isNeutral) || (layer==7 && isTakenByVirus))
                 {
-                    GameManager.nbContaminatedAreaByScientist++;
                     BelongsToScientists();
                     audioSource.Stop();
                     isTakenByScientist = true;
                     isNeutral = false;
-
-
+                    Debug.Log("isTakenByScientist");
                 }
                 else if ((layer == 8 && isNeutral) || (layer==8 && isTakenByScientist))
                 {
-                    GameManager.nbContaminatedAreaByVirus++;
                     BelongsToVirus();
                     audioSource.Stop();
                     isTakenByVirus = true;
                     isNeutral = false;
-
+                    Debug.Log("isTakenByVirus");
                 }
-
                 timer = 0;
             }
             else

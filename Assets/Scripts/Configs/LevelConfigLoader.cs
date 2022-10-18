@@ -33,7 +33,7 @@ public class LevelConfigLoader : MonoBehaviour
     void Start()
     {
         levelConfig = new LevelConfig();
-        levelConfig.Load("LevelConfig");
+        levelConfig.Load("DefaultLevelConfig");
         levelConfig.DebugLog();
         //SceneManager.LoadScene(SceneToLoad);
     }

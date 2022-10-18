@@ -9,18 +9,8 @@ public class LevelConfig
 {
 
     public static readonly string PATH = "./LevelConfigs/";
-    //Contamination area
-
-    public List<Vector3> contaminationAreaPositions = new List<Vector3>();
-    public List<Vector3> contaminationAreaRotations = new List<Vector3>();
-    // Throwable object
-    public List<Vector3> throwableObjectPositions = new List<Vector3>();
-    public List<Vector3> throwableObjectRotations = new List<Vector3>();
-
-    //spawner
-    public List<Vector3> spawnAreaPositions = new List<Vector3>();
-    public List<Vector3> spawnAreaRotations = new List<Vector3>();
-
+    
+    public List<UnitModification> Modifications = new List<UnitModification>();
 
     // Disables debug logging
     public bool NoDebug;
@@ -30,11 +20,14 @@ public class LevelConfig
     public void Load(string filename)
     {
         string jsonRepresentation = TextReader.LoadResourceTextfileFromStreamingAsset(PATH+filename+".json");
+        // string jsonRepresentation = TextReader.LoadResourceTextfileFromStreamingAsset(PATH+"DefaultLevelConfig.json");
+
         if (jsonRepresentation != null)
         {
             JsonUtility.FromJsonOverwrite(jsonRepresentation, this);
             Debug.unityLogger.logEnabled = !NoDebug;
             Debug.Log("json" + jsonRepresentation);
+            Debug.Log("listcount" + Modifications.Count);
         }
         else
         {

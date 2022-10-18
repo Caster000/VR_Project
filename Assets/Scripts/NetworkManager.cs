@@ -105,8 +105,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                     : new Vector3(0f, 1f, 0f);
                 if (SceneManager.GetActiveScene().name == "TutoSceneSolo")
                 {
-                    Instantiate(playerPrefab, initialPos, Quaternion.Euler(0, 180, 0));
                     isMulti = false;
+                    Instantiate(playerPrefab, initialPos, Quaternion.Euler(0, 180, 0));
                 }
                 else
                 {

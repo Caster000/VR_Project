@@ -43,7 +43,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         gameConfig = GameConfigLoader.Instance.gameConfig;
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
         Debug.Log(NetworkManager.isMulti);
-        spawPoints = LevelConfigLoader.Instance.levelConfig.spawnAreaPositions;
+        spawPoints = GameManager.Instance.spawnAreaList;
         _photonTransformChildView = GetComponent<PhotonTransformChildView>();
         if (NetworkManager.isMulti)
         {
