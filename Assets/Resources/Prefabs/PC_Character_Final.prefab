@@ -14272,7 +14272,21 @@ MonoBehaviour:
   isVR: 0
   progressBar: {fileID: 1674136193203638334}
   waitToFire: 1.5
-  bulletSpeed: 10
+  bulletSpeed: 900
+  gameConfig:
+    LifeNumber: 0
+    DelayShoot: 0
+    DelayTeleport: 0
+    ColorShotVirus: {r: 0, g: 0, b: 0, a: 0}
+    ColorShotKMS: {r: 0, g: 0, b: 0, a: 0}
+    NbContaminatedPlayerToVictory: 0
+    RadiusExplosion: 0
+    TimeToAreaContamination: 0
+    RespawnTime: 0
+    NoDebug: 0
+    friendlyFire: 0
+    killToVictory: 0
+    contaminationVictory: 0
 --- !u!1 &7838008519847405872
 GameObject:
   m_ObjectHideFlags: 0

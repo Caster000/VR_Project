@@ -15,21 +15,27 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
 {
     public static GameObject UserMeInstance;
     
-    [SerializeField] private List<Transform> spawPoints;
     [SerializeField] private Slider Healthbar;
-    [SerializeField] private Canvas CanvasPlayer;
+    [SerializeField] private Canvas CanvasVRPlayer;
     [SerializeField] private TMP_Text TimerText;
     [SerializeField] private GameObject CameraPlayer;
     [SerializeField] private GameObject gunVr;
-    [SerializeField] private GameObject ShieldPrefab;
+    [SerializeField] private GameObject shieldPrefab;
     [SerializeField] private GameObject socket;
+    [SerializeField] private Collider colliderHead;
 
+
+    private List<Vector3> spawPoints;
     private int currentHealth;
     private float respawnTime;
     private bool spawned;
     private GameConfig gameConfig;
     private GameObject gunVrInstance;
     private GameObject shieldInstance;
+    private Rigidbody _rigidbody;
+    private LocomotionProvider _locomotionProvider;
+    private PhotonTransformChildView _photonTransformChildView;
+    private List<Transform> SynchronizedChildTransform = new List<Transform>();
     
     // Start is called before the first frame update
     void Awake()
@@ -37,6 +43,8 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         gameConfig = GameConfigLoader.Instance.gameConfig;
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
         Debug.Log(NetworkManager.isMulti);
+        spawPoints = LevelConfigLoader.Instance.levelConfig.spawnAreaPositions;
+        _photonTransformChildView = GetComponent<PhotonTransformChildView>();
         if (NetworkManager.isMulti)
         {
             if (photonView.IsMine)
@@ -44,22 +52,34 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
                 Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
                 UserMeInstance = gameObject;
                 FindObjectOfType<DelayedTeleportation>().teleportationProvider =
-                    GetComponent<TeleportationProvider>();
-                gunVrInstance = PhotonNetwork.Instantiate("Prefabs/"+gunVr.name, transform.position,Quaternion.identity);
-                shieldInstance = PhotonNetwork.Instantiate("Prefabs/"+shieldInstance.name, transform.position,Quaternion.identity);
+                    GetComponent<TeleportationProvider>(); 
             }
-            CameraPlayer.SetActive(photonView.IsMine);
+            //Prepare Prefabs
+            gunVr.GetComponent<TeleportGun>().gunspawnPoint = socket;
+            gunVr.GetComponent<TeleportGun>().enabled = photonView.IsMine;
+            gunVr.GetComponent<XRGrabInteractable>().enabled = photonView.IsMine;
+            shieldPrefab.GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
+            
+            CameraPlayer.GetComponent<Camera>().enabled = photonView.IsMine;
+            CameraPlayer.GetComponent<AudioListener>().enabled = photonView.IsMine;
+            CanvasVRPlayer.enabled = photonView.IsMine;
+            gunVrInstance = Instantiate(gunVr, transform.position + Vector3.up,Quaternion.identity);
+            shieldInstance = Instantiate(shieldPrefab, transform.position,Quaternion.identity);
+            
+            //add to list to synchronized
+            SynchronizedChildTransform.Add(gunVrInstance.transform);
+            SynchronizedChildTransform.Add(shieldInstance.transform);
         }
         else
         {
             Debug.Log("instantiate Solo");
             CameraPlayer.SetActive(true);
-            gunVrInstance = Instantiate(gunVr, transform.position,Quaternion.identity);
-            shieldInstance = Instantiate(ShieldPrefab, transform.position,Quaternion.identity);
+            gunVrInstance = Instantiate(gunVr, transform.position + Vector3.up,Quaternion.identity);
+            shieldInstance = Instantiate(shieldPrefab, transform.position,Quaternion.identity);
             FindObjectOfType<DelayedTeleportation>().teleportationProvider =
                 GetComponent<TeleportationProvider>();
         }
-        gunVrInstance.GetComponent<TeleportGun>().gunspawnPoint = socket;
+        _locomotionProvider = GetComponent<LocomotionProvider>();
     }
 
     // Update is called once per frame
@@ -85,7 +105,10 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         Healthbar.value = --currentHealth;
         if (currentHealth <= 0)
         {
-            PrepareRespwan();
+            if (photonView.IsMine)
+            {
+                PrepareRespwan();
+            }
             return;
         }
     }
@@ -94,66 +117,62 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     {
         // Canvas update
         spawned = false;
-       // CanvasPlayer.GetComponent<Image>().color = Color.black;
+        CanvasVRPlayer.enabled = true;
         Healthbar.gameObject.SetActive(false);
         // Hide the body and colliders  
-       // GetComponent<Collider>().enabled = false;
-        // GetComponent<Rigidbody>().useGravity = false;
-        // GetComponent<Rigidbody>().isKinematic = true;
-        // GetComponent<vThirdPersonInput>().enabled = false;
+        colliderHead.enabled = false;
+        _locomotionProvider.enabled = false;
         // Teleport to spawnPoint
-        Transform transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
-        transform.position = transform_spawn.position;
-        TimerText.enabled = true;
+        Vector3 transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
+        transform.position = transform_spawn;
         respawnTime = gameConfig.RespawnTime;
     }
 
     private void Respawn()
     {
         //Reset Canvas
-        TimerText.text = "";
-        TimerText.enabled = false;
         Healthbar.gameObject.SetActive(true);
-//        CanvasPlayer.GetComponent<Image>().color = Color.clear;
+        CanvasVRPlayer.enabled = false;
         Healthbar.value = currentHealth = gameConfig.LifeNumber;
         spawned = true;
             
         //Reset player health, position and shield
         
-        // todo public values
-//        GetComponent<Collider>().enabled = true;
-       // GetComponent<Rigidbody>().useGravity = true;
-       // GetComponent<Rigidbody>().isKinematic = false;
-       // GetComponent<vThirdPersonInput>().enabled = true;
+        colliderHead.enabled = true;
+        _locomotionProvider.enabled = true;
             
         //TODO Rescale shield
     }
     
     #region Photon
 
-    // void ShootVr()
-    // {
-    //     photonView.RPC("PlayerShoot",RpcTarget.AllViaServer);
-    // }
-    // [PunRPC]
-    // void PlayerShoot()
-    // {
-    //     gunBeahviour.Shoot();
-    // }
-
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if(stream.IsWriting)
         {
             stream.SendNext(currentHealth);
-            // stream.SendNext(BodyPlayer.activeSelf);
-//            stream.SendNext(GetComponent<Collider>().enabled);
+            stream.SendNext(colliderHead.enabled);
+            
+            for (int i = 0; i < SynchronizedChildTransform.Count; i++)
+            {
+                //Todo MAYBE interpolate
+               
+                stream.SendNext(SynchronizedChildTransform[i].localPosition);
+                stream.SendNext(SynchronizedChildTransform[i].localRotation);
+                stream.SendNext(SynchronizedChildTransform[i].localScale);
+            }
         }
         else
         {
             currentHealth = (int)stream.ReceiveNext();
-            // BodyPlayer.SetActive((bool)stream.ReceiveNext());
-           // GetComponent<Collider>().enabled = (bool)stream.ReceiveNext();
+            colliderHead.enabled = (bool)stream.ReceiveNext();
+            
+            for (int i = 0; i < SynchronizedChildTransform.Count; i++)
+            {
+                SynchronizedChildTransform[i].localPosition = (Vector3)stream.ReceiveNext();
+                SynchronizedChildTransform[i].localRotation = (Quaternion)stream.ReceiveNext();
+                SynchronizedChildTransform[i].localScale = (Vector3)stream.ReceiveNext();
+            }
         }
     }
 

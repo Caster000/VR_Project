@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,15 @@ public class GunBeahviour : MonoBehaviour
     public float waitToFire = 1.5f;
 
     public float bulletSpeed = 10f;
+
+    public GameConfig gameConfig;
+
+    private void Awake()
+    {
+        gameConfig = GameConfigLoader.Instance.gameConfig;
+        waitToFire = gameConfig.DelayShoot;
+    }
+
     void Update()
     {
         if (!allowfire)
@@ -84,7 +94,9 @@ public class GunBeahviour : MonoBehaviour
             {
                 tempBullet = Instantiate(bullet, bulletSpawn.transform.position, cameraPlayer.transform.rotation);
             }
-            tempBullet.GetComponent<Rigidbody>().velocity = cameraPlayer.transform.forward * bulletSpeed ;
+            // tempBullet.GetComponent<Rigidbody>().velocity = cameraPlayer.transform.forward * bulletSpeed ;
+            tempBullet.GetComponent<Rigidbody>().AddForce(cameraPlayer.transform.forward * bulletSpeed );
+
             tempBullet.layer = gameObject.layer;
             RaycastHit hit;
             if(Physics.Raycast(transform.position, transform.forward, out hit, range))
@@ -112,7 +124,8 @@ public class GunBeahviour : MonoBehaviour
             {
                 tempBullet = Instantiate(bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
             }
-            tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
+            // tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
+            tempBullet.GetComponent<Rigidbody>().AddForce(bulletSpawn.transform.forward * bulletSpeed );
             tempBullet.layer = gameObject.layer;
             RaycastHit hit;
             if(Physics.Raycast(transform.position, transform.forward, out hit, range))

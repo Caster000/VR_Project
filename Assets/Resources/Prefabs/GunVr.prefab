@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1798262656695451348}
   - component: {fileID: 4485372462308251843}
   - component: {fileID: 5821181040373539203}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170473130705131095}
   m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: 0.017700002, y: 0.0308, z: 0.041}
+  m_LocalPosition: {x: 0.017700002, y: 0.0099, z: 0.041}
   m_LocalScale: {x: 4.6268487, y: 4.6268487, z: 4.6268487}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3803797529570083633}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bullet spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3803797529570083632}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0166, y: 0.0345, z: 0.157}
+  m_LocalPosition: {x: 0.0166, y: 0.0327, z: 0.1536}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -128,7 +128,9 @@ GameObject:
   - component: {fileID: 5509471694054072015}
   - component: {fileID: -6514272929637963466}
   - component: {fileID: 5894612117020298630}
-  m_Layer: 0
+  - component: {fileID: -8205298048229580098}
+  - component: {fileID: 8227743972535212791}
+  m_Layer: 8
   m_Name: GunVr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,8 +146,8 @@ Transform:
   m_GameObject: {fileID: 5133615375440266358}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 200259731906073732}
   - {fileID: 3803797529570083633}
@@ -210,34 +212,10 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5509471694054072014}
-        m_TargetAssemblyTypeName: UnityEngine.Rigidbody, UnityEngine
-        m_MethodName: set_isKinematic
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5509471694054072014}
-        m_TargetAssemblyTypeName: UnityEngine.Rigidbody, UnityEngine
-        m_MethodName: set_isKinematic
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_Activated:
     m_PersistentCalls:
       m_Calls:
@@ -344,7 +322,21 @@ MonoBehaviour:
   isVR: 1
   progressBar: {fileID: 0}
   waitToFire: 1.5
-  bulletSpeed: 10
+  bulletSpeed: 900
+  gameConfig:
+    LifeNumber: 0
+    DelayShoot: 0
+    DelayTeleport: 0
+    ColorShotVirus: {r: 0, g: 0, b: 0, a: 0}
+    ColorShotKMS: {r: 0, g: 0, b: 0, a: 0}
+    NbContaminatedPlayerToVictory: 0
+    RadiusExplosion: 0
+    TimeToAreaContamination: 0
+    RespawnTime: 0
+    NoDebug: 0
+    friendlyFire: 0
+    killToVictory: 0
+    contaminationVictory: 0
 --- !u!114 &-6514272929637963466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,8 +361,47 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.0619876, y: 0.043009706, z: 0.16572294}
-  m_Center: {x: 0.016183618, y: 0.054363053, z: 0.042170227}
+  m_Size: {x: 0.030549504, y: 0.03776468, z: 0.14160138}
+  m_Center: {x: 0.017478134, y: 0.035998132, z: 0.04268473}
+--- !u!114 &-8205298048229580098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5133615375440266358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 2
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 8227743972535212791}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &8227743972535212791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5133615375440266358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 0
 --- !u!1001 &3803797529753021752
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -378,9 +409,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5509471694054072012}
     m_Modifications:
+    - target: {fileID: 3893055686433049036, guid: 23533a28f7bef0e45ad209384e54def1, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 3893305060862915686, guid: 23533a28f7bef0e45ad209384e54def1, type: 3}
       propertyPath: m_Name
       value: MuzzleFlash01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893305060862915686, guid: 23533a28f7bef0e45ad209384e54def1, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3895255895784585660, guid: 23533a28f7bef0e45ad209384e54def1, type: 3}
       propertyPath: m_RootOrder
@@ -396,7 +435,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3895255895784585660, guid: 23533a28f7bef0e45ad209384e54def1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.158
+      value: 0.1279
       objectReference: {fileID: 0}
     - target: {fileID: 3895255895784585660, guid: 23533a28f7bef0e45ad209384e54def1, type: 3}
       propertyPath: m_LocalRotation.w

@@ -110,8 +110,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 }
                 else
                 {
-                    PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, initialPos, Quaternion.Euler(0, 180, 0), 0);
                     isMulti = true;
+                    PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, initialPos, Quaternion.Euler(0, 180, 0), 0);
                 }
             }
             else

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class TrailRenderDelay : MonoBehaviour
+public class TrailRenderDelay : MonoBehaviourPunCallbacks
 {
     public TrailRenderer TrailRenderer;
 
@@ -31,8 +32,7 @@ public class TrailRenderDelay : MonoBehaviour
 
     public void StartTimer()
     {
-        timer = 1f;
+        timer = 1.5f;
     }
-    
     
 }

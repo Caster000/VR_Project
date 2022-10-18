@@ -66,10 +66,10 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
             Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
             UserMeInstance = gameObject;
             CameraPlayerInstanciate();
+            }
             _thirdPersonInput.enabled = photonView.IsMine;
             _rigidbody.isKinematic = !photonView.IsMine;
             CanvasPlayer.gameObject.SetActive(photonView.IsMine);
-            }
         }
         else
         {

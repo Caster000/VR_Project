@@ -28,6 +28,12 @@ namespace VR_Vs_KMS.Scripts
         private Vector3 endPosition;
         private Vector3 direction;
         private bool inTravel;
+        private GameConfig _gameConfig;
+
+        public void Start()
+        {
+            _gameConfig = GameConfigLoader.Instance.gameConfig;
+        }
 
         /// <inheritdoc />
         /// 
@@ -44,7 +50,7 @@ namespace VR_Vs_KMS.Scripts
             teleportRequest.destinationPosition = raycastHit.point;
             teleportRequest.destinationRotation = transform.rotation;
             canTp = false;
-            timer = 5f;
+            timer = _gameConfig.DelayTeleport;
             endPosition = 
             startPosition = teleportRequest.destinationPosition;
             

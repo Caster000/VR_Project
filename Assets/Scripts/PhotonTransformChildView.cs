@@ -11,15 +11,6 @@ public class PhotonTransformChildView : MonoBehaviourPunCallbacks, IPunObservabl
     // Start is called before the first frame update
     void Awake()
     {
-        // if (photonView.IsMine)
-        // {
-        //     for (int i = 0; i < SynchronizedChildTransform.Count; i++)
-        //     {
-        //         SynchronizedChildTransform[i].gameObject.SetActive(false);
-        //         SynchronizedChildTransform[i].gameObject.SetActive(false);
-        //         SynchronizedChildTransform[i].gameObject.SetActive(false);
-        //     }
-        // }
         if (NetworkManager.isMulti)
         {
             cameraPlayer.enabled = photonView.IsMine;
@@ -32,7 +23,6 @@ public class PhotonTransformChildView : MonoBehaviourPunCallbacks, IPunObservabl
 
     }
 
-    [SerializeField] private float ratio = 0.8f;
     #region IPUnObservable
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {

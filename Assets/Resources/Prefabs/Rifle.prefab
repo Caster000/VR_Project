@@ -815,17 +815,16 @@ MonoBehaviour:
   damage: 1
   range: 50
   fireRate: 10
-  crosshair: {fileID: 0}
   muzzleFlash: {fileID: 4972601942562366761}
   gunShot: {fileID: 8300000, guid: b9d6e48eb46bc3241baf2ee3ef6399b4, type: 3}
   gunReload: {fileID: 0}
   bullet: {fileID: 3741455278575672788, guid: d72e75ae8a31bc24a8246e7a143f3d08, type: 3}
   bulletSpawn: {fileID: 5170833896613116232}
   isReloaded: 1
-  anim: {fileID: 0}
+  isVR: 0
   progressBar: {fileID: 0}
   waitToFire: 1.5
-  bulletSpeed: 10
+  bulletSpeed: 900
 --- !u!1 &5170833896613116232
 GameObject:
   m_ObjectHideFlags: 0

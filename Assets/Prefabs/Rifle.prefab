@@ -699,9 +699,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2037475094906256955}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.72, y: 1.48, z: 0.599}
-  m_LocalScale: {x: 1.4154, y: 1.4154, z: 1.4154}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2037475094905758219}
@@ -731,17 +731,16 @@ MonoBehaviour:
   damage: 1
   range: 50
   fireRate: 10
-  crosshair: {fileID: 2037475094227787004}
   muzzleFlash: {fileID: 2199680606712697282}
-  gunShot: {fileID: 8300000, guid: be0c166dec85dc94ba85ba92f5ef2968, type: 3}
+  gunShot: {fileID: 8300000, guid: b9d6e48eb46bc3241baf2ee3ef6399b4, type: 3}
   gunReload: {fileID: 8300000, guid: 9eb7910e8f3c5e8428f58cf1f3ca1152, type: 3}
   bullet: {fileID: 3741455278575672788, guid: d72e75ae8a31bc24a8246e7a143f3d08, type: 3}
   bulletSpawn: {fileID: 2037475095694904739}
   isReloaded: 1
-  anim: {fileID: 0}
+  isVR: 0
   progressBar: {fileID: 0}
   waitToFire: 1.5
-  bulletSpeed: 10
+  bulletSpeed: 900
 --- !u!1 &2037475095694904739
 GameObject:
   m_ObjectHideFlags: 0

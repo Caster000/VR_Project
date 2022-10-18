@@ -12,18 +12,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2037475094905758235, guid: 0b92c27d61cdbb045accdb704ee4160e, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2037475094905758235, guid: 0b92c27d61cdbb045accdb704ee4160e, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2037475094905758235, guid: 0b92c27d61cdbb045accdb704ee4160e, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2037475094905758235, guid: 0b92c27d61cdbb045accdb704ee4160e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.809
       objectReference: {fileID: 0}
@@ -62,14 +50,6 @@ PrefabInstance:
     - target: {fileID: 2037475094905758235, guid: 0b92c27d61cdbb045accdb704ee4160e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2037475094906157192, guid: 0b92c27d61cdbb045accdb704ee4160e, type: 3}
-      propertyPath: gunShot
-      value: 
-      objectReference: {fileID: 8300000, guid: b9d6e48eb46bc3241baf2ee3ef6399b4, type: 3}
-    - target: {fileID: 2037475094906157192, guid: 0b92c27d61cdbb045accdb704ee4160e, type: 3}
-      propertyPath: progressBar
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2037475094906256955, guid: 0b92c27d61cdbb045accdb704ee4160e, type: 3}
       propertyPath: m_Name
