@@ -1,0 +1,23 @@
+{
+    "Modifications": [
+        {"modification": "ThrowableObject", "position": {"x": 4.9, "y": 2.65, "z": 3.89}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ThrowableObject", "position": {"x": 47.76, "y": 2.51, "z": 14.55}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ThrowableObject", "position": {"x": 5.874, "y": 4.753, "z": 16.434}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ThrowableObject", "position": {"x": 3.281, "y": 2.307, "z": 47.01}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ThrowableObject", "position": {"x": 3.513, "y": 2.2, "z": 45.878}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ThrowableObject", "position": {"x": 35.19, "y": 2.8, "z": 41.724}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ThrowableObject", "position": {"x": 23.61, "y": 1.688, "z": 24.18}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ThrowableObject", "position": {"x": 23.855, "y": 1.511, "z": 25.082}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ThrowableObject", "position": {"x": 23.561, "y": 1.385, "z": 26.23}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ContaminationArea", "position": {"x": 7.358, "y": 4.76, "z": 17.053}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ContaminationArea", "position": {"x": 9.69, "y": 2.317, "z": 48.36}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ContaminationArea", "position": {"x": 47.78, "y": 2.371, "z": 23.082}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ContaminationArea", "position": {"x": 22.9, "y": 3.61, "z": 24.86}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "ContaminationArea", "position": {"x": 30.66, "y": 2.33, "z": 2.09}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "SpawnArea", "position": {"x": 19.776, "y": 2.4, "z": 1.9}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "SpawnArea", "position": {"x": 37.82, "y": 2.308, "z": 9.232}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "SpawnArea", "position": {"x": 9.55, "y": 4.666, "z": 29.757}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "SpawnArea", "position": {"x": 47.72, "y": 2.287, "z": 46.65}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}},
+        {"modification": "SpawnArea", "position": {"x": 21.727, "y": 2.284, "z": 38.334}, "rotation": {"x": 0, "y": 0,"z": 0,"w":0}}
+    ]
+}
