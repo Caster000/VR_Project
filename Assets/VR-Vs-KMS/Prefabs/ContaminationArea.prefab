@@ -4896,18 +4896,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nobody:
-    mainColor: {r: 0, g: 0, b: 1, a: 0.80784315}
-    secondColor: {r: 1, g: 1, b: 1, a: 0.9098039}
+    mainColor: {r: 0.103773594, g: 0.09741012, b: 0.09741012, a: 1}
+    secondColor: {r: 0.745283, g: 0.7417675, b: 0.7417675, a: 1}
   virus:
     mainColor: {r: 1, g: 0, b: 0, a: 0.92156863}
     secondColor: {r: 0.8962264, g: 0.44833267, b: 0.063412234, a: 0.92941177}
   scientist:
-    mainColor: {r: 0.09745628, g: 0.8113208, b: 0, a: 0.92941177}
-    secondColor: {r: 0.31102926, g: 1, b: 0.475, a: 0.95686275}
+    mainColor: {r: 0, g: 0.1764706, b: 0.7264151, a: 1}
+    secondColor: {r: 0, g: 0.6191137, b: 0.990566, a: 1}
   cullRadius: 4
-  isNeutral: 1
-  layerCapture: 0
-  layers: 
+  isTaken: 0
   audioSource: {fileID: 1678797290}
 --- !u!82 &1678797290
 AudioSource:
