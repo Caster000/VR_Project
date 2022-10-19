@@ -141,14 +141,12 @@ public class GameManager : MonoBehaviour
 
         if (!gameConfig.killToVictory)
         {
-            GameObject.Find("ScientistContaminationPanel").SetActive(false);
-            GameObject.Find("VirusContaminationPanel").SetActive(false);
-          
+            _CanvasUIScript.ScientistContaminationPanel.SetActive(false);
+            _CanvasUIScript.VirusContaminationPanel.SetActive(false);
         }
         if (!gameConfig.contaminationVictory)
         {
-            GameObject.Find("ContaminationAreaPanel").SetActive(false);
-
+            _CanvasUIScript.ContaminationAreaPanel.SetActive(false);
            
         }
     }
