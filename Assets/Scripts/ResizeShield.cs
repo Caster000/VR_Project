@@ -48,22 +48,22 @@ public class ResizeShield : MonoBehaviour, IPunObservable
     
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if(stream.IsWriting)
-        {
-    
-                stream.SendNext(transform.localPosition);
-                stream.SendNext(transform.localRotation);
-                stream.SendNext(transform.localScale);
-                stream.SendNext(gameObject.activeSelf);
-            
-        }
-        else
-        {
-            transform.localPosition = (Vector3)stream.ReceiveNext();
-            transform.localRotation = (Quaternion)stream.ReceiveNext();
-            transform.localScale = (Vector3)stream.ReceiveNext();
-            gameObject.SetActive((bool)stream.ReceiveNext());
-        }
+        // if(stream.IsWriting)
+        // {
+        //
+        //         stream.SendNext(transform.localPosition);
+        //         stream.SendNext(transform.localRotation);
+        //         stream.SendNext(transform.localScale);
+        //         stream.SendNext(gameObject.activeSelf);
+        //     
+        // }
+        // else
+        // {
+        //     transform.localPosition = (Vector3)stream.ReceiveNext();
+        //     transform.localRotation = (Quaternion)stream.ReceiveNext();
+        //     transform.localScale = (Vector3)stream.ReceiveNext();
+        //     gameObject.SetActive((bool)stream.ReceiveNext());
+        // }
     }
 
 }

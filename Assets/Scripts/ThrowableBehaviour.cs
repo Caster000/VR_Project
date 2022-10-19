@@ -56,10 +56,7 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
 
         // Add particles
         GameObject g = PhotonNetwork.Instantiate("Prefabs/"+explosionPrefab.name, position, objectTransform.rotation);
-        // GameObject g = Instantiate(explosionPrefab, position, objectTransform.rotation);
 
-        Destroy(g, 3);
-        
         // Push everything around & damage players
         Collider[] hitColliders = Physics.OverlapSphere(position, radius);
         GameObject currentTreatedObject;
@@ -76,7 +73,7 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
                 currentTreatedObject.GetComponent<UserManager>().TakeDamage();
         }
         
-        Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
 
 }

@@ -38,8 +38,8 @@ public class BulletBehaviour : MonoBehaviourPunCallbacks,IPunObservable
                 if (gameObject.layer == 7) //todo 7
                 {
                     Debug.Log("Resize");
-                    _resizeShield.Resize(new Vector3(0.1f, 0.1f, 0.1f));
-                    // photonView.RPC("Resize", RpcTarget.AllViaServer,new Vector3(0.1f, 0.1f, 0.1f),_resizeShield);
+                    // _resizeShield.Resize(new Vector3(0.1f, 0.1f, 0.1f));
+                    photonView.RPC("Resize", RpcTarget.AllViaServer,new Vector3(0.1f, 0.1f, 0.1f),_resizeShield);
                 }
             }
             Destroy(gameObject);
