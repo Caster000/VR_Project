@@ -15477,6 +15477,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EndGameCanvas 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1013954616422683407, guid: 62312aa05eb58124384ecdbbf47f0c0a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1013954616422683411, guid: 62312aa05eb58124384ecdbbf47f0c0a, type: 3}
       propertyPath: m_Pivot.x
       value: 0

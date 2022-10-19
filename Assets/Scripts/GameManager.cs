@@ -6,9 +6,10 @@ using TMPro;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     //global information
     //private int playerNumber;
@@ -293,5 +294,37 @@ public class GameManager : MonoBehaviour
         nbContaminatedAreaByVirus--;
         _CanvasUIScript.contaminationAreaVirusText.text = nbContaminatedAreaByVirus.ToString();
     }
+    #region Photon
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(virusScore);
+            stream.SendNext(isStarted);
+            stream.SendNext(scientistScore);
+            stream.SendNext(nbContaminationArea);
+            stream.SendNext(nbContaminatedAreaByScientist);
+            stream.SendNext(nbContaminatedAreaByVirus);
+            stream.SendNext(gameConfig.killToVictory);
+            stream.SendNext(gameConfig.contaminationVictory);
+            //stream.SendNext(_CanvasUIScript.virusSlider.value);
+            //stream.SendNext(_CanvasUIScript.scientistSlider.value);
 
+        }
+        else
+        {
+            virusScore = (int)stream.ReceiveNext();
+            isStarted = (bool)stream.ReceiveNext();
+            scientistScore = (int)stream.ReceiveNext();
+            nbContaminationArea = (int)stream.ReceiveNext();
+            nbContaminatedAreaByScientist = (int)stream.ReceiveNext();
+            nbContaminatedAreaByVirus = (int)stream.ReceiveNext();
+            gameConfig.killToVictory = (bool)stream.ReceiveNext();
+            gameConfig.contaminationVictory = (bool)stream.ReceiveNext();
+            //_CanvasUIScript.virusSlider.value = (int)stream.ReceiveNext();
+            //_CanvasUIScript.scientistSlider.value = (int)stream.ReceiveNext();
+
+        }
+    }
+    #endregion
 }

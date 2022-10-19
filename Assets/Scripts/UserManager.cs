@@ -160,6 +160,13 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         if (currentHealth <= 0)
         {
             PrepareRespwan();
+            if(gameObject.layer == 7)
+            {
+                gameManager.IncreaseVirusScore();
+            } if(gameObject.layer == 8)
+            {
+                gameManager.IncreaseScientificScore();
+            }
             return;
         }
 
