@@ -1,8 +1,10 @@
-﻿using Photon.Pun;
+﻿using DefaultNamespace;
+using Photon.Pun;
 using Photon.Pun.Demo.PunBasics;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -24,24 +26,19 @@ namespace vr_vs_kms
         private float faerieSpeed;
         private float radius = 1f;
         public float cullRadius = 5f;
-        private bool isTakenByScientist;
-        private bool isTakenByVirus;
-        public bool isNeutral = true;
         private float TimeToAreaContamination;
         private int playerNumber = 0;
-        private bool isSomeoneAlreadyIn = false;
-        private bool isSameTeam = false;
-        private bool isAlone = false;
         private float timer;
-        public int layerCapture = 0;
-        public List<int> layers = new List<int>();
+        public int isTaken = 0;
         public AudioSource audioSource;
         private ParticleSystem pSystem;
-        ParticleSystem.ColorOverLifetimeModule colorModule; 
+        ParticleSystem.ColorOverLifetimeModule colorModule;
         private WindZone windZone;
         private int remainingGrenades;
         private CullingGroup cullGroup;
-        
+        //Dictionary<int, int> layersList = new Dictionary<int, int>();
+        private int numberOfScientist;
+        private int numberOfVirus;
         private GameConfig gameConfig;
         private GameManager gameManager;
 
@@ -51,7 +48,7 @@ namespace vr_vs_kms
             gameConfig = GameConfigLoader.Instance.gameConfig;
             TimeToAreaContamination = gameConfig.TimeToAreaContamination;
             populateParticleSystemCache();
-            setupCullingGroup();    
+            setupCullingGroup();
             TimeToAreaContamination = gameConfig.TimeToAreaContamination;
             BelongsToNobody();
             // audioSource = GetComponent<AudioSource>();
@@ -89,98 +86,42 @@ namespace vr_vs_kms
                 pSystem.Pause();
             }
         }
-
         private void OnTriggerEnter(Collider other)
         {
-            if (!isSomeoneAlreadyIn)
+            if (other.gameObject.GetComponent<IPlayer>() != null)
             {
-                layers.Add(other.gameObject.layer);
-                isSomeoneAlreadyIn = true;
-                playerNumber++;
-                isAlone = true;
-                checkLayerCapture(other.gameObject.layer);
-            }
-            else
-            {
-                foreach (var layer in layers)
-                {
-
-                    if (layer != other.gameObject.layer)
-                    {
-                        isSameTeam = false;
-                    }
-                    else
-                    {
-                        isSameTeam = true;
-                        checkLayerCapture(other.gameObject.layer);
-
-                    }
-                }
-                layers.Add(other.gameObject.layer);
-                playerNumber++;
-                isAlone = false;
+                audioSource.Play();
+                if (other.gameObject.layer == 7) numberOfScientist++;
+                if (other.gameObject.layer == 8) numberOfVirus++;
             }
         }
         private void OnTriggerStay(Collider other)
         {
-            Debug.Log(other.gameObject);
-            if (isSameTeam && !isAlone)
+            //ifsame, stop audio()
+            if (other.gameObject.GetComponent<IPlayer>() == null) return;
+            if(isTaken != 7 && numberOfScientist > 0 && numberOfVirus == 0 )
             {
-                Debug.Log("isSameTeam && !isAlone");
                 contaminationProcess(other.gameObject.layer);
             }
-            if(isAlone)
+            if (isTaken != 8 && numberOfVirus > 0 && numberOfScientist == 0)
             {
-                Debug.Log("isAlone");
-                if (isNeutral || (other.gameObject.layer == 7 && isTakenByVirus)
-                              || 
-                              (other.gameObject.layer == 8 && isTakenByScientist))
-                {
-                    Debug.Log("Big condition");
-
-                    contaminationProcess(other.gameObject.layer);
-                }
+                contaminationProcess(other.gameObject.layer);
             }
-            if (!isSameTeam && !isAlone)
+           
+            if((numberOfScientist >= 1 && isTaken == 7) || (numberOfVirus >=1 && isTaken == 8) || (numberOfVirus >=1 && numberOfScientist>=1))
             {
-                Debug.Log("!isSameTeam && !isAlone");
-                audioSource.Stop();
-                timer = 0;
+               audioSource.Stop();
             }
         }
         private void OnTriggerExit(Collider other)
         {
-            if (playerNumber > 0)
+           
+            if (other.gameObject.GetComponent<IPlayer>() != null)
             {
-                playerNumber--;
-                isAlone = false;
-            }
-            if(playerNumber == 0)
-            {
-                isSomeoneAlreadyIn = false;
-                isAlone = false;
-            }
-            if(playerNumber == 1)
-            {
-                isAlone = true;
-
-            }
-            timer = 0;
-            audioSource.Stop();
-
-
-        }
-        void Update()
-        {
-
-        }
-
-        private void checkLayerCapture(int playerLayer)
-        {
-            if (layerCapture != playerLayer)
-            {
-                audioSource.Play();
-
+                if (other.gameObject.layer == 7) numberOfScientist--;
+                if (other.gameObject.layer == 8) numberOfVirus--;
+                if(numberOfScientist == 0 && numberOfVirus == 0) audioSource.Stop();
+                timer = 0;
             }
         }
         private void ColorParticle(ParticleSystem pSys, Color mainColor, Color accentColor)
@@ -198,31 +139,31 @@ namespace vr_vs_kms
         public void BelongsToVirus()
         {
             ColorParticle(pSystem, virus.mainColor, virus.secondColor);
-            layerCapture = 8;
-            gameManager.IncreaseContaminationAreaVirusScore();
-            if (isNeutral)
+            if (isTaken == 0)
             {
+                gameManager.IncreaseContaminationAreaVirusScore();
                 gameManager.DecreaseContaminationAreaNeutralScore();
             }
-            else if (isTakenByScientist)
+            else if (isTaken == 7)
             {
+                gameManager.IncreaseContaminationAreaVirusScore();
                 gameManager.DecreaseContaminationAreaScientistScore();
             }
         }
 
         public void BelongsToScientists()
         {
-
             ColorParticle(pSystem, scientist.mainColor, scientist.secondColor);
-            layerCapture = 7;
-            gameManager.IncreaseContaminationAreaScientistScore();
-            if (isNeutral)
+            if (isTaken == 0)
             {
+                gameManager.IncreaseContaminationAreaScientistScore();
                 gameManager.DecreaseContaminationAreaNeutralScore();
             }
-            else if (isTakenByVirus)
+            else if (isTaken == 8)
             {
-                gameManager.DecreaseContaminationAreaVirusScore();            }
+                gameManager.IncreaseContaminationAreaScientistScore();
+                gameManager.DecreaseContaminationAreaVirusScore();
+            }
 
         }
         public void contaminationProcess(int layer)
@@ -230,21 +171,20 @@ namespace vr_vs_kms
 
             if (timer >= TimeToAreaContamination)
             {
-                
-                if ((layer == 7 && isNeutral) || (layer==7 && isTakenByVirus))
+
+                if (layer == 7)
                 {
-                    BelongsToScientists();
                     audioSource.Stop();
-                    isTakenByScientist = true;
-                    isNeutral = false;
+                    BelongsToScientists();
+                    isTaken = 7;
                     Debug.Log("isTakenByScientist");
                 }
-                else if ((layer == 8 && isNeutral) || (layer==8 && isTakenByScientist))
+                else if (layer == 8)
                 {
-                    BelongsToVirus();
+
                     audioSource.Stop();
-                    isTakenByVirus = true;
-                    isNeutral = false;
+                    BelongsToVirus();
+                    isTaken = 8;
                     Debug.Log("isTakenByVirus");
                 }
                 timer = 0;
@@ -270,13 +210,13 @@ namespace vr_vs_kms
         {
             if (stream.IsWriting)
             {
-                stream.SendNext(colorModule.color) ;
-                
+                stream.SendNext(colorModule.color);
+
             }
             else
             {
                 colorModule.color = (ParticleSystem.MinMaxGradient)stream.ReceiveNext();
-               
+
             }
         }
 
