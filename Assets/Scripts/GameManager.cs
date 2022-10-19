@@ -180,7 +180,7 @@ public class GameManager : MonoBehaviour
 
             } if(levelConfig.Modifications[i].modification == throwableObject)
             {
-                GameObject ThrowableObject = Instantiate(throwableObjectPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
+                GameObject ThrowableObject = PhotonNetwork.Instantiate("Prefabs/"+throwableObjectPrefab.name, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
                 ThrowableObject.transform.SetParent(throwableObjectParent, false);
 
             } if(levelConfig.Modifications[i].modification == contaminationArea)
