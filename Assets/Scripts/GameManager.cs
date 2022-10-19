@@ -138,6 +138,19 @@ public class GameManager : MonoBehaviour
         _CanvasUIScript.virusSlider.maxValue = gameConfig.NbContaminatedPlayerToVictory;
         _CanvasUIScript.scientistSlider.maxValue = gameConfig.NbContaminatedPlayerToVictory;
         _CanvasUIScript.contaminationAreaNeutralText.text = nbContaminationArea.ToString();
+
+        if (!gameConfig.killToVictory)
+        {
+            GameObject.Find("ScientistContaminationPanel").SetActive(false);
+            GameObject.Find("VirusContaminationPanel").SetActive(false);
+          
+        }
+        if (!gameConfig.contaminationVictory)
+        {
+            GameObject.Find("ContaminationAreaPanel").SetActive(false);
+
+           
+        }
     }
     //TODO Ecran de victoire / ecran de défaite en focntion de l'équipe
     public void EndGame(string winner)
@@ -158,6 +171,7 @@ public class GameManager : MonoBehaviour
     {
         levelConfig = LevelConfigLoader.Instance.levelConfig;
         gameConfig = GameConfigLoader.Instance.gameConfig;
+        Debug.Log("killToVictory" + gameConfig.killToVictory + "contaminationVictory" + gameConfig.contaminationVictory);
     }
 
     public void ReadServerConfig()
