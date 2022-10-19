@@ -25,7 +25,7 @@ namespace Photon.Pun.Demo.Asteroids
 
 #pragma warning disable 0109
         private new Rigidbody rigidbody;
-#pragma warning restore 0109
+#pragma warning restore 0109 
 
         #region UNITY
 

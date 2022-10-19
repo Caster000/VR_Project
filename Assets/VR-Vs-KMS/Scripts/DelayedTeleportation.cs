@@ -23,7 +23,6 @@ namespace VR_Vs_KMS.Scripts
         private bool canTp = true;
         
         private XRInteractorLineVisual _xrInteractorLineVisual;
-        private GameObject manageParticle;
         private Vector3 startPosition;
         private Vector3 endPosition;
         private Vector3 direction;
@@ -41,7 +40,6 @@ namespace VR_Vs_KMS.Scripts
         {
             
             _xrInteractorLineVisual = interactor.transform.gameObject.GetComponent<XRInteractorLineVisual>();
-            manageParticle = interactor.transform.gameObject.GetComponent<ManageParticle>().particleObjecT;
 
             if (!canTp) return false;
 

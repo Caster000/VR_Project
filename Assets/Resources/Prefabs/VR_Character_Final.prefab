@@ -5277,6 +5277,7 @@ GameObject:
   - component: {fileID: 2401730548936164923}
   - component: {fileID: 22180273528655378}
   - component: {fileID: 4954999930328102272}
+  - component: {fileID: 7773370710747099439}
   m_Layer: 8
   m_Name: VR_Character_Final
   m_TagString: Untagged
@@ -5363,7 +5364,7 @@ MonoBehaviour:
   gunVr: {fileID: 5133615375440266358, guid: e82ededc2c8d3d047a2b57eb007da614, type: 3}
   shieldPrefab: {fileID: 4972389250741197096, guid: 3d6664df9025830458a092a10577ea3b, type: 3}
   socket: {fileID: 4912568694180681497}
-  colliderHead: {fileID: 194727815903083461}
+  Head: {fileID: 9039778624610558707}
 --- !u!114 &7155806439317141122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5421,9 +5422,8 @@ MonoBehaviour:
   SynchronizedChildTransform:
   - {fileID: 5623934179374939428}
   - {fileID: 5623934179913487924}
-  - {fileID: 5623934179669653134}
-  - {fileID: 1736411502033942970}
   - {fileID: 4954999931979330144}
+  - {fileID: 5623934179669653134}
 --- !u!114 &4954999930328102272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5438,6 +5438,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ActionAssets:
   - {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+--- !u!136 &7773370710747099439
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5623934179247966781}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.35
+  m_Height: 2.0107832
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.41042092, z: 0}
 --- !u!1 &5623934179374939429
 GameObject:
   m_ObjectHideFlags: 0
@@ -5699,7 +5713,7 @@ MonoBehaviour:
   m_OnSelectExited:
     m_PersistentCalls:
       m_Calls: []
-  m_SelectActionTrigger: 2
+  m_SelectActionTrigger: 3
   m_HideControllerOnSelect: 1
   m_AllowHoveredActivate: 0
   m_PlayAudioClipOnSelectEntered: 0
@@ -5968,7 +5982,6 @@ GameObject:
   - component: {fileID: 5623934179377177711}
   - component: {fileID: 5623934179377177704}
   - component: {fileID: 5623934179377177705}
-  - component: {fileID: 7531599634421760109}
   m_Layer: 8
   m_Name: Right Controller Teleport
   m_TagString: Untagged
@@ -6205,6 +6218,18 @@ MonoBehaviour:
       - m_Target: {fileID: 4954999931434392845}
         m_TargetAssemblyTypeName: TrailRenderDelay, Assembly-CSharp
         m_MethodName: StartTimer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4954999931434392845}
+        m_TargetAssemblyTypeName: TrailRenderDelay, Assembly-CSharp
+        m_MethodName: SendStartTimerEvent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6498,19 +6523,6 @@ MonoBehaviour:
   m_SnapThresholdDistance: 10
   m_Reticle: {fileID: 0}
   m_StopLineAtFirstRaycastHit: 1
---- !u!114 &7531599634421760109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5623934179377177707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90ffcd49cbdfdf3499917f1c0f27a1c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particleObjecT: {fileID: 0}
 --- !u!1 &5623934179669653135
 GameObject:
   m_ObjectHideFlags: 0
@@ -6525,7 +6537,7 @@ GameObject:
   - component: {fileID: 5623934179669653133}
   m_Layer: 8
   m_Name: Main Camera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6686,7 +6698,6 @@ GameObject:
   - component: {fileID: 5623934179752037088}
   - component: {fileID: 5623934179752037089}
   - component: {fileID: 5623934179752037090}
-  - component: {fileID: 5546992326842551654}
   m_Layer: 8
   m_Name: LeftHand Controller Teleport
   m_TagString: Untagged
@@ -6911,6 +6922,18 @@ MonoBehaviour:
       - m_Target: {fileID: 4954999931434392845}
         m_TargetAssemblyTypeName: TrailRenderDelay, Assembly-CSharp
         m_MethodName: StartTimer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 4954999931434392845}
+        m_TargetAssemblyTypeName: TrailRenderDelay, Assembly-CSharp
+        m_MethodName: SendStartTimerEvent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7204,19 +7227,6 @@ MonoBehaviour:
   m_SnapThresholdDistance: 10
   m_Reticle: {fileID: 0}
   m_StopLineAtFirstRaycastHit: 1
---- !u!114 &5546992326842551654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5623934179752037116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90ffcd49cbdfdf3499917f1c0f27a1c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particleObjecT: {fileID: 4954999931979330147}
 --- !u!1 &5623934179913487925
 GameObject:
   m_ObjectHideFlags: 0
@@ -8203,7 +8213,6 @@ GameObject:
   - component: {fileID: 1736411502033942970}
   - component: {fileID: 5352404512626437962}
   - component: {fileID: 1892820733262078966}
-  - component: {fileID: 194727815903083461}
   m_Layer: 8
   m_Name: Head
   m_TagString: Untagged
@@ -8219,7 +8228,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9039778624610558707}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.7, z: -0.6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -8276,17 +8285,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &194727815903083461
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9039778624610558707}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.6152911
-  m_Height: 3.567058
-  m_Direction: 1
-  m_Center: {x: 0, y: -1.064379, z: -0.15751338}

@@ -7,6 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Unity.XR.CoreUtils;
+using UnityEngine.InputSystem.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using VR_Vs_KMS.Scripts;
 using Random = UnityEngine.Random;
@@ -22,7 +24,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     [SerializeField] private GameObject gunVr;
     [SerializeField] private GameObject shieldPrefab;
     [SerializeField] private GameObject socket;
-    [SerializeField] private Collider colliderHead;
+    [SerializeField] private GameObject Head;
 
 
     private List<Vector3> spawPoints;
@@ -34,8 +36,8 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     private GameObject shieldInstance;
     private Rigidbody _rigidbody;
     private LocomotionProvider _locomotionProvider;
-    private PhotonTransformChildView _photonTransformChildView;
     private List<Transform> SynchronizedChildTransform = new List<Transform>();
+    private CapsuleCollider _capsuleCollider;
     
     // Start is called before the first frame update
     void Awake()
@@ -44,31 +46,33 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
         Debug.Log(NetworkManager.isMulti);
         spawPoints = GameManager.Instance.spawnAreaList;
-        _photonTransformChildView = GetComponent<PhotonTransformChildView>();
         if (NetworkManager.isMulti)
         {
+            //Prepare Prefabs
+            gunVr.GetComponent<TeleportGun>().enabled = photonView.IsMine;
+            gunVr.GetComponent<XRGrabInteractable>().enabled = photonView.IsMine;
+            shieldPrefab.GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
+            _capsuleCollider = GetComponent<CapsuleCollider>();
+            
             if (photonView.IsMine)
             {
                 Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
                 UserMeInstance = gameObject;
                 FindObjectOfType<DelayedTeleportation>().teleportationProvider =
                     GetComponent<TeleportationProvider>(); 
+                
+                shieldInstance = PhotonNetwork.Instantiate("Prefabs/"+shieldPrefab.name, transform.position,Quaternion.identity);
             }
-            //Prepare Prefabs
-            gunVr.GetComponent<TeleportGun>().gunspawnPoint = socket;
-            gunVr.GetComponent<TeleportGun>().enabled = photonView.IsMine;
-            gunVr.GetComponent<XRGrabInteractable>().enabled = photonView.IsMine;
-            shieldPrefab.GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
-            
+
             CameraPlayer.GetComponent<Camera>().enabled = photonView.IsMine;
             CameraPlayer.GetComponent<AudioListener>().enabled = photonView.IsMine;
             CanvasVRPlayer.enabled = photonView.IsMine;
             gunVrInstance = Instantiate(gunVr, transform.position + Vector3.up,Quaternion.identity);
-            shieldInstance = Instantiate(shieldPrefab, transform.position,Quaternion.identity);
-            
+
+            CameraPlayer.GetComponent<TrackedPoseDriver>().enabled = photonView.IsMine;
             //add to list to synchronized
             SynchronizedChildTransform.Add(gunVrInstance.transform);
-            SynchronizedChildTransform.Add(shieldInstance.transform);
+            SynchronizedChildTransform.Add(_capsuleCollider.transform);
         }
         else
         {
@@ -85,6 +89,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     // Update is called once per frame
     void Update()
     {
+        _capsuleCollider.center = CameraPlayer.transform.localPosition - new Vector3(0, 0.5f, 0);
         if (!photonView.IsMine && NetworkManager.isMulti) return;
         
         if(respawnTime>0)     
@@ -99,8 +104,16 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             Respawn();
         }
     }
-
+    
+    
     public void TakeDamage()
+    {
+        Debug.Log("TakeDamage RPC");
+        photonView.RPC("Damage", RpcTarget.AllViaServer,1);
+    }
+    
+    [PunRPC]
+    public void Damage(int damage)
     {
         Healthbar.value = --currentHealth;
         if (currentHealth <= 0)
@@ -120,7 +133,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         CanvasVRPlayer.enabled = true;
         Healthbar.gameObject.SetActive(false);
         // Hide the body and colliders  
-        colliderHead.enabled = false;
+        Head.SetActive(false);
         _locomotionProvider.enabled = false;
         // Teleport to spawnPoint
         Vector3 transform_spawn = spawPoints[Random.Range(0, spawPoints.Count)];
@@ -138,7 +151,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             
         //Reset player health, position and shield
         
-        colliderHead.enabled = true;
+        Head.SetActive(true);
         _locomotionProvider.enabled = true;
             
         //TODO Rescale shield
@@ -151,7 +164,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         if(stream.IsWriting)
         {
             stream.SendNext(currentHealth);
-            stream.SendNext(colliderHead.enabled);
+            stream.SendNext(Head.activeSelf);
             
             for (int i = 0; i < SynchronizedChildTransform.Count; i++)
             {
@@ -165,7 +178,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         else
         {
             currentHealth = (int)stream.ReceiveNext();
-            colliderHead.enabled = (bool)stream.ReceiveNext();
+            Head.SetActive((bool)stream.ReceiveNext());
             
             for (int i = 0; i < SynchronizedChildTransform.Count; i++)
             {

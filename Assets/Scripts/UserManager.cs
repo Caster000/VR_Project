@@ -151,18 +151,25 @@ public class UserManager : MonoBehaviourPunCallbacks, IPunObservable, IPlayer
         GameManager.Instance._CanvasUIScript = CanvasPlayer.GetComponent<CanvasUIScript>();
 
     }
-
+    
     public void TakeDamage()
     {
-        Debug.Log("Damage receive :"+photonView.InstantiationId);
+        Debug.Log("TakeDamage RPC");
+        photonView.RPC("Damage", RpcTarget.AllViaServer,1);
+    }
+    
+    [PunRPC]
+    public void Damage(int damage)
+    {
         Healthbar.value = --currentHealth;
-        AudioSource.PlayClipAtPoint(damage, transform.position);
         if (currentHealth <= 0)
         {
-            PrepareRespwan();
+            if (photonView.IsMine)
+            {
+                PrepareRespwan();
+            }
             return;
         }
-
     }
     
     public void Aim()

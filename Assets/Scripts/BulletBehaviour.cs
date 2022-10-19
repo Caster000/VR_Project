@@ -4,7 +4,7 @@ using DefaultNamespace;
 using Photon.Pun;
 using UnityEngine;
 
-public class BulletBehaviour : MonoBehaviourPunCallbacks,IPunObservable
+public class BulletBehaviour : MonoBehaviour,IPunObservable
 {
     public float life = 5f;
     private GameConfig gameConfig;
@@ -17,21 +17,32 @@ public class BulletBehaviour : MonoBehaviourPunCallbacks,IPunObservable
         _rigidbody = GetComponent<Rigidbody>();
     }
     
+    
     private void OnCollisionEnter(Collision collision)
     {
-        GameObject hit = collision.gameObject;
-        IPlayer player = hit.GetComponent<IPlayer>();
-        if(player != null)
-        {
-            //TODO uncomment
-            // if (hit.layer == gameObject.layer && !gameConfig.friendlyFire)
-            //     return;
-            player.TakeDamage();
+
+            GameObject hit = collision.gameObject;
+            IPlayer player = hit.GetComponent<IPlayer>();
+            if(player != null)
+            {
+                if (hit.layer == gameObject.layer)
+                    return;
+                player.TakeDamage();
+            
+            }
+            ResizeShield _resizeShield = hit.GetComponent<ResizeShield>();
+            if (_resizeShield)
+            {
+                Debug.Log("Resize shield");
+                if (gameObject.layer == 7) //todo 7
+                {
+                    _resizeShield.ResizeRPC(new Vector3(0.1f, 0.1f, 0.1f));
+                }
+            }
             Destroy(gameObject);
-        }
-        Destroy(gameObject);
+        
     }
-    
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
 
