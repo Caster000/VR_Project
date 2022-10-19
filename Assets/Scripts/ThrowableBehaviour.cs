@@ -1,7 +1,8 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-public class ThrowableBehaviour : MonoBehaviour
+public class ThrowableBehaviour : MonoBehaviourPunCallbacks
 {
 
     private bool isThrown;
@@ -13,16 +14,19 @@ public class ThrowableBehaviour : MonoBehaviour
     private float power = 10.0f;
     private float radius = 5.0f;
     private float upforce = 1.0f;
-
+    // private AudioSource _audioSource;
+        
     [SerializeField] private float throwForce = 75f;
     [SerializeField] private ForceMode throwMode = ForceMode.Impulse;
     [SerializeField] GameObject explosionPrefab;
+
 
     private void Awake()
     {
         scientistLayer = LayerMask.NameToLayer("Scientist");
         throwableRigidbody = GetComponent<Rigidbody>();
-
+        // _audioSource = GetComponent<AudioSource>();
+        
         power = GameConfigLoader.Instance.gameConfig.ExplosionPower > 0.0f ? GameConfigLoader.Instance.gameConfig.ExplosionPower : power;
         radius = GameConfigLoader.Instance.gameConfig.RadiusExplosion > 0.0f ? GameConfigLoader.Instance.gameConfig.RadiusExplosion : radius;
         upforce = GameConfigLoader.Instance.gameConfig.ExplosionUpforce > 0.0f ? GameConfigLoader.Instance.gameConfig.ExplosionUpforce : upforce;
@@ -31,8 +35,6 @@ public class ThrowableBehaviour : MonoBehaviour
 
     public void Throw()
     {
-        // Debug.Log(throwableRigidbody.velocity.magnitude);
-        // isThrown = throwableRigidbody.velocity.magnitude > minimumThrownVelocity;
         isThrown = true;
         grabController.interactionManager.CancelInteractableSelection(grabController);
         throwableRigidbody.AddForce(grabController.transform.forward * throwForce, throwMode);
@@ -40,18 +42,22 @@ public class ThrowableBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (isThrown) 
+        if (isThrown)
             Explode();
+        // photonView.RPC("Explode", RpcTarget.AllViaServer);
     }
 
+    // [PunRPC]
     private void Explode()
     {
-        Debug.Log("Explode");
+        // _audioSource.Play();
         Transform objectTransform = gameObject.transform;
         Vector3 position = objectTransform.position;
 
         // Add particles
-        GameObject g = Instantiate(explosionPrefab, position, objectTransform.rotation);
+        GameObject g = PhotonNetwork.Instantiate("Prefabs/"+explosionPrefab.name, position, objectTransform.rotation);
+        // GameObject g = Instantiate(explosionPrefab, position, objectTransform.rotation);
+
         Destroy(g, 3);
         
         // Push everything around & damage players

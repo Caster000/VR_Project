@@ -14287,6 +14287,8 @@ MonoBehaviour:
     friendlyFire: 0
     killToVictory: 0
     contaminationVictory: 0
+    ExplosionPower: 0
+    ExplosionUpforce: 0
 --- !u!1 &7838008519847405872
 GameObject:
   m_ObjectHideFlags: 0

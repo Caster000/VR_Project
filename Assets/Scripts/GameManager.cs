@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
         }
         for (int j = 0; j < throwableObjectPositions.Count; j++)
         {
-            GameObject throwableObjectPosition = Instantiate(throwableObjectPrefab, throwableObjectPositions[j], Quaternion.Euler(throwableObjectRotations[j]));
+            GameObject throwableObjectPosition = PhotonNetwork.Instantiate("Prefabs/"+throwableObjectPrefab.name, throwableObjectPositions[j], Quaternion.Euler(throwableObjectRotations[j]));
             throwableObjectPosition.transform.SetParent(throwableObjectParent);
         }
         for (int k = 0; k < spawnAreaPositions.Count; k++)

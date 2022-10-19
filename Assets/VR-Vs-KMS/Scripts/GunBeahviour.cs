@@ -85,15 +85,15 @@ public class GunBeahviour : MonoBehaviour
             muzzleFlash.Play();
             AudioSource.PlayClipAtPoint(gunShot, transform.position);
             GameObject tempBullet = null;
-            if (NetworkManager.isMulti)
-            {
-                tempBullet = PhotonNetwork.Instantiate("Prefabs/"+bullet.name, bulletSpawn.transform.position, cameraPlayer.transform.rotation);
-
-            }
-            else
-            {
+            // if (NetworkManager.isMulti)
+            // {
+            //     tempBullet = PhotonNetwork.Instantiate("Prefabs/"+bullet.name, bulletSpawn.transform.position, cameraPlayer.transform.rotation);
+            //
+            // }
+            // else
+            // {
                 tempBullet = Instantiate(bullet, bulletSpawn.transform.position, cameraPlayer.transform.rotation);
-            }
+            // }
             // tempBullet.GetComponent<Rigidbody>().velocity = cameraPlayer.transform.forward * bulletSpeed ;
             tempBullet.GetComponent<Rigidbody>().AddForce(cameraPlayer.transform.forward * bulletSpeed );
 
@@ -115,15 +115,15 @@ public class GunBeahviour : MonoBehaviour
             muzzleFlash.Play();
             AudioSource.PlayClipAtPoint(gunShot, transform.position);
             GameObject tempBullet = null;
-            if (NetworkManager.isMulti)
-            {
-                tempBullet = PhotonNetwork.Instantiate("Prefabs/"+bullet.name, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
-
-            }
-            else
-            {
+            // if (NetworkManager.isMulti)
+            // {
+            //     tempBullet = PhotonNetwork.Instantiate("Prefabs/"+bullet.name, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
+            //
+            // }
+            // else
+            // {
                 tempBullet = Instantiate(bullet, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
-            }
+            // }
             // tempBullet.GetComponent<Rigidbody>().velocity = bulletSpawn.transform.forward * bulletSpeed ;
             tempBullet.GetComponent<Rigidbody>().AddForce(bulletSpawn.transform.forward * bulletSpeed );
             tempBullet.layer = gameObject.layer;
