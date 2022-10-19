@@ -72,8 +72,6 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
             if (currentTreatedObject.layer == scientistLayer) //TODO friendly fire ?
                 currentTreatedObject.GetComponent<UserManager>().TakeDamage();
         }
-        
-        PhotonNetwork.Destroy(gameObject);
     }
 
 }
