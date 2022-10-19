@@ -37,6 +37,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     private Rigidbody _rigidbody;
     private LocomotionProvider _locomotionProvider;
     private List<Transform> SynchronizedChildTransform = new List<Transform>();
+    private CapsuleCollider _capsuleCollider;
     
     // Start is called before the first frame update
     void Awake()
@@ -54,6 +55,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             gunVr.GetComponent<TeleportGun>().enabled = photonView.IsMine;
             gunVr.GetComponent<XRGrabInteractable>().enabled = photonView.IsMine;
             shieldPrefab.GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
+            _capsuleCollider = GetComponent<CapsuleCollider>();
             
             if (photonView.IsMine)
             {
@@ -73,7 +75,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             CameraPlayer.GetComponent<TrackedPoseDriver>().enabled = photonView.IsMine;
             //add to list to synchronized
             SynchronizedChildTransform.Add(gunVrInstance.transform);
-            // SynchronizedChildTransform.Add(shieldInstance.transform);
+            SynchronizedChildTransform.Add(_capsuleCollider.transform);
         }
         else
         {
@@ -90,6 +92,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     // Update is called once per frame
     void Update()
     {
+        _capsuleCollider.center = CameraPlayer.transform.localPosition - new Vector3(0, 0.5f, 0);
         if (!photonView.IsMine && NetworkManager.isMulti) return;
         
         if(respawnTime>0)     
