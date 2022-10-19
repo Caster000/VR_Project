@@ -199,7 +199,7 @@ public class GameManager : MonoBehaviour
 
             } if(levelConfig.Modifications[i].modification == contaminationArea)
             {
-                GameObject ContaminationArea = Instantiate(contaminationAreaPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
+                GameObject ContaminationArea = Instantiate(contaminationAreaPrefab, levelConfig.Modifications[i].position, Quaternion.identity);
                 ContaminationArea.transform.SetParent(contaminationAreaParent, false);
 
             }
