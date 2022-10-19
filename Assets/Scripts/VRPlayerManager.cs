@@ -46,6 +46,9 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
         Debug.Log(NetworkManager.isMulti);
         spawPoints = GameManager.Instance.spawnAreaList;
+
+        gunVr.GetComponent<TeleportGun>().gunspawnPoint = socket;
+        
         if (NetworkManager.isMulti)
         {
             //Prepare Prefabs
