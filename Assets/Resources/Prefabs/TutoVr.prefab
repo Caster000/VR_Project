@@ -909,7 +909,7 @@ MonoBehaviour:
   capturing: {fileID: 7836870344838414974}
   fire: {fileID: 7836870345248559563}
   kill: {fileID: 7836870345032489856}
-  ScientistToKill: {fileID: 0}
+  ScientistToKill: {fileID: 3063179302552185003, guid: 93c5cfaa325f5e941bef03f85bdd2a3a, type: 3}
 --- !u!1 &7836870345742118042
 GameObject:
   m_ObjectHideFlags: 0

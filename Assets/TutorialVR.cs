@@ -40,27 +40,28 @@ public class TutorialVR : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if(timer >= 5 && !welcomed)
+        if(timer >= 10 && !welcomed)
         {
             welcome.enabled = false;
             movement.enabled = true;
             welcomed = true;
         }
 
-        if(timer >= 10 && !winconditiondone)
+        if(timer >= 20 && !winconditiondone)
         {
             winCondition.enabled = false;
             capturing.enabled = true;
             winconditiondone = true;
         }
 
-        if(timer >= 25 && winconditiondone)
+        if(timer >= 50 && winconditiondone)
         {
             fire.enabled = false;
             kill.enabled = true;
             if (!isInstantiate)
             {
-                ScientistToKill.SetActive(true);
+                Instantiate(ScientistToKill,new Vector3(-22, 0, 4), Quaternion.Euler(new Vector3(0,90,0)));
+                // ScientistToKill.SetActive(true);
                 isInstantiate = true;
             }
                 
