@@ -51,11 +51,12 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
     private void Explode()
     {
         // _audioSource.Play();
+        isThrown = false;
         Transform objectTransform = gameObject.transform;
         Vector3 position = objectTransform.position;
 
         // Add particles
-        GameObject g = PhotonNetwork.Instantiate("Prefabs/"+explosionPrefab.name, position, objectTransform.rotation);
+        PhotonNetwork.Instantiate("Prefabs/"+explosionPrefab.name, position, objectTransform.rotation);
 
         // Push everything around & damage players
         Collider[] hitColliders = Physics.OverlapSphere(position, radius);
@@ -72,6 +73,8 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
             if (currentTreatedObject.layer == scientistLayer) //TODO friendly fire ?
                 currentTreatedObject.GetComponent<UserManager>().TakeDamage();
         }
+        
+        PhotonNetwork.Destroy(gameObject);
     }
 
 }
