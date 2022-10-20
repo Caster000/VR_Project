@@ -13,9 +13,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     [Tooltip("The prefab to use for representing the user on a PC. Must be in Resources folder")]
     public GameObject playerPrefabPC;
+    public GameObject TutoPCPrefab;
 
     [Tooltip("The prefab to use for representing the user in VR. Must be in Resources folder")]
     public GameObject playerPrefabVR;
+    public GameObject TutoVRPrefab;
 
     #region Photon Callbacks
 
@@ -87,6 +89,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         #endregion
 
         GameObject playerPrefab = UserDeviceManager.GetPrefabToSpawnWithDeviceUsed(playerPrefabPC, playerPrefabVR);
+        GameObject tutoPrefab = UserDeviceManager.GetPrefabToSpawnWithDeviceUsed(TutoPCPrefab, TutoVRPrefab);
         if (playerPrefab == null)
         {
             Debug.LogErrorFormat(
@@ -108,6 +111,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 {
                     isMulti = false;
                     Instantiate(playerPrefab, initialPos, Quaternion.Euler(0, 180, 0));
+                    Instantiate(tutoPrefab);
                 }
                 else
                 {

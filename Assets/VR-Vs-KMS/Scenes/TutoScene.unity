@@ -1751,6 +1751,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 667634667748746887, guid: 893d7d88144380a4b9a00aded7c33f0d, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5837272303240001897, guid: 893d7d88144380a4b9a00aded7c33f0d, type: 3}
       propertyPath: m_Name
       value: ThowableContainer
