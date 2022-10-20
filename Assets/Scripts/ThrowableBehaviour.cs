@@ -53,6 +53,7 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
     // [PunRPC]
     private void Explode()
     {
+        Debug.Log(photonView.Owner);
         // _audioSource.Play();
         isThrown = false;
         Transform objectTransform = gameObject.transform;
@@ -78,13 +79,15 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
         }
         
         PhotonNetwork.Destroy(gameObject);
+        
     }
 
     public void Select()
     {
-        photonView.TransferOwnership(PhotonNetwork.LocalPlayer.ActorNumber);
+        Debug.Log(photonView.Owner);
+        photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
         throwableRigidbody.isKinematic = true;
-        
+        Debug.Log(photonView.Owner);
     }
 
 }
