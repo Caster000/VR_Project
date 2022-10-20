@@ -308,7 +308,7 @@ public class StartMenu : MonoBehaviourPunCallbacks
             
             roomOptions.CustomRoomProperties.Add("GameConfig",gameConfigCustom);
             roomOptions.CustomRoomPropertiesForLobby = new string[1] { "GameConfig" };
-
+            roomOptions.CustomRoomProperties.Add("SceneToLoad", mapDropdown.options[mapDropdown.value].text);
             bool roomCreated = PhotonNetwork.CreateRoom(roomNameField.text, roomOptions, TypedLobby.Default);
             Debug.Log("roomCreated "+roomCreated);
         }
@@ -335,7 +335,7 @@ public class StartMenu : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && isCreating)
         {
             Debug.Log("We load the scene "+mapDropdown.options[mapDropdown.value].text);
-            PhotonNetwork.LoadLevel(mapDropdown.options[mapDropdown.value].text);
+            PhotonNetwork.LoadLevel("Warmup");
         }
     }
 
