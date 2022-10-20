@@ -48,14 +48,14 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         spawPoints = GameManager.Instance.spawnAreaList;
 
         gunVr.GetComponent<TeleportGun>().gunspawnPoint = socket;
-        
+        _capsuleCollider = GetComponent<CapsuleCollider>();
         if (NetworkManager.isMulti)
         {
             //Prepare Prefabs
             gunVr.GetComponent<TeleportGun>().enabled = photonView.IsMine;
             gunVr.GetComponent<XRGrabInteractable>().enabled = photonView.IsMine;
             shieldPrefab.GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
-            _capsuleCollider = GetComponent<CapsuleCollider>();
+            
             
             if (photonView.IsMine)
             {
@@ -84,7 +84,8 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             gunVrInstance = Instantiate(gunVr, transform.position + Vector3.up,Quaternion.identity);
             shieldInstance = Instantiate(shieldPrefab, transform.position,Quaternion.identity);
             FindObjectOfType<DelayedTeleportation>().teleportationProvider =
-                GetComponent<TeleportationProvider>();
+            GetComponent<TeleportationProvider>();
+            CanvasVRPlayer.enabled = false;
         }
         _locomotionProvider = GetComponent<LocomotionProvider>();
     }
