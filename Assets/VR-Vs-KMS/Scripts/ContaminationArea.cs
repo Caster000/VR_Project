@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 
 namespace vr_vs_kms
@@ -58,6 +59,7 @@ namespace vr_vs_kms
         {
             pSystem = GetComponentInChildren<ParticleSystem>();
             colorModule = pSystem.colorOverLifetime;
+            // pSystem.startColor = Color.white;
         }
 
 
@@ -208,14 +210,27 @@ namespace vr_vs_kms
         }
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
+            Debug.Log(colorModule);
+            if (colorModule.Equals(null))
+                return;
             if (stream.IsWriting)
             {
-                stream.SendNext(colorModule.color);
+                // stream.SendNext(colorModule.color);
+                
+                stream.SendNext(colorModule.color.colorMax.r);
+                stream.SendNext(colorModule.color.colorMax.g);
+                stream.SendNext(colorModule.color.colorMax.b);
+                stream.SendNext(colorModule.color.colorMin.r);
+                stream.SendNext(colorModule.color.colorMin.g);
+                stream.SendNext(colorModule.color.colorMin.b);
 
             }
             else
             {
-                colorModule.color = (ParticleSystem.MinMaxGradient)stream.ReceiveNext();
+                // colorModule.color = (ParticleSystem.MinMaxGradient)stream.ReceiveNext();
+                ColorParticle(null, 
+                    new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext()),
+                    new Color((float)stream.ReceiveNext(), (float)stream.ReceiveNext(), (float)stream.ReceiveNext()));
 
             }
         }

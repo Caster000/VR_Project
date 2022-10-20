@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
        
        
-            if (!isWin && (killToVictory || contaminationVictory))
+            if (!isWin && (killToVictory || contaminationVictory) && PhotonNetwork.IsConnected)
             {
             LoadUI();
 
@@ -210,7 +210,8 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             {
                 if (levelConfig.Modifications[i].modification == spawnArea)
                 {
-                    GameObject spawnArea = Instantiate(spawnAreaPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
+                    // GameObject spawnArea = Instantiate(spawnAreaPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
+                    GameObject spawnArea = PhotonNetwork.InstantiateRoomObject("Prefabs/"+spawnAreaPrefab.name, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
                     spawnArea.transform.SetParent(spawnAreaParent, false);
                     spawnAreaList.Add(spawnArea.transform.position);
 
@@ -222,7 +223,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
                 }
                 if (levelConfig.Modifications[i].modification == contaminationArea)
                 {
-                    GameObject ContaminationArea = Instantiate(contaminationAreaPrefab, levelConfig.Modifications[i].position, Quaternion.identity);
+                    GameObject ContaminationArea = PhotonNetwork.InstantiateRoomObject("Prefabs/"+contaminationAreaPrefab.name, levelConfig.Modifications[i].position, Quaternion.identity);
                     ContaminationArea.transform.SetParent(contaminationAreaParent, false);
 
                 }
