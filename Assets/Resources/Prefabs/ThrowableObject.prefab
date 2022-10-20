@@ -68,7 +68,7 @@ CapsuleCollider:
   m_Radius: 0.7
   m_Height: 1
   m_Direction: 1
-  m_Center: {x: 0, y: 0.6, z: 0}
+  m_Center: {x: -0.43, y: 0.75, z: 0}
 --- !u!114 &-3312774160152603829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,10 +111,10 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5290371634470740057}
-        m_TargetAssemblyTypeName: UnityEngine.Rigidbody, UnityEngine
-        m_MethodName: set_isKinematic
-        m_Mode: 6
+      - m_Target: {fileID: 7054785777856220580}
+        m_TargetAssemblyTypeName: ThrowableBehaviour, Assembly-CSharp
+        m_MethodName: Select
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -185,7 +185,7 @@ MonoBehaviour:
       m_Calls: []
   m_AttachTransform: {fileID: 0}
   m_AttachEaseInTime: 0.15
-  m_MovementType: 2
+  m_MovementType: 1
   m_VelocityDamping: 1
   m_VelocityScale: 1
   m_AngularVelocityDamping: 1
@@ -235,6 +235,7 @@ MonoBehaviour:
   throwForce: 75
   throwMode: 1
   explosionPrefab: {fileID: 100010, guid: 031d08f52af1daa4f929b85221519426, type: 3}
+  photonView: {fileID: 0}
 --- !u!114 &667634667748746887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +252,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 0
   ObservedComponents:
   - {fileID: 5977669585423252958}
@@ -304,11 +305,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6444fef9c9b06ce4abf7a4635d326a27, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: -0.442
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6444fef9c9b06ce4abf7a4635d326a27, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.093
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 6444fef9c9b06ce4abf7a4635d326a27, type: 3}
       propertyPath: m_LocalPosition.z
