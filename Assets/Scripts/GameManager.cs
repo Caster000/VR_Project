@@ -216,7 +216,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
             } if(levelConfig.Modifications[i].modification == throwableObject)
             {
-                GameObject ThrowableObject = PhotonNetwork.Instantiate("Prefabs/"+throwableObjectPrefab.name, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
+                GameObject ThrowableObject = PhotonNetwork.InstantiateRoomObject("Prefabs/"+throwableObjectPrefab.name, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
                 ThrowableObject.transform.SetParent(throwableObjectParent, false);
 
                 }
