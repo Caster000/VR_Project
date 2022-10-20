@@ -5362,7 +5362,7 @@ MonoBehaviour:
   TimerText: {fileID: 5697667791681425741}
   CameraPlayer: {fileID: 5623934179669653135}
   gunVr: {fileID: 5133615375440266358, guid: e82ededc2c8d3d047a2b57eb007da614, type: 3}
-  shieldPrefab: {fileID: 4972389250741197096, guid: 3d6664df9025830458a092a10577ea3b, type: 3}
+  shieldPrefab: {fileID: 2389985519901547684, guid: adaf93a8dc673d74a90fe90d4a58d66a, type: 3}
   socket: {fileID: 4912568694180681497}
   Head: {fileID: 9039778624610558707}
 --- !u!114 &7155806439317141122
