@@ -6,23 +6,25 @@ using TMPro;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     //global information
     //private int playerNumber;
     private bool isWin;
-    private bool isStarted;
     private string winner;
-
-
+    private bool isStarted;
     // variables related to contamination area
-     public int nbContaminationArea;
-     public int nbContaminatedAreaByScientist;
-     public int nbContaminatedAreaByVirus;
+    public int nbContaminationArea;
+    public int nbContaminatedAreaByScientist;
+    public int nbContaminatedAreaByVirus;
 
-    
-    
+    public bool killToVictory;
+    public bool contaminationVictory;
+
+
+
     [Header("Contamination Area")]
     public GameObject contaminationAreaPrefab;
     public Transform contaminationAreaParent;
@@ -31,12 +33,12 @@ public class GameManager : MonoBehaviour
     public int scientistScore;
     public int virusScore;
 
-  
+
     [Header("Throwable Object")]
     public GameObject throwableObjectPrefab;
     public Transform throwableObjectParent;
 
-    
+
     [Header("Spawner")]
     public GameObject spawnAreaPrefab;
     public Transform spawnAreaParent;
@@ -52,16 +54,6 @@ public class GameManager : MonoBehaviour
     [Header("User Interface")]
     public CanvasUIScript _CanvasUIScript;
     public bool isCanvasEnabled;
-    
-    // public Canvas canvasEndText;
-    // public TextMeshProUGUI endText;
-    // public TextMeshProUGUI virusScoreText;
-    // public TextMeshProUGUI scientistScoreText;
-    // public Slider scientistSlider;
-    // public Slider virusSlider;
-    // public TextMeshProUGUI contaminationAreaScientistText;
-    // public TextMeshProUGUI contaminationAreaVirusText;
-    // public TextMeshProUGUI contaminationAreaNeutralText;
     private LevelConfig levelConfig;
     private GameConfig gameConfig;
 
@@ -106,31 +98,52 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateUI();
         if (isCanvasEnabled)
         {
             // Setup the canvas Ui with Gameconfig variables
             SetupCanvasUI();
             isCanvasEnabled = false;
-            // isStarted = true;
         }
-        if (!isWin && isStarted)
-        {
+
+       
+       
+            if (!isWin && (killToVictory || contaminationVictory))
+            {
+            LoadUI();
+
             //Todo victory condition from Gameconfig to add
             if (scientistScore == gameConfig.NbContaminatedPlayerToVictory || virusScore == gameConfig.NbContaminatedPlayerToVictory)
-            {
-                isWin = true;
-                winner = scientistScore > virusScore ? "Scientist" : "Virus";
-                EndGame(winner);
+                {
+                    isWin = true;
+                    winner = scientistScore > virusScore ? "scientist" : "virus";
+                    EndGame(winner);
 
-            }
-            if (nbContaminatedAreaByScientist == nbContaminationArea || nbContaminatedAreaByVirus == nbContaminationArea)
-            {
-                isWin = true;
-                winner = nbContaminatedAreaByScientist > nbContaminatedAreaByVirus ? "Scientist" : "Virus";
-                EndGame(winner);
+
+                }
+                if (nbContaminatedAreaByScientist == nbContaminationArea || nbContaminatedAreaByVirus == nbContaminationArea)
+                {
+                    isWin = true;
+                    winner = nbContaminatedAreaByScientist > nbContaminatedAreaByVirus ? "scientist" : "virus";
+                    EndGame(winner);
+
+
+                
             }
         }
-       
+        
+        if (isWin)
+        {
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                if (Input.GetKeyDown(KeyCode.X))
+                {
+                    ReloadGame();
+                }
+            }
+               
+        }
     }
 
     public void SetupCanvasUI()
@@ -141,26 +154,44 @@ public class GameManager : MonoBehaviour
         _CanvasUIScript.virusSlider.maxValue = gameConfig.NbContaminatedPlayerToVictory;
         _CanvasUIScript.scientistSlider.maxValue = gameConfig.NbContaminatedPlayerToVictory;
         _CanvasUIScript.contaminationAreaNeutralText.text = nbContaminationArea.ToString();
+
+       
+    }
+    public void LoadUI()
+    {
+        if (!killToVictory)
+        {
+            _CanvasUIScript.ScientistContaminationPanel.SetActive(false);
+            _CanvasUIScript.VirusContaminationPanel.SetActive(false);
+        }
+        if (!contaminationVictory)
+        {
+            _CanvasUIScript.ContaminationAreaPanel.SetActive(false);
+
+        }
     }
     //TODO Ecran de victoire / ecran de défaite en focntion de l'équipe
     public void EndGame(string winner)
     {
-        if (isWin)
-        {
+        
             _CanvasUIScript.canvasEndText.gameObject.SetActive(true);
-            _CanvasUIScript.endText.text = winner + "\nwin";
-            _CanvasUIScript.endText.color = winner == "Scientist" ? new Color32(25, 207, 0, 237) : new Color32(255, 0, 0, 237);
-        }
+            _CanvasUIScript.endText.fontSize = 28;
+            _CanvasUIScript.endText.text = "the winner of the game are the " + winner;
+            _CanvasUIScript.reloadText.text = "Press X to reload the game...";
+        
     }
 
     public void ReloadGame()
     {
-        //TODO isStarted =true
+           // Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene("Warmup");
     }
     public void ReadConfigFile()
     {
         levelConfig = LevelConfigLoader.Instance.levelConfig;
         gameConfig = GameConfigLoader.Instance.gameConfig;
+        contaminationVictory = gameConfig.contaminationVictory;
+        killToVictory = gameConfig.killToVictory;
     }
 
     public void ReadServerConfig()
@@ -173,51 +204,71 @@ public class GameManager : MonoBehaviour
     }
     public void GeneratingObject()
     {
-        for( int i = 0; i < levelConfig.Modifications.Count; i++)
+        if (PhotonNetwork.IsMasterClient)
         {
-            if(levelConfig.Modifications[i].modification == spawnArea)
+            for (int i = 0; i < levelConfig.Modifications.Count; i++)
             {
-                GameObject spawnArea = Instantiate(spawnAreaPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
-                spawnArea.transform.SetParent(spawnAreaParent, false);
-                spawnAreaList.Add(spawnArea.transform.position);
+                if (levelConfig.Modifications[i].modification == spawnArea)
+                {
+                    GameObject spawnArea = Instantiate(spawnAreaPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
+                    spawnArea.transform.SetParent(spawnAreaParent, false);
+                    spawnAreaList.Add(spawnArea.transform.position);
 
             } if(levelConfig.Modifications[i].modification == throwableObject)
             {
                 GameObject ThrowableObject = PhotonNetwork.Instantiate("Prefabs/"+throwableObjectPrefab.name, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
                 ThrowableObject.transform.SetParent(throwableObjectParent, false);
 
-            } if(levelConfig.Modifications[i].modification == contaminationArea)
-            {
-                GameObject ContaminationArea = Instantiate(contaminationAreaPrefab, levelConfig.Modifications[i].position, levelConfig.Modifications[i].rotation);
-                ContaminationArea.transform.SetParent(contaminationAreaParent, false);
+                }
+                if (levelConfig.Modifications[i].modification == contaminationArea)
+                {
+                    GameObject ContaminationArea = Instantiate(contaminationAreaPrefab, levelConfig.Modifications[i].position, Quaternion.identity);
+                    ContaminationArea.transform.SetParent(contaminationAreaParent, false);
 
+                }
+            }
+        }
+       
+
+    }
+    public void CountContaminationArea()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            for (int i = 0; i < levelConfig.Modifications.Count; i++)
+            {
+                if (levelConfig.Modifications[i].modification == contaminationArea)
+                {
+                    nbContaminationArea++;
+                    Debug.Log("incount"+ nbContaminationArea);
+                }
             }
         }
        
     }
-    public void CountContaminationArea()
-    {
-        for (int i = 0; i < levelConfig.Modifications.Count; i++)
-        {
-            if (levelConfig.Modifications[i].modification == contaminationArea)
-            {
-                nbContaminationArea++;
-            }
-        }
-    }
     public void IncreaseVirusScore()
     {
-        virusScore++;
-        _CanvasUIScript.virusScoreText.text = virusScore.ToString();
-    }public void IncreaseScientificScore()
+        if (PhotonNetwork.IsMasterClient)
+        {
+            virusScore++;
+            _CanvasUIScript.virusScoreText.text = virusScore.ToString();
+        }
+       
+    }
+    public void IncreaseScientificScore()
     {
-        scientistScore++;
-        _CanvasUIScript.scientistScoreText.text = scientistScore.ToString();
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            scientistScore++;
+            _CanvasUIScript.scientistScoreText.text = scientistScore.ToString();
+        }
     }
     public void IncreaseScientificSlider()
     {
         _CanvasUIScript.scientistSlider.value += scientistScore;
-    } public void IncreaseVirusSlider()
+    }
+    public void IncreaseVirusSlider()
     {
         _CanvasUIScript.virusSlider.value += virusScore;
     }
@@ -236,14 +287,66 @@ public class GameManager : MonoBehaviour
     {
         nbContaminationArea--;
         _CanvasUIScript.contaminationAreaNeutralText.text = nbContaminationArea.ToString();
-    }public void DecreaseContaminationAreaScientistScore()
+    }
+    public void DecreaseContaminationAreaScientistScore()
     {
         nbContaminatedAreaByScientist--;
         _CanvasUIScript.contaminationAreaScientistText.text = nbContaminatedAreaByScientist.ToString();
-    }public void DecreaseContaminationAreaVirusScore()
+    }
+    public void DecreaseContaminationAreaVirusScore()
     {
         nbContaminatedAreaByVirus--;
         _CanvasUIScript.contaminationAreaVirusText.text = nbContaminatedAreaByVirus.ToString();
     }
 
+    public void UpdateUI()
+    {
+        
+        _CanvasUIScript.contaminationAreaNeutralText.text = nbContaminationArea.ToString();
+        _CanvasUIScript.contaminationAreaScientistText.text = nbContaminatedAreaByScientist.ToString();
+        _CanvasUIScript.contaminationAreaVirusText.text = nbContaminatedAreaByVirus.ToString();
+        _CanvasUIScript.scientistScoreText.text = scientistScore.ToString();
+        _CanvasUIScript.virusScoreText.text = virusScore.ToString();
+        _CanvasUIScript.virusSlider.value = virusScore;
+        _CanvasUIScript.scientistSlider.value = scientistScore;
+        _CanvasUIScript.virusSlider.maxValue = gameConfig.NbContaminatedPlayerToVictory;
+        _CanvasUIScript.scientistSlider.maxValue = gameConfig.NbContaminatedPlayerToVictory;
+
+    }
+    #region Photon
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            Debug.Log("virusScore" + virusScore);
+            Debug.Log("scientistScore" + scientistScore);
+            Debug.Log("nbContaminationArea" + nbContaminationArea);
+            Debug.Log("nbContaminatedAreaByScientist" + nbContaminatedAreaByScientist);
+            Debug.Log("nbContaminatedAreaByVirus" + nbContaminatedAreaByVirus);
+            stream.SendNext(virusScore);
+            stream.SendNext(scientistScore);
+            stream.SendNext(nbContaminationArea);
+            stream.SendNext(nbContaminatedAreaByScientist);
+            stream.SendNext(nbContaminatedAreaByVirus);
+            stream.SendNext(killToVictory);
+            stream.SendNext(contaminationVictory);
+
+        }
+        else
+        {
+            virusScore = (int)stream.ReceiveNext();
+            scientistScore = (int)stream.ReceiveNext();
+            nbContaminationArea = (int)stream.ReceiveNext();
+            nbContaminatedAreaByScientist = (int)stream.ReceiveNext();
+            nbContaminatedAreaByVirus = (int)stream.ReceiveNext();
+            killToVictory = (bool)stream.ReceiveNext();
+            contaminationVictory = (bool)stream.ReceiveNext();
+            Debug.Log("virusScore" + virusScore);
+            Debug.Log("scientistScore" + scientistScore);
+            Debug.Log("nbContaminationArea" + nbContaminationArea);
+            Debug.Log("nbContaminatedAreaByScientist" + nbContaminatedAreaByScientist);
+            Debug.Log("nbContaminatedAreaByVirus" + nbContaminatedAreaByVirus);
+        }
+    }
+    #endregion
 }

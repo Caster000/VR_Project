@@ -8,6 +8,7 @@ public class CanvasUIScript : MonoBehaviour
 {
     public Canvas canvasEndText;
     public TextMeshProUGUI endText;
+    public TextMeshProUGUI reloadText;
     public TextMeshProUGUI virusScoreText;
     public TextMeshProUGUI scientistScoreText;
     public Slider scientistSlider;
@@ -15,4 +16,7 @@ public class CanvasUIScript : MonoBehaviour
     public TextMeshProUGUI contaminationAreaScientistText;
     public TextMeshProUGUI contaminationAreaVirusText;
     public TextMeshProUGUI contaminationAreaNeutralText;
+    public GameObject ContaminationAreaPanel;
+    public GameObject ScientistContaminationPanel;
+    public GameObject VirusContaminationPanel;
 }
