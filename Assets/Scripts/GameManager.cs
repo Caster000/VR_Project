@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public int nbContaminationArea;
     public int nbContaminatedAreaByScientist;
     public int nbContaminatedAreaByVirus;
-    public int nbContaminationAreaToVictory;
+    public int nbContaminationAreaToVictory = 10;
     public bool killToVictory;
     public bool contaminationVictory;
 
