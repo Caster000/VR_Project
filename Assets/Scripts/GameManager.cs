@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public int nbContaminationArea;
     public int nbContaminatedAreaByScientist;
     public int nbContaminatedAreaByVirus;
-
+    public int nbContaminationAreaToVictory;
     public bool killToVictory;
     public bool contaminationVictory;
 
@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
 
 
                 }
-                if (nbContaminatedAreaByScientist == nbContaminationArea || nbContaminatedAreaByVirus == nbContaminationArea)
+                if (nbContaminatedAreaByScientist == nbContaminationAreaToVictory || nbContaminatedAreaByVirus == nbContaminationAreaToVictory)
                 {
                     isWin = true;
                     winner = nbContaminatedAreaByScientist > nbContaminatedAreaByVirus ? "scientist" : "virus";
@@ -254,6 +254,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
                 {
                     nbContaminationArea++;
                     Debug.Log("incount"+ nbContaminationArea);
+                    nbContaminationAreaToVictory = nbContaminationArea;
                 }
             }
         }
