@@ -101,11 +101,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             // TODO: Instantiate the prefab representing my own avatar only if it is UserMe
             if (UserManager.UserMeInstance == null)
             {
-                Vector3 pos = SceneManager.GetActiveScene().name == "Outdoor map"?new Vector3(23f, 4f, 30f):new Vector3(0f, 1f, 0f);
+                Vector3 pos = SceneManager.GetActiveScene().name == "Outdoor map"?new Vector3(23f, 4f, 30f):new Vector3(0f, 0, 0f);
                               Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
                 // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
                 Vector3 initialPos = UserDeviceManager.GetDeviceUsed() == UserDeviceType.HTC
-                    ? pos + new Vector3(0,0.5f,0)
+                    ? pos
                     : pos;
                 if (SceneManager.GetActiveScene().name == "TutoSceneSolo")
                 {
