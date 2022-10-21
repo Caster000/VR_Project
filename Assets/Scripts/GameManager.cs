@@ -106,7 +106,13 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             isCanvasEnabled = false;
         }
 
-       
+        if (spawnAreaList.Count<0)
+        {
+            foreach (Transform child in spawnAreaParent.transform)
+            {
+                spawnAreaList.Add(child.position);
+            }
+        }
        
             if (!isWin && (killToVictory || contaminationVictory) && PhotonNetwork.IsConnected)
             {
