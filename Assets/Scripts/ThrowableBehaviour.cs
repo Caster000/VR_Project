@@ -45,7 +45,7 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (isThrown)
+        if (isThrown && collision.gameObject.layer != 8)
             Explode();
         // photonView.RPC("Explode", RpcTarget.AllViaServer);
     }
@@ -60,7 +60,14 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
         Vector3 position = objectTransform.position;
 
         // Add particles
-        PhotonNetwork.Instantiate("Prefabs/"+explosionPrefab.name, position, objectTransform.rotation);
+        if (NetworkManager.isMulti)
+        {
+            PhotonNetwork.Instantiate("Prefabs/" + explosionPrefab.name, position, objectTransform.rotation);
+        }
+        else
+        {
+            Instantiate(explosionPrefab, position, objectTransform.rotation);
+        }
 
         // Push everything around & damage players
         Collider[] hitColliders = Physics.OverlapSphere(position, radius);
@@ -77,8 +84,14 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
             if (currentTreatedObject.layer == scientistLayer) //TODO friendly fire ?
                 currentTreatedObject.GetComponent<UserManager>().TakeDamage();
         }
-        
-        PhotonNetwork.Destroy(gameObject);
+        if (NetworkManager.isMulti)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         
     }
 

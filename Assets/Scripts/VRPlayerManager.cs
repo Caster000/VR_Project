@@ -67,8 +67,10 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             {
                 Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
                 UserMeInstance = gameObject;
-                FindObjectOfType<DelayedTeleportation>().teleportationProvider =
-                    GetComponent<TeleportationProvider>(); 
+                foreach (DelayedTeleportation VARIABLE in FindObjectsOfType<DelayedTeleportation>())
+                {
+                    VARIABLE.teleportationProvider = GetComponent<TeleportationProvider>();
+                }
                 
                 shieldInstance = PhotonNetwork.Instantiate("Prefabs/"+shieldPrefab.name, transform.position,Quaternion.identity);
             }
@@ -92,8 +94,11 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             CameraPlayer.SetActive(true);
             gunVrInstance = Instantiate(gunVr, transform.position + Vector3.up,Quaternion.identity);
             shieldInstance = Instantiate(shieldPrefab, transform.position,Quaternion.identity);
-            FindObjectOfType<DelayedTeleportation>().teleportationProvider =
-            GetComponent<TeleportationProvider>();
+            foreach (DelayedTeleportation VARIABLE in FindObjectsOfType<DelayedTeleportation>())
+            {
+                VARIABLE.teleportationProvider = GetComponent<TeleportationProvider>();
+            }
+            
             CanvasVRPlayer.enabled = false;
         }
         _locomotionProvider = GetComponent<LocomotionProvider>();

@@ -12,7 +12,17 @@ public class ExplosionLifeTime : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(timeLived >= lifetime) PhotonNetwork.Destroy(gameObject);
+        if (timeLived >= lifetime)
+        {
+            if (NetworkManager.isMulti)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
         timeLived += Time.deltaTime;
     }
 }
