@@ -76,11 +76,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             Instance = this;
         }
 
-        if (NetworkManager.isMulti)
+        if (NetworkManager.isMulti && PhotonNetwork.IsMasterClient)
         {
             ReadServerConfig();
         }
-        else
+        if (!NetworkManager.isMulti)
         {
             ReadConfigFile();
         }
