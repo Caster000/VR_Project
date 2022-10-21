@@ -25,6 +25,8 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     [SerializeField] private GameObject shieldPrefab;
     [SerializeField] private GameObject socket;
     [SerializeField] private GameObject Head;
+    [SerializeField] private GameObject LeftHandController;
+    [SerializeField] private GameObject RightHandController;
 
 
     private List<Vector3> spawPoints;
@@ -71,7 +73,8 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             CameraPlayer.GetComponent<AudioListener>().enabled = photonView.IsMine;
             CanvasVRPlayer.enabled = photonView.IsMine;
             gunVrInstance = Instantiate(gunVr, transform.position + Vector3.up,Quaternion.identity);
-
+            LeftHandController.GetComponent<ActionBasedController>().enabled = photonView.IsMine;
+            RightHandController.GetComponent<ActionBasedController>().enabled = photonView.IsMine;
             CameraPlayer.GetComponent<TrackedPoseDriver>().enabled = photonView.IsMine;
             //add to list to synchronized
             SynchronizedChildTransform.Add(gunVrInstance.transform);

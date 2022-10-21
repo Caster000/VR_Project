@@ -4791,6 +4791,8 @@ MonoBehaviour:
   shieldPrefab: {fileID: 2389985519901547684, guid: adaf93a8dc673d74a90fe90d4a58d66a, type: 3}
   socket: {fileID: 4912568694180681497}
   Head: {fileID: 9039778624610558707}
+  LeftHandController: {fileID: 5623934179374939429}
+  RightHandController: {fileID: 5623934179913487925}
 --- !u!114 &7155806439317141122
 MonoBehaviour:
   m_ObjectHideFlags: 0
