@@ -19,6 +19,8 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     
     [SerializeField] private Slider Healthbar;
     [SerializeField] private Canvas CanvasVRPlayer;
+    [SerializeField] private Canvas CanvasHand;
+    [SerializeField] private Camera cameraMinimap;
     [SerializeField] private TMP_Text TimerText;
     [SerializeField] private GameObject CameraPlayer;
     [SerializeField] private GameObject gunVr;
@@ -34,6 +36,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     private float respawnTime;
     private bool spawned;
     private GameConfig gameConfig;
+    private GameManager gameManager;
     private GameObject gunVrInstance;
     private GameObject shieldInstance;
     private Rigidbody _rigidbody;
@@ -44,6 +47,7 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     // Start is called before the first frame update
     void Awake()
     {
+        gameManager = GameManager.Instance;
         gameConfig = GameConfigLoader.Instance.gameConfig;
         Healthbar.maxValue = Healthbar.value = currentHealth = gameConfig.LifeNumber;
         Debug.Log(NetworkManager.isMulti);
@@ -71,7 +75,9 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
 
             CameraPlayer.GetComponent<Camera>().enabled = photonView.IsMine;
             CameraPlayer.GetComponent<AudioListener>().enabled = photonView.IsMine;
+            cameraMinimap.enabled = photonView.IsMine;
             CanvasVRPlayer.enabled = photonView.IsMine;
+            CanvasHand.enabled = photonView.IsMine;
             gunVrInstance = Instantiate(gunVr, transform.position + Vector3.up,Quaternion.identity);
             LeftHandController.GetComponent<ActionBasedController>().enabled = photonView.IsMine;
             RightHandController.GetComponent<ActionBasedController>().enabled = photonView.IsMine;
@@ -128,6 +134,13 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             if (photonView.IsMine)
             {
                 PrepareRespwan();
+                if(gameObject.layer == 7)
+                {
+                    gameManager.IncreaseVirusScore();
+                } if(gameObject.layer == 8)
+                {
+                    gameManager.IncreaseScientificScore();
+                }
             }
             return;
         }

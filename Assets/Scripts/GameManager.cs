@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             Instance = this;
         }
 
-        if (NetworkManager.isMulti && PhotonNetwork.IsMasterClient)
+        if (NetworkManager.isMulti)
         {
             ReadServerConfig();
         }
@@ -305,7 +305,10 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
     public void DecreaseContaminationAreaNeutralScore()
     {
         nbContaminationArea--;
-        _CanvasUIScript.contaminationAreaNeutralText.text = nbContaminationArea.ToString();
+        if (_CanvasUIScript)
+        {
+            _CanvasUIScript.contaminationAreaNeutralText.text = nbContaminationArea.ToString();
+        }
     }
     public void DecreaseContaminationAreaScientistScore()
     {
