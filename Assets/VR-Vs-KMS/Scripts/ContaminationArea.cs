@@ -99,14 +99,19 @@ namespace vr_vs_kms
         }
         private void OnTriggerStay(Collider other)
         {
+            Debug.Log("instay" + other.gameObject.layer);
             //ifsame, stop audio()
             if (other.gameObject.GetComponent<IPlayer>() == null) return;
+            Debug.Log("player");
+
             if(isTaken != 7 && numberOfScientist > 0 && numberOfVirus == 0 )
             {
                 contaminationProcess(other.gameObject.layer);
             }
             if (isTaken != 8 && numberOfVirus > 0 && numberOfScientist == 0)
             {
+                Debug.Log("virus");
+
                 contaminationProcess(other.gameObject.layer);
             }
            

@@ -106,11 +106,11 @@ public class GameManager : MonoBehaviourPunCallbacks, IPunObservable
             isCanvasEnabled = false;
         }
 
-        if (spawnAreaList.Count<0)
+        if (spawnAreaList.Count==0)
         {
-            foreach (Transform child in spawnAreaParent.transform)
+            foreach (GameObject child in GameObject.FindGameObjectsWithTag("Respawn"))
             {
-                spawnAreaList.Add(child.position);
+                spawnAreaList.Add(child.transform.position);
             }
         }
        
