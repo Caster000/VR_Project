@@ -25,6 +25,8 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
     [SerializeField] private GameObject shieldPrefab;
     [SerializeField] private GameObject socket;
     [SerializeField] private GameObject Head;
+    [SerializeField] private GameObject LeftHandController;
+    [SerializeField] private GameObject RightHandController;
 
 
     private List<Vector3> spawPoints;
@@ -48,14 +50,14 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
         spawPoints = GameManager.Instance.spawnAreaList;
 
         gunVr.GetComponent<TeleportGun>().gunspawnPoint = socket;
-        
+        _capsuleCollider = GetComponent<CapsuleCollider>();
         if (NetworkManager.isMulti)
         {
             //Prepare Prefabs
             gunVr.GetComponent<TeleportGun>().enabled = photonView.IsMine;
             gunVr.GetComponent<XRGrabInteractable>().enabled = photonView.IsMine;
             shieldPrefab.GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
-            _capsuleCollider = GetComponent<CapsuleCollider>();
+            
             
             if (photonView.IsMine)
             {
@@ -71,7 +73,8 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             CameraPlayer.GetComponent<AudioListener>().enabled = photonView.IsMine;
             CanvasVRPlayer.enabled = photonView.IsMine;
             gunVrInstance = Instantiate(gunVr, transform.position + Vector3.up,Quaternion.identity);
-
+            LeftHandController.GetComponent<ActionBasedController>().enabled = photonView.IsMine;
+            RightHandController.GetComponent<ActionBasedController>().enabled = photonView.IsMine;
             CameraPlayer.GetComponent<TrackedPoseDriver>().enabled = photonView.IsMine;
             //add to list to synchronized
             SynchronizedChildTransform.Add(gunVrInstance.transform);
@@ -84,7 +87,8 @@ public class VRPlayerManager : MonoBehaviourPunCallbacks, IPunObservable, IPlaye
             gunVrInstance = Instantiate(gunVr, transform.position + Vector3.up,Quaternion.identity);
             shieldInstance = Instantiate(shieldPrefab, transform.position,Quaternion.identity);
             FindObjectOfType<DelayedTeleportation>().teleportationProvider =
-                GetComponent<TeleportationProvider>();
+            GetComponent<TeleportationProvider>();
+            CanvasVRPlayer.enabled = false;
         }
         _locomotionProvider = GetComponent<LocomotionProvider>();
     }

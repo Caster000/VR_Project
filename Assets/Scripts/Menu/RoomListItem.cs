@@ -40,7 +40,7 @@ public class RoomListItem : MonoBehaviourPunCallbacks
         {
             Debug.Log("We load the scene 'GameScene'");
 
-            PhotonNetwork.LoadLevel("GameScene");
+            PhotonNetwork.LoadLevel("Warmup");
         }
     }
 

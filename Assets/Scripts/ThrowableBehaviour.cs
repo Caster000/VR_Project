@@ -19,6 +19,8 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
     [SerializeField] private float throwForce = 75f;
     [SerializeField] private ForceMode throwMode = ForceMode.Impulse;
     [SerializeField] GameObject explosionPrefab;
+    [SerializeField] private PhotonView photonView;
+    
 
 
     private void Awake()
@@ -31,6 +33,7 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
         radius = GameConfigLoader.Instance.gameConfig.RadiusExplosion > 0.0f ? GameConfigLoader.Instance.gameConfig.RadiusExplosion : radius;
         upforce = GameConfigLoader.Instance.gameConfig.ExplosionUpforce > 0.0f ? GameConfigLoader.Instance.gameConfig.ExplosionUpforce : upforce;
         grabController = GetComponent<XRGrabInteractable>();
+        photonView = gameObject.GetComponent<PhotonView>();
     }
 
     public void Throw()
@@ -50,6 +53,7 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
     // [PunRPC]
     private void Explode()
     {
+        Debug.Log(photonView.Owner);
         // _audioSource.Play();
         isThrown = false;
         Transform objectTransform = gameObject.transform;
@@ -75,6 +79,15 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
         }
         
         PhotonNetwork.Destroy(gameObject);
+        
+    }
+
+    public void Select()
+    {
+        Debug.Log(photonView.Owner);
+        photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+        throwableRigidbody.isKinematic = true;
+        Debug.Log(photonView.Owner);
     }
 
 }
